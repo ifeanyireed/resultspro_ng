@@ -147,83 +147,128 @@ func initDB() {
 }
 
 func seedDB() {
-	var count int64
-	db.Model(&BlogPost{}).Count(&count)
-	if count > 0 {
-		return // Database already seeded
-	}
-
 	// Seed Category
-	cat1 := Category{Name: "General", Slug: "general"}
-	cat2 := Category{Name: "Product Updates", Slug: "product-updates"}
-	cat3 := Category{Name: "Education Trends", Slug: "education-trends"}
-	db.Create(&cat1)
-	db.Create(&cat2)
-	db.Create(&cat3)
+	var catCount int64
+	db.Model(&Category{}).Count(&catCount)
+	if catCount == 0 {
+		cat1 := Category{Name: "General", Slug: "general"}
+		cat2 := Category{Name: "Product Updates", Slug: "product-updates"}
+		cat3 := Category{Name: "Education Trends", Slug: "education-trends"}
+		db.Create(&cat1)
+		db.Create(&cat2)
+		db.Create(&cat3)
+	}
 
 	// Seed Tag
-	tag1 := Tag{Name: "Education", Slug: "education"}
-	tag2 := Tag{Name: "Technology", Slug: "technology"}
-	tag3 := Tag{Name: "Africa", Slug: "africa"}
-	db.Create(&tag1)
-	db.Create(&tag2)
-	db.Create(&tag3)
-
-	blogPosts := []BlogPost{
-		{
-			Title:      "Building the Future of African Education",
-			Slug:       "building-future-african-education",
-			Content:    "<h1>Bridging the Education Gap</h1><p>Our mission at Scholars.ng is to ensure that every student has access to high-quality learning resources, regardless of their location.</p>",
-			Author:     "Admin",
-			Status:     "published",
-			CategoryID: &cat1.ID,
-			Tags:       []Tag{tag1, tag3},
-			Comments: []Comment{
-				{Author: "Jane Doe", Content: "This is a great initiative! Looking forward to seeing it scale."},
-				{Author: "John Smith", Content: "Very inspiring. How can schools sign up?"},
-			},
-		},
-		{
-			Title:      "Introducing ClassroomPRO 2.0",
-			Slug:       "introducing-classroompro-2-0",
-			Content:    "<h1>Next Gen Classroom Management</h1><p>We are excited to announce the launch of ClassroomPRO 2.0 with enhanced offline capabilities.</p>",
-			Author:     "Product Team",
-			Status:     "published",
-			CategoryID: &cat2.ID,
-			Tags:       []Tag{tag2},
-		},
+	var tagCount int64
+	db.Model(&Tag{}).Count(&tagCount)
+	if tagCount == 0 {
+		tag1 := Tag{Name: "Education", Slug: "education"}
+		tag2 := Tag{Name: "Technology", Slug: "technology"}
+		tag3 := Tag{Name: "Africa", Slug: "africa"}
+		db.Create(&tag1)
+		db.Create(&tag2)
+		db.Create(&tag3)
 	}
 
-	for _, p := range blogPosts {
-		db.Create(&p)
+	// Seed Blog Posts
+	var blogCount int64
+	db.Model(&BlogPost{}).Count(&blogCount)
+	if blogCount == 0 {
+		var cat1 Category
+		db.First(&cat1, "slug = ?", "general")
+		var tag1, tag2, tag3 Tag
+		db.First(&tag1, "slug = ?", "education")
+		db.First(&tag2, "slug = ?", "technology")
+		db.First(&tag3, "slug = ?", "africa")
+
+		blogPosts := []BlogPost{
+			{
+				Title:      "Building the Future of African Education",
+				Slug:       "building-future-african-education",
+				Content:    "<h1>Bridging the Education Gap</h1><p>Our mission at Scholars.ng is to ensure that every student has access to high-quality learning resources, regardless of their location.</p>",
+				Author:     "Admin",
+				Status:     "published",
+				CategoryID: &cat1.ID,
+				Tags:       []Tag{tag1, tag3},
+				Comments: []Comment{
+					{Author: "Jane Doe", Content: "This is a great initiative! Looking forward to seeing it scale."},
+					{Author: "John Smith", Content: "Very inspiring. How can schools sign up?"},
+				},
+			},
+			{
+				Title:      "Introducing ClassroomPRO 2.0",
+				Slug:       "introducing-classroompro-2-0",
+				Content:    "<h1>Next Gen Classroom Management</h1><p>We are excited to announce the launch of ClassroomPRO 2.0 with enhanced offline capabilities.</p>",
+				Author:     "Product Team",
+				Status:     "published",
+				CategoryID: &cat1.ID,
+				Tags:       []Tag{tag2},
+			},
+		}
+
+		for _, p := range blogPosts {
+			db.Create(&p)
+		}
 	}
 
 	// Seed Mailing List
-	list1 := MailingList{Name: "General Newsletter", Description: "Primary subscribers list"}
-	list2 := MailingList{Name: "Product Beta", Description: "Beta testers for new features"}
-	db.Create(&list1)
-	db.Create(&list2)
+	var listCount int64
+	db.Model(&MailingList{}).Count(&listCount)
+	var list1, list2 MailingList
+	if listCount == 0 {
+		list1 = MailingList{Name: "General Newsletter", Description: "Primary subscribers list"}
+		list2 = MailingList{Name: "Product Beta", Description: "Beta testers for new features"}
+		db.Create(&list1)
+		db.Create(&list2)
+	} else {
+		db.First(&list1, "name = ?", "General Newsletter")
+		db.First(&list2, "name = ?", "Product Beta")
+	}
 
 	// Seed Contacts
-	contacts := []Contact{
-		{Email: "admin@scholars.ng", FullName: "Main Admin", Status: "active", MailingListID: &list1.ID, Phone: "08012345678", Address: "123 Education Way, Lagos", State: "Lagos", LGA: "Ikeja"},
-		{Email: "info@scholars.ng", FullName: "Info Desk", Status: "active", MailingListID: &list1.ID, Phone: "08087654321", Address: "456 Knowledge St, Abuja", State: "FCT", LGA: "Garki"},
-		{Email: "support@scholars.ng", FullName: "Support Team", Status: "active", MailingListID: &list2.ID, Phone: "09011223344", Address: "789 Help Blvd, Port Harcourt", State: "Rivers", LGA: "Obio-Akpor"},
-		{Email: "ade.bayo@gmail.com", FullName: "Adebayo Kola", Status: "active", MailingListID: &list1.ID, Phone: "08022334455", Address: "12 Victoria Island", State: "Lagos", LGA: "Lagos Island"},
-		{Email: "chioma.n@yahoo.com", FullName: "Chioma Nwosu", Status: "unsubscribed", MailingListID: &list1.ID, Phone: "07033445566", Address: "45 Enugu Rd", State: "Enugu", LGA: "Enugu North"},
-	}
-	for _, c := range contacts {
-		db.Create(&c)
+	var contactCount int64
+	db.Model(&Contact{}).Count(&contactCount)
+	if contactCount == 0 {
+		contacts := []Contact{
+			{Email: "admin@scholars.ng", FullName: "Main Admin", Status: "active", MailingListID: &list1.ID, Phone: "08012345678", Address: "123 Education Way, Lagos", State: "Lagos", LGA: "Ikeja"},
+			{Email: "info@scholars.ng", FullName: "Info Desk", Status: "active", MailingListID: &list1.ID, Phone: "08087654321", Address: "456 Knowledge St, Abuja", State: "FCT", LGA: "Garki"},
+			{Email: "support@scholars.ng", FullName: "Support Team", Status: "active", MailingListID: &list2.ID, Phone: "09011223344", Address: "789 Help Blvd, Port Harcourt", State: "Rivers", LGA: "Obio-Akpor"},
+			{Email: "ade.bayo@gmail.com", FullName: "Adebayo Kola", Status: "active", MailingListID: &list1.ID, Phone: "08022334455", Address: "12 Victoria Island", State: "Lagos", LGA: "Lagos Island"},
+			{Email: "chioma.n@yahoo.com", FullName: "Chioma Nwosu", Status: "unsubscribed", MailingListID: &list1.ID, Phone: "07033445566", Address: "45 Enugu Rd", State: "Enugu", LGA: "Enugu North"},
+		}
+		for _, c := range contacts {
+			db.Create(&c)
+		}
 	}
 
 	// Seed Campaigns
-	campaigns := []Campaign{
-		{Subject: "Welcome to Scholars.ng", Content: "<h1>Welcome!</h1><p>Thank you for joining our community.</p>", Status: "sent", MailingListID: &list1.ID},
-		{Subject: "Monthly Education Update", Content: "<h1>New Features</h1><p>Check out our latest learning tools.</p>", Status: "draft", MailingListID: &list1.ID},
-		{Subject: "Beta Test Invitation", Content: "<h1>Join our Beta</h1><p>Be the first to try out our new AI tools.</p>", Status: "scheduled", MailingListID: &list2.ID},
+	var campaignCount int64
+	db.Model(&Campaign{}).Count(&campaignCount)
+	if campaignCount == 0 {
+		campaigns := []Campaign{
+			{Subject: "Welcome to Scholars.ng", Content: "<h1>Welcome!</h1><p>Thank you for joining our community.</p>", Status: "sent", MailingListID: &list1.ID},
+			{Subject: "Monthly Education Update", Content: "<h1>New Features</h1><p>Check out our latest learning tools.</p>", Status: "draft", MailingListID: &list1.ID},
+			{Subject: "Beta Test Invitation", Content: "<h1>Join our Beta</h1><p>Be the first to try out our new AI tools.</p>", Status: "scheduled", MailingListID: &list2.ID},
+		}
+		for _, camp := range campaigns {
+			db.Create(&camp)
+		}
 	}
-	for _, camp := range campaigns {
-		db.Create(&camp)
+
+	// Seed Tickets
+	var ticketCount int64
+	db.Model(&Ticket{}).Count(&ticketCount)
+	if ticketCount == 0 {
+		tickets := []Ticket{
+			{FullName: "John Doe", Email: "john@example.com", Subject: "Pricing Inquiry", Message: "I would like to know more about the pro plan pricing for schools.", Status: "open"},
+			{FullName: "Jane Smith", Email: "jane@example.com", Subject: "Technical Support", Message: "I'm having trouble accessing the classroom management dashboard.", Status: "open"},
+			{FullName: "Samuel Okon", Email: "sam@example.com", Subject: "Partnership Proposal", Message: "We are interested in partnering with Scholars.ng to expand to more rural areas.", Status: "open"},
+			{FullName: "Grace Ali", Email: "grace@example.com", Subject: "Feedback", Message: "The new UI looks amazing! Great job team.", Status: "closed"},
+		}
+		for _, t := range tickets {
+			db.Create(&t)
+		}
 	}
 }
 

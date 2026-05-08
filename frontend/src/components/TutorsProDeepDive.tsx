@@ -4,16 +4,16 @@ export default function TutorsProDeepDive() {
   return (
     <DeepDiveCard 
       title="TutorsPRO"
-      subtitle="Global Expertise, Local Impact."
-      tag="Educator Marketplace"
+      subtitle="Simplified Live Teaching Delivery."
+      tag="Tutoring System"
       color="text-purple-400"
       features={[
-        "Vet System",
-        "Booking Engine",
-        "Virtual Classroom",
-        "Payout Portal",
-        "Rating System",
-        "Course Builder"
+        "School-Led Live Classes",
+        "1-on-1 Session Management",
+        "Live Progress Feedback",
+        "Integrated Scheduling",
+        "Tutor Marketplace",
+        "Session Analytics"
       ]}
     />
   );

@@ -4,16 +4,16 @@ export default function ClassroomProDeepDive() {
   return (
     <DeepDiveCard 
       title="ClassroomPRO"
-      subtitle="The Command Center for Educational Efficiency."
-      tag="LMS Infrastructure"
+      subtitle="Standardized Learning, Even Offline."
+      tag="Learning Infrastructure"
       color="text-blue"
       features={[
-        "Real-time Attendance",
-        "Automated Grading",
-        "Lesson Planning",
-        "Parent Portals",
-        "Behavior Tracking",
-        "Fee Management"
+        "Offline-First Notes",
+        "Lesson Standardization",
+        "Parent-Teacher Messaging",
+        "Daily Flashcards",
+        "Digital Class Logs",
+        "Teacher Lesson Support"
       ]}
     />
   );

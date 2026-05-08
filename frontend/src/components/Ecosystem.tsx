@@ -23,33 +23,33 @@ export default function Ecosystem() {
   const cards = [
     {
       title: "ClassroomPRO",
-      description: "Automate grading, track real-time attendance, and manage student performance with AI-driven insights.",
+      description: "Deliver structured, offline-friendly learning resources and standardize classroom notes across your entire school.",
       icon: <Target className="w-6 h-6" />,
-      tag: "School Management",
+      tag: "Learning Resources",
       color: "text-blue",
       glass: "glass"
     },
     {
       title: "ExamsPRO",
-      description: "CBT infrastructure designed for scale. Secure, anti-cheat enabled, and offline-ready for any environment.",
+      description: "Turn exam prep into excitement with live quiz battles, rankings, and a secure CBT competition layer.",
       icon: <Zap className="w-6 h-6" />,
-      tag: "Testing Engine",
+      tag: "Engagement & Prep",
       color: "text-gold",
       glass: "glass"
     },
     {
       title: "TutorsPRO",
-      description: "Connect the best educators with students globally. Personalized learning paths and 1-on-1 session management.",
+      description: "Manage school-led tutoring and private sessions with integrated live class workflows and parent visibility.",
       icon: <Users className="w-6 h-6" />,
-      tag: "Marketplace",
+      tag: "Teaching Delivery",
       color: "text-purple-400",
       glass: "glass"
     },
     {
       title: "ResultsPRO",
-      description: "Gamified learning for students. Compete, earn coins, and transform test prep into an addictive game.",
+      description: "Automate grade book generation and social cards while creating new revenue through scratch-card monetization.",
       icon: <BarChart3 className="w-6 h-6" />,
-      tag: "Consumer App",
+      tag: "Admin & Revenue",
       color: "text-primary",
       glass: "glass"
     }

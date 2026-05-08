@@ -4,16 +4,16 @@ export default function ResultsProDeepDive() {
   return (
     <DeepDiveCard 
       title="ResultsPRO"
-      subtitle="Education, Gamified. Excellence, Rewarded."
-      tag="Consumer Experience"
+      subtitle="Administrative Speed & School Revenue."
+      tag="Admin & Monetization"
       color="text-primary"
       features={[
-        "Leaderboards",
-        "Coin Rewards",
-        "Weekly Battles",
-        "Flashcard AI",
-        "Performance Radar",
-        "Study Streaks"
+        "Master Sheet CSV Upload",
+        "Instant Grade Book Gen",
+        "Shareable Social Cards",
+        "Scratch Card Monetization",
+        "Admin Workflow Sync",
+        "Automated Result Portals"
       ]}
     />
   );

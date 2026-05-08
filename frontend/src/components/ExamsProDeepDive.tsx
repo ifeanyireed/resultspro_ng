@@ -4,16 +4,16 @@ export default function ExamsProDeepDive() {
   return (
     <DeepDiveCard 
       title="ExamsPRO"
-      subtitle="Scalable, Secure, and Unshakeable CBT."
-      tag="Testing Engine"
+      subtitle="Engagement Driven Exam Readiness."
+      tag="Testing & Competition"
       color="text-gold"
       features={[
-        "Anti-Cheat AI",
-        "Offline Sync",
-        "Instant Results",
-        "Batch Uploads",
-        "Question Bank",
-        "Analytics Dashboard"
+        "Live Quiz Battles",
+        "Academic Rankings",
+        "Game-Based Learning",
+        "Anti-Cheat CBT",
+        "Instant Performance Feedback",
+        "National Benchmarking"
       ]}
     />
   );

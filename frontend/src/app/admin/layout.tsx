@@ -3,7 +3,7 @@
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { LayoutDashboard, FileText, Mail, MessageSquare, Home, Tag, Folder, MessageCircle } from 'lucide-react';
+import { LayoutDashboard, FileText, Mail, MessageSquare, Home, Tag, Folder, MessageCircle, Inbox } from 'lucide-react';
 import ThemeToggle from '@/components/ThemeToggle';
 
 export default function AdminLayout({
@@ -15,6 +15,7 @@ export default function AdminLayout({
 
   const menuItems = [
     { name: 'Dashboard', href: '/admin', icon: LayoutDashboard },
+    { name: 'Inbox', href: '/admin/inbox', icon: Inbox },
     { name: 'Blog Posts', href: '/admin/blog', icon: FileText },
     { name: 'Email Mgmt', href: '/admin/email', icon: Mail },
     { name: 'Support Tickets', href: '/admin/tickets', icon: MessageSquare },
