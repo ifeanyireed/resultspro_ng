@@ -1,6 +1,7 @@
-import type { Metadata } from "next";
 import { Inter, DM_Sans } from "next/font/google";
 import "./globals.css";
+import Navbar from "@/components/Navbar";
+import { ThemeProvider } from "@/components/ThemeContext";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -12,9 +13,9 @@ const dmSans = DM_Sans({
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
-  title: "Scholars.ng | Inclusion Through Recognition",
-  description: "An EdTech Ecosystem for Africa's Underserved Schools",
+export const metadata = {
+  title: "Scholars.ng | Education Operating System",
+  description: "One OS for Learning, Engagement, Teaching & Intelligence.",
 };
 
 export default function RootLayout({
@@ -23,9 +24,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${inter.variable} ${dmSans.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col font-body">
-        {children}
+    <html lang="en" suppressHydrationWarning>
+      <body className={`${inter.variable} ${dmSans.variable} antialiased`} suppressHydrationWarning>
+        <ThemeProvider>
+          <Navbar />
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );

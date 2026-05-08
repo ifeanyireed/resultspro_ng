@@ -5,9 +5,9 @@ import { Trophy } from 'lucide-react';
 
 export default function RootCause() {
   return (
-    <section className="relative bg-[#05090C] py-32 px-6 md:px-16 overflow-hidden">
+    <section className="relative bg-background py-32 px-6 md:px-16 overflow-hidden">
       {/* Structural Elements */}
-      <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-white/5 to-transparent" />
+      <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-foreground/5 to-transparent" />
       
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-20 items-center relative z-10">
         <motion.div
@@ -22,9 +22,9 @@ export default function RootCause() {
           <h2 className="heading-premium text-4xl md:text-7xl mb-12">
             Recognition is the Missing Lever
           </h2>
-          <div className="space-y-8 text-gray-400 text-xl leading-relaxed font-body max-w-xl">
+          <div className="space-y-8 text-muted text-xl leading-relaxed font-body max-w-xl">
             <p>
-              Billions invested in infrastructure, meals, and scholarships haven't fixed motivation — 
+              Billions invested in infrastructure, meals, and scholarships haven&apos;t fixed motivation — 
               because the student who scores 94% in a public school in Kano has never been seen 
               beyond those walls.
             </p>
@@ -34,8 +34,8 @@ export default function RootCause() {
               transition={{ delay: 0.3 }}
               className="text-light-green italic font-medium text-2xl tracking-tight leading-snug border-l-2 border-primary/30 pl-10 py-2"
             >
-              "Recognition doesn't just reward achievement — it creates aspirational pull for entire communities. 
-              No amount of funding replicates this."
+              &quot;Recognition doesn&apos;t just reward achievement — it creates aspirational pull for entire communities. 
+              No amount of funding replicates this.&quot;
             </motion.p>
           </div>
         </motion.div>
@@ -58,11 +58,11 @@ export default function RootCause() {
             <div className="relative z-10 flex flex-col items-center">
               <Trophy className="w-24 h-24 text-gold mb-10 group-hover:scale-110 transition-transform duration-700 drop-shadow-[0_0_30px_rgba(232,168,56,0.3)]" />
               <p className="italic text-gold text-2xl md:text-3xl font-black text-center max-w-xs leading-none tracking-tighter uppercase font-display px-6">
-                "The most underutilized lever in African education"
+                &quot;The most underutilized lever in African education&quot;
               </p>
             </div>
             
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(232,168,56,0.1)_0,transparent_70%)]" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,color-mix(in_srgb,var(--gold),transparent_90%)_0,transparent_70%)]" />
           </div>
           
           {/* Subtle floating background glow */}

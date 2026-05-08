@@ -26,7 +26,7 @@ export default function Problem() {
   ];
 
   return (
-    <section className="relative py-32 px-6 md:px-16 overflow-hidden bg-[#05090C]">
+    <section className="relative py-32 px-6 md:px-16 overflow-hidden bg-background">
       <div className="max-w-7xl mx-auto">
         <div className="flex flex-col mb-24">
           <motion.span 
@@ -43,7 +43,7 @@ export default function Problem() {
             viewport={{ once: true }}
             className="heading-premium text-4xl md:text-7xl max-w-4xl"
           >
-            Africa's Education Crisis Runs Deeper Than Funding
+            Africa&apos;s Education Crisis Runs Deeper Than Funding
           </motion.h2>
         </div>
 
@@ -57,14 +57,14 @@ export default function Problem() {
               transition={{ delay: stat.delay, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
               className="group relative"
             >
-              <div className="glass p-10 rounded-[2.5rem] relative z-10 hover:bg-white/[0.05] transition-all duration-500 border-white/[0.05] h-full flex flex-col">
+              <div className="glass p-10 rounded-[2.5rem] relative z-10 hover:bg-foreground/[0.02] transition-all duration-500 border-foreground/[0.05] h-full flex flex-col">
                 <div className="mb-10 p-4 bg-primary/5 rounded-2xl w-fit group-hover:scale-110 transition-transform duration-500">
                   {stat.icon}
                 </div>
-                <div className="text-white text-6xl font-black mb-6 tracking-tighter font-display leading-none">
+                <div className="text-foreground text-6xl font-black mb-6 tracking-tighter font-display leading-none">
                   {stat.number}
                 </div>
-                <p className="text-gray-400 text-lg leading-relaxed font-body">
+                <p className="text-muted text-lg leading-relaxed font-body">
                   {stat.label}
                 </p>
               </div>
@@ -83,9 +83,9 @@ export default function Problem() {
         className="mt-32 max-w-5xl mx-auto"
       >
         <div className="glass-gold p-12 md:p-20 rounded-[3rem] text-center relative overflow-hidden">
-          <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_center,rgba(232,168,56,0.05)_0,transparent_70%)]" />
+          <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_center,color-mix(in_srgb,var(--gold),transparent_95%)_0,transparent_70%)]" />
           <p className="italic text-gold text-2xl md:text-4xl font-display leading-[1.15] tracking-tight relative z-10">
-            "The deeper crisis: students who excel in underserved schools go unrecognized — and motivation collapses."
+            &quot;The deeper crisis: students who excel in underserved schools go unrecognized — and motivation collapses.&quot;
           </p>
         </div>
       </motion.div>

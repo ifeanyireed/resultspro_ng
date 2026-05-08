@@ -1,130 +1,136 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import { usePathname } from 'next/navigation';
+import { 
+  BarChart3, 
+  Users, 
+  Target, 
+  Zap, 
+  Globe, 
+  ArrowRight,
+  ChevronRight,
+  ShieldCheck,
+  Smartphone,
+  Trophy,
+  Rocket
+} from 'lucide-react';
 
 export default function Ecosystem() {
+  const pathname = usePathname();
+  if (pathname === '/pitch') return null;
+
+  const cards = [
+    {
+      title: "ClassroomPRO",
+      description: "Automate grading, track real-time attendance, and manage student performance with AI-driven insights.",
+      icon: <Target className="w-6 h-6" />,
+      tag: "School Management",
+      color: "text-blue",
+      glass: "glass"
+    },
+    {
+      title: "ExamsPRO",
+      description: "CBT infrastructure designed for scale. Secure, anti-cheat enabled, and offline-ready for any environment.",
+      icon: <Zap className="w-6 h-6" />,
+      tag: "Testing Engine",
+      color: "text-gold",
+      glass: "glass"
+    },
+    {
+      title: "TutorsPRO",
+      description: "Connect the best educators with students globally. Personalized learning paths and 1-on-1 session management.",
+      icon: <Users className="w-6 h-6" />,
+      tag: "Marketplace",
+      color: "text-purple-400",
+      glass: "glass"
+    },
+    {
+      title: "ResultsPRO",
+      description: "Gamified learning for students. Compete, earn coins, and transform test prep into an addictive game.",
+      icon: <BarChart3 className="w-6 h-6" />,
+      tag: "Consumer App",
+      color: "text-primary",
+      glass: "glass"
+    }
+  ];
+
   return (
-    <section className="relative py-32 px-6 md:px-16 overflow-hidden bg-[#05090C] border-t border-white/[0.03]">
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-primary/5 blur-[160px] pointer-events-none opacity-50" />
+    <section className="py-32 px-6 md:px-16 relative bg-background">
+      <div className="max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-20">
+          
+          <div className="lg:col-span-4 sticky top-32 h-fit">
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+            >
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full glass border-foreground/10 text-[10px] font-black tracking-widest text-primary mb-6 uppercase">
+                <Globe className="w-3 h-3" />
+                Integrated Platform
+              </div>
+              <h2 className="heading-premium text-4xl md:text-6xl mb-8">
+                The <span className="text-primary">Full Stack</span> Education OS.
+              </h2>
+              <p className="text-muted text-lg mb-10 leading-relaxed font-body">
+                We don&apos;t just build apps; we build infrastructure. From the classroom to the individual student, ScholarsNG connects every touchpoint of the education journey.
+              </p>
+              
+              <div className="space-y-4">
+                {[
+                  { icon: <ShieldCheck className="w-4 h-4" />, text: "Enterprise-grade Data Security" },
+                  { icon: <Smartphone className="w-4 h-4" />, text: "Mobile-First User Experience" },
+                  { icon: <Trophy className="w-4 h-4" />, text: "Gamified Engagement Models" }
+                ].map((item, i) => (
+                  <div key={i} className="flex items-center gap-3 text-muted font-bold text-xs uppercase tracking-widest">
+                    <div className="text-primary">{item.icon}</div>
+                    {item.text}
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+          </div>
 
-      <div className="max-w-7xl mx-auto mb-32 relative z-10 flex flex-col items-center text-center">
-        <motion.span 
-          initial={{ opacity: 0, y: 10 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="text-primary font-bold tracking-[0.3em] text-[11px] mb-8 uppercase font-display"
-        >
-          The Intelligence Loop
-        </motion.span>
-        <motion.h2 
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="heading-premium text-4xl md:text-[90px] mb-12"
-        >
-          Three Products. One Ecosystem.
-        </motion.h2>
+          <div className="lg:col-span-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+            {cards.map((card, i) => (
+              <motion.div
+                key={card.title}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1 }}
+                className={`${card.glass} p-10 rounded-[3rem] border-foreground/5 group hover:border-primary/20 transition-all cursor-pointer flex flex-col`}
+              >
+                <div className={`w-14 h-14 rounded-2xl glass flex items-center justify-center mb-10 ${card.color} group-hover:scale-110 transition-transform duration-500`}>
+                  {card.icon}
+                </div>
+                
+                <div className="flex items-center gap-2 mb-4">
+                  <span className={`text-[10px] font-black uppercase tracking-[0.2em] ${card.color}`}>{card.tag}</span>
+                  <div className="h-px w-8 bg-foreground/10" />
+                </div>
+                
+                <h3 className="text-2xl font-display font-black text-foreground mb-4 group-hover:text-primary transition-colors">
+                  {card.title}
+                </h3>
+                
+                <p className="text-muted text-sm leading-relaxed mb-10 flex-grow">
+                  {card.description}
+                </p>
+
+                <div className="flex items-center justify-between group/btn">
+                  <span className="text-[11px] font-black uppercase tracking-widest text-muted group-hover:text-foreground transition-colors">Deep Dive</span>
+                  <div className="w-10 h-10 rounded-full glass border-foreground/10 flex items-center justify-center group-hover/btn:bg-primary group-hover/btn:text-background transition-all">
+                    <ChevronRight className="w-5 h-5" />
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+
+        </div>
       </div>
-
-      <div className="max-w-6xl mx-auto relative min-h-[500px] md:min-h-[700px] flex items-center justify-center relative z-10">
-        {/* Refined Connection Lines */}
-        <svg className="absolute inset-0 w-full h-full pointer-events-none hidden md:block" viewBox="0 0 1000 600">
-          <motion.path
-            d="M 500 300 L 250 150"
-            stroke="rgba(0,200,83,0.3)"
-            strokeWidth="1"
-            strokeDasharray="4 4"
-            initial={{ pathLength: 0 }}
-            whileInView={{ pathLength: 1 }}
-            viewport={{ once: true }}
-          />
-          <motion.path
-            d="M 500 300 L 750 150"
-            stroke="rgba(232,168,56,0.3)"
-            strokeWidth="1"
-            strokeDasharray="4 4"
-            initial={{ pathLength: 0 }}
-            whileInView={{ pathLength: 1 }}
-            viewport={{ once: true }}
-          />
-          <motion.path
-            d="M 500 300 L 500 550"
-            stroke="rgba(21,101,192,0.3)"
-            strokeWidth="1"
-            strokeDasharray="4 4"
-            initial={{ pathLength: 0 }}
-            whileInView={{ pathLength: 1 }}
-            viewport={{ once: true }}
-          />
-        </svg>
-
-        {/* Central Hub - High Contrast */}
-        <motion.div
-          initial={{ scale: 0.8, opacity: 0 }}
-          whileInView={{ scale: 1, opacity: 1 }}
-          viewport={{ once: true }}
-          className="relative z-20 w-80 h-80 md:w-[450px] md:h-[450px] rounded-full glass border-primary/20 flex items-center justify-center p-12 text-center shadow-[0_0_80px_0_rgba(0,200,83,0.1)] overflow-hidden"
-        >
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(0,200,83,0.1)_0,transparent_70%)]" />
-          <span className="text-white font-black text-3xl md:text-5xl leading-none font-display tracking-tighter relative z-10">
-            INCLUSION <br />
-            <span className="text-primary">THROUGH</span> <br />
-            RECOGNITION
-          </span>
-        </motion.div>
-
-        {/* Satellites - Floating Effect */}
-        {[
-          { 
-            name: "ResultsPRO", 
-            sub: "Schools Results Manager", 
-            pos: "left-0 top-0 md:top-[10%]", 
-            glass: "glass-green border-primary/20",
-            accent: "text-primary",
-            x: -40, y: -20
-          },
-          { 
-            name: "ResultsPRO", 
-            sub: "Exams Guide", 
-            pos: "right-0 top-0 md:top-[10%]", 
-            glass: "glass-gold border-gold/20",
-            accent: "text-gold",
-            x: 40, y: -20
-          },
-          { 
-            name: "EduNode", 
-            sub: "Offline Intelligence", 
-            pos: "bottom-[-15%] md:bottom-[-10%]", 
-            glass: "glass border-blue/20",
-            accent: "text-blue",
-            x: 0, y: 40
-          }
-        ].map((item, i) => (
-          <motion.div
-            key={item.name + item.sub}
-            initial={{ opacity: 0, x: item.x, y: item.y }}
-            whileInView={{ opacity: 1, x: 0, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: i * 0.2, duration: 1, ease: [0.16, 1, 0.3, 1] }}
-            className={`absolute ${item.pos} ${item.glass} p-10 rounded-[2.5rem] w-64 md:w-80 shadow-2xl z-30 group hover:bg-white/[0.05] transition-all duration-500 cursor-default`}
-          >
-            <h4 className={`font-display font-black text-2xl mb-2 ${item.accent} tracking-tighter`}>{item.name}</h4>
-            <p className="text-gray-400 text-sm font-display font-bold tracking-tight uppercase opacity-80">{item.sub}</p>
-          </motion.div>
-        ))}
-      </div>
-
-      <motion.div 
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        className="mt-32 glass p-10 md:p-14 rounded-[3rem] text-center max-w-5xl mx-auto border-white/[0.05]"
-      >
-        <p className="italic text-gray-300 text-xl md:text-2xl font-display leading-relaxed tracking-tight">
-          "Data from <span className="text-blue font-bold">EduNode</span> feeds <span className="text-primary font-bold">ResultsPRO</span>, which identifies talent for <span className="text-gold font-bold">Exams Guide</span> competitions, 
-          creating a self-reinforcing loop of visibility and growth."
-        </p>
-      </motion.div>
     </section>
   );
 }

@@ -11,7 +11,7 @@ export default function WhyDats() {
   ];
 
   return (
-    <section className="relative py-32 px-6 md:px-16 overflow-hidden bg-[#05090C] border-t border-white/[0.03]">
+    <section className="relative py-32 px-6 md:px-16 overflow-hidden bg-background border-t border-foreground/[0.03]">
       <div className="max-w-7xl mx-auto relative z-10">
         <div className="flex flex-col mb-24 max-w-4xl">
           <motion.span 
@@ -40,10 +40,10 @@ export default function WhyDats() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.1, duration: 1, ease: [0.16, 1, 0.3, 1] }}
-              className="glass p-12 md:p-16 rounded-[3rem] hover:bg-white/[0.05] transition-all duration-700 group cursor-default border-white/5"
+              className="glass p-12 md:p-16 rounded-[3rem] hover:bg-foreground/[0.02] transition-all duration-700 group cursor-default border-foreground/5"
             >
-              <h3 className="text-2xl md:text-3xl font-black text-white mb-6 group-hover:text-primary transition-colors font-display tracking-tight leading-none">{card.title}</h3>
-              <p className="text-gray-400 text-lg leading-relaxed font-body">{card.desc}</p>
+              <h3 className="text-2xl md:text-3xl font-black text-foreground mb-6 group-hover:text-primary transition-colors font-display tracking-tight leading-none">{card.title}</h3>
+              <p className="text-muted text-lg leading-relaxed font-body">{card.desc}</p>
             </motion.div>
           ))}
         </div>
@@ -55,9 +55,9 @@ export default function WhyDats() {
         viewport={{ once: true }}
         className="glass-green py-14 px-6 md:px-16 text-center border-y border-primary/10 relative overflow-hidden"
       >
-        <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_center,rgba(0,200,83,0.05)_0,transparent_70%)]" />
-        <p className="text-white text-2xl md:text-4xl font-black italic tracking-tighter leading-tight font-display max-w-5xl mx-auto relative z-10">
-          "Our mission is to ensure that no child’s potential is lost to the lack of a data point."
+        <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_center,color-mix(in_srgb,var(--primary),transparent_95%)_0,transparent_70%)]" />
+        <p className="text-foreground text-2xl md:text-4xl font-black italic tracking-tighter leading-tight font-display max-w-5xl mx-auto relative z-10">
+          &quot;Our mission is to ensure that no child’s potential is lost to the lack of a data point.&quot;
         </p>
       </motion.div>
     </section>

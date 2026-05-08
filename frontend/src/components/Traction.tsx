@@ -30,7 +30,7 @@ export default function Traction() {
   ];
 
   return (
-    <section className="relative py-32 px-6 md:px-16 overflow-hidden bg-[#05090C] border-t border-white/[0.03]">
+    <section className="relative py-32 px-6 md:px-16 overflow-hidden bg-background border-t border-foreground/[0.03]">
       <div className="max-w-7xl mx-auto relative z-10">
         <div className="flex flex-col mb-24 items-center text-center">
           <motion.span
@@ -59,15 +59,15 @@ export default function Traction() {
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.1, duration: 1, ease: [0.16, 1, 0.3, 1] }}
-              className="glass p-12 md:p-16 rounded-[3.5rem] relative overflow-hidden group border-white/5"
+              className="glass p-12 md:p-16 rounded-[3.5rem] relative overflow-hidden group border-foreground/5"
             >
               <div className="absolute top-10 right-10 bg-primary/10 text-primary px-4 py-1 rounded-full text-[10px] font-black tracking-widest border border-primary/20 uppercase font-display">LIVE</div>
               <h3 className={`font-display text-3xl md:text-4xl font-black mb-4 leading-tight tracking-tight ${product.accent}`}>{product.name}</h3>
-              <a href={`https://${product.url}`} className="text-white/40 font-medium mb-12 inline-flex items-center gap-2 hover:text-white transition-colors font-display tracking-tight text-lg underline decoration-white/10 underline-offset-8">
+              <a href={`https://${product.url}`} className="text-muted font-medium mb-12 inline-flex items-center gap-2 hover:text-foreground transition-colors font-display tracking-tight text-lg underline decoration-foreground/10 underline-offset-8">
                 {product.url} <ExternalLink className="w-4 h-4" />
               </a>
 
-              <ul className="space-y-6 text-gray-400 text-lg font-body">
+              <ul className="space-y-6 text-muted text-lg font-body">
                 {product.bullets.map((bullet, idx) => (
                   <li key={idx} className="flex items-start gap-4 group/item">
                     <CheckCircle2 className="w-5 h-5 text-primary shrink-0 mt-1 opacity-40 group-hover/item:opacity-100 transition-opacity" />
@@ -85,8 +85,8 @@ export default function Traction() {
           <div className="absolute top-0 right-0 p-24 bg-blue/5 rounded-full blur-[120px]" />
           <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-12 relative z-10">
             <div className="flex flex-col">
-              <div className="text-white text-3xl md:text-5xl font-black tracking-tighter font-display leading-none mb-4">EduNode Hardware Pilot</div>
-              <p className="text-gray-400 text-xl font-body italic">Pilot programs being discussed for expansion across Nigeria.</p>
+              <div className="text-foreground text-3xl md:text-5xl font-black tracking-tighter font-display leading-none mb-4">EduNode Hardware Pilot</div>
+              <p className="text-muted text-xl font-body italic">Pilot programs being discussed for expansion across Nigeria.</p>
             </div>
             <motion.div
               whileHover={{ scale: 1.05 }}
