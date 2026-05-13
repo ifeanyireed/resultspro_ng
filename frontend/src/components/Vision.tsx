@@ -45,10 +45,10 @@ export default function Vision() {
           viewport={{ once: true }}
           className="mt-32 pt-16 border-t border-foreground/5 flex flex-col md:flex-row justify-between items-center gap-10"
         >
-          <div className="font-display text-foreground text-3xl font-black tracking-[0.2em] uppercase">SCHOLARS<span className="text-primary">.NG</span></div>
+          <div className="font-display text-foreground text-3xl font-black tracking-[0.2em] uppercase">RESULTSPRO<span className="text-primary">.NG</span></div>
           <div className="flex flex-col md:flex-row gap-12 text-muted font-display font-black text-xs uppercase tracking-[0.2em]">
-            <a href="mailto:invest@scholars.ng" className="hover:text-gold transition-colors underline decoration-foreground/5 underline-offset-8">invest@scholars.ng</a>
-            <a href="https://scholars.ng" className="hover:text-gold transition-colors underline decoration-foreground/5 underline-offset-8">scholars.ng</a>
+            <a href="mailto:invest@resultspro.ng" className="hover:text-gold transition-colors underline decoration-foreground/5 underline-offset-8">invest@resultspro.ng</a>
+            <a href="https://resultspro.ng" className="hover:text-gold transition-colors underline decoration-foreground/5 underline-offset-8">resultspro.ng</a>
           </div>
         </motion.div>
       </div>

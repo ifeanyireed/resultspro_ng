@@ -39,7 +39,7 @@ export default function Newsletter() {
         
         <h2 className="heading-premium text-4xl md:text-6xl mb-6">Join the <span className="text-primary">Inner Circle</span></h2>
         <p className="text-muted text-lg md:text-xl max-w-xl mx-auto mb-12 leading-relaxed">
-          Get exclusive updates on new features, educational trends, and the future of ScholarsNG.
+          Get exclusive updates on new features, educational trends, and the future of ResultsProNG.
         </p>
 
         <form onSubmit={handleSubscribe} className="max-w-md mx-auto relative group">

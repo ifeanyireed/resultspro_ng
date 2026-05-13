@@ -70,7 +70,7 @@ function UnsubscribeContent() {
               Leaving so <span className="text-primary">Soon?</span>
             </h1>
             <p className="text-gray-500 font-bold text-sm leading-relaxed mb-4">
-              We&apos;re sorry to see you go. If you unsubscribe, you&apos;ll stop receiving updates from Scholars.ng.
+              We&apos;re sorry to see you go. If you unsubscribe, you&apos;ll stop receiving updates from ResultsPro.ng.
             </p>
             <div className="glass bg-white/5 py-4 px-6 rounded-2xl mb-12 border-white/5 inline-block mx-auto">
               <p className="text-xs font-black uppercase tracking-widest text-primary">{email}</p>

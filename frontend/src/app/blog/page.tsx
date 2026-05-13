@@ -43,7 +43,7 @@ export default function BlogPage() {
             Insights & Updates
           </motion.div>
           <h1 className="heading-premium text-5xl md:text-8xl mb-8">
-            The <span className="text-primary">Scholars</span> Blog
+            The <span className="text-primary">ResultsPro</span> Blog
           </h1>
           <p className="text-gray-400 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed">
             Exploring the future of education, technology, and gamification in West Africa.

@@ -74,7 +74,7 @@ export default function Ecosystem() {
                 The <span className="text-primary">Full Stack</span> Education OS.
               </h2>
               <p className="text-muted text-lg mb-10 leading-relaxed font-body">
-                We don&apos;t just build apps; we build infrastructure. From the classroom to the individual student, ScholarsNG connects every touchpoint of the education journey.
+                We don&apos;t just build apps; we build infrastructure. From the classroom to the individual student, ResultsProNG connects every touchpoint of the education journey.
               </p>
               
               <div className="space-y-4">

@@ -27,7 +27,7 @@ export default function AdminLayout({
       <aside className="w-64 glass border-r border-foreground/5 fixed h-full z-20">
         <div className="p-8">
           <Link href="/" className="font-display text-foreground text-xl font-black tracking-tighter uppercase group">
-            SCHOLARS<span className="text-primary group-hover:text-foreground transition-colors">.NG</span>
+            RESULTSPRO<span className="text-primary group-hover:text-foreground transition-colors">.NG</span>
           </Link>
           <p className="text-[10px] font-black uppercase tracking-[0.2em] text-muted mt-2">Admin Portal</p>
         </div>

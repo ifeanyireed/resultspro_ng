@@ -40,7 +40,7 @@ export default function Navbar() {
       <div className="absolute inset-0 bg-background/40 backdrop-blur-2xl" />
       
       <Link href="/" className="relative z-10 font-display text-foreground text-2xl font-black tracking-tighter uppercase group">
-        SCHOLARS<span className="text-primary group-hover:text-foreground transition-colors">.NG</span>
+        RESULTSPRO<span className="text-primary group-hover:text-foreground transition-colors">.NG</span>
       </Link>
 
       <div className="relative z-10 hidden md:flex items-center gap-10">

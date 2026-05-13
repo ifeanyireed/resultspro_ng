@@ -30,7 +30,7 @@ export default function Hero() {
             </div>
 
             <h1 className="heading-premium text-6xl md:text-[110px] mb-8">
-              Scholars<span className="text-primary">.ng</span>
+              ResultsPro<span className="text-primary">.ng</span>
             </h1>
             
             <motion.p 

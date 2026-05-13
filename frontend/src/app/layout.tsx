@@ -14,7 +14,7 @@ const dmSans = DM_Sans({
 });
 
 export const metadata = {
-  title: "Scholars.ng | Education Operating System",
+  title: "ResultsPro.ng | Education Operating System",
   description: "One OS for Learning, Engagement, Teaching & Intelligence.",
 };
 

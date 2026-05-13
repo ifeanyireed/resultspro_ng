@@ -612,7 +612,7 @@ export default function EmailMgmtPage() {
                         <input 
                           type="text" value={(editingItem as Campaign)?.subject || ''} 
                           onChange={(e) => setEditingItem({ ...editingItem, subject: e.target.value } as Campaign)}
-                          className="w-full glass border-white/10 rounded-2xl px-6 py-4 outline-none focus:border-primary/50" placeholder="Welcome to Scholars!" 
+                          className="w-full glass border-white/10 rounded-2xl px-6 py-4 outline-none focus:border-primary/50" placeholder="Welcome to ResultsPro!" 
                         />
                       </div>
                       <div className="space-y-2">

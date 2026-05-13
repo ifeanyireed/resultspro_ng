@@ -1,4 +1,4 @@
-module scholars-ng/backend
+module resultspro-ng/backend
 
 go 1.23.0
 

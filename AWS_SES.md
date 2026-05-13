@@ -1,11 +1,11 @@
-To set up Amazon SES for scholars.ng, follow these steps in the AWS Management Console. This will prepare your account to send emails from your application.
+To set up Amazon SES for resultspro.ng, follow these steps in the AWS Management Console. This will prepare your account to send emails from your application.
 
   1. Verify Your Identity
   AWS requires you to prove you own the domain or email address you'll be sending from.
    1. Open the SES Console: Search for "SES" in the AWS Console.
    2. Verified Identities: Click Verified identities in the left sidebar, then click Create identity.
    3. Identity Type: 
-       * Domain (Recommended): Choose this for production. Enter scholars.ng. AWS will provide CNAME records that you must add to your DNS provider.
+       * Domain (Recommended): Choose this for production. Enter resultspro.ng. AWS will provide CNAME records that you must add to your DNS provider.
        * Email Address: Choose this for quick testing. AWS will send a verification link to that email.
    4. Verification Status: Wait until the status changes to Verified.
 
@@ -17,7 +17,7 @@ To set up Amazon SES for scholars.ng, follow these steps in the AWS Management C
    2. Click Request production access.
    3. Fill out the form:
        * Mail type: Marketing or Transactional (choose both if applicable).
-       * Website URL: https://scholars.ng
+       * Website URL: https://resultspro.ng
        * Use Case Description: Briefly explain that you are sending welcome emails, newsletters, and system notifications to your users.
    4. AWS usually approves this within 24 hours.
 

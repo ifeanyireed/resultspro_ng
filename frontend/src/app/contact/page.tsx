@@ -99,7 +99,7 @@ export default function ContactPage() {
               </h1>
               
               <p className="text-muted text-lg md:text-xl max-w-xl mb-12 leading-relaxed">
-                ScholarsNG is West Africa&apos;s leading education infrastructure. 
+                ResultsProNG is West Africa&apos;s leading education infrastructure. 
                 Whether you&apos;re a student using ResultsPRO or a school deploying ClassroomPRO, 
                 our team is here to support your journey.
               </p>
@@ -302,7 +302,7 @@ export default function ContactPage() {
       {/* Footer-like Vision Statement */}
       <footer className="py-20">
         <div className="max-w-7xl mx-auto px-6 text-center">
-          <p className="text-muted font-display font-black text-[10px] uppercase tracking-[0.4em] mb-8">ScholarsNG Infrastructure</p>
+          <p className="text-muted font-display font-black text-[10px] uppercase tracking-[0.4em] mb-8">ResultsProNG Infrastructure</p>
           <div className="flex flex-wrap justify-center gap-8 mb-12 text-muted font-black text-[10px] uppercase tracking-[0.2em]">
             <span className="hover:text-primary transition-colors cursor-pointer">ClassroomPRO</span>
             <span className="hover:text-primary transition-colors cursor-pointer">ExamsPRO</span>

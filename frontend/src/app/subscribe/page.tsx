@@ -75,7 +75,7 @@ export default function SubscribePage() {
                 <h1 className="text-4xl md:text-5xl font-display font-black uppercase tracking-tighter leading-none mb-4">
                   Stay <span className="text-primary">Connected</span>
                 </h1>
-                <p className="text-gray-500 font-bold text-sm">Join the Scholars.ng community for the latest education insights.</p>
+                <p className="text-gray-500 font-bold text-sm">Join the ResultsPro.ng community for the latest education insights.</p>
               </header>
 
               <form onSubmit={handleSubmit} className="space-y-6">

@@ -136,7 +136,7 @@ var db *gorm.DB
 
 func initDB() {
 	var err error
-	db, err = gorm.Open(sqlite.Open("scholars.db"), &gorm.Config{})
+	db, err = gorm.Open(sqlite.Open("resultspro.db"), &gorm.Config{})
 	if err != nil {
 		log.Fatal("failed to connect database")
 	}
@@ -186,7 +186,7 @@ func seedDB() {
 			{
 				Title:      "Building the Future of African Education",
 				Slug:       "building-future-african-education",
-				Content:    "<h1>Bridging the Education Gap</h1><p>Our mission at Scholars.ng is to ensure that every student has access to high-quality learning resources, regardless of their location.</p>",
+				Content:    "<h1>Bridging the Education Gap</h1><p>Our mission at ResultsPro.ng is to ensure that every student has access to high-quality learning resources, regardless of their location.</p>",
 				Author:     "Admin",
 				Status:     "published",
 				CategoryID: &cat1.ID,
@@ -231,9 +231,9 @@ func seedDB() {
 	db.Model(&Contact{}).Count(&contactCount)
 	if contactCount == 0 {
 		contacts := []Contact{
-			{Email: "admin@scholars.ng", FullName: "Main Admin", Status: "active", MailingListID: &list1.ID, Phone: "08012345678", Address: "123 Education Way, Lagos", State: "Lagos", LGA: "Ikeja"},
-			{Email: "info@scholars.ng", FullName: "Info Desk", Status: "active", MailingListID: &list1.ID, Phone: "08087654321", Address: "456 Knowledge St, Abuja", State: "FCT", LGA: "Garki"},
-			{Email: "support@scholars.ng", FullName: "Support Team", Status: "active", MailingListID: &list2.ID, Phone: "09011223344", Address: "789 Help Blvd, Port Harcourt", State: "Rivers", LGA: "Obio-Akpor"},
+			{Email: "admin@resultspro.ng", FullName: "Main Admin", Status: "active", MailingListID: &list1.ID, Phone: "08012345678", Address: "123 Education Way, Lagos", State: "Lagos", LGA: "Ikeja"},
+			{Email: "info@resultspro.ng", FullName: "Info Desk", Status: "active", MailingListID: &list1.ID, Phone: "08087654321", Address: "456 Knowledge St, Abuja", State: "FCT", LGA: "Garki"},
+			{Email: "support@resultspro.ng", FullName: "Support Team", Status: "active", MailingListID: &list2.ID, Phone: "09011223344", Address: "789 Help Blvd, Port Harcourt", State: "Rivers", LGA: "Obio-Akpor"},
 			{Email: "ade.bayo@gmail.com", FullName: "Adebayo Kola", Status: "active", MailingListID: &list1.ID, Phone: "08022334455", Address: "12 Victoria Island", State: "Lagos", LGA: "Lagos Island"},
 			{Email: "chioma.n@yahoo.com", FullName: "Chioma Nwosu", Status: "unsubscribed", MailingListID: &list1.ID, Phone: "07033445566", Address: "45 Enugu Rd", State: "Enugu", LGA: "Enugu North"},
 		}
@@ -247,7 +247,7 @@ func seedDB() {
 	db.Model(&Campaign{}).Count(&campaignCount)
 	if campaignCount == 0 {
 		campaigns := []Campaign{
-			{Subject: "Welcome to Scholars.ng", Content: "<h1>Welcome!</h1><p>Thank you for joining our community.</p>", Status: "sent", MailingListID: &list1.ID},
+			{Subject: "Welcome to ResultsPro.ng", Content: "<h1>Welcome!</h1><p>Thank you for joining our community.</p>", Status: "sent", MailingListID: &list1.ID},
 			{Subject: "Monthly Education Update", Content: "<h1>New Features</h1><p>Check out our latest learning tools.</p>", Status: "draft", MailingListID: &list1.ID},
 			{Subject: "Beta Test Invitation", Content: "<h1>Join our Beta</h1><p>Be the first to try out our new AI tools.</p>", Status: "scheduled", MailingListID: &list2.ID},
 		}
@@ -263,7 +263,7 @@ func seedDB() {
 		tickets := []Ticket{
 			{FullName: "John Doe", Email: "john@example.com", Subject: "Pricing Inquiry", Message: "I would like to know more about the pro plan pricing for schools.", Status: "open"},
 			{FullName: "Jane Smith", Email: "jane@example.com", Subject: "Technical Support", Message: "I'm having trouble accessing the classroom management dashboard.", Status: "open"},
-			{FullName: "Samuel Okon", Email: "sam@example.com", Subject: "Partnership Proposal", Message: "We are interested in partnering with Scholars.ng to expand to more rural areas.", Status: "open"},
+			{FullName: "Samuel Okon", Email: "sam@example.com", Subject: "Partnership Proposal", Message: "We are interested in partnering with ResultsPro.ng to expand to more rural areas.", Status: "open"},
 			{FullName: "Grace Ali", Email: "grace@example.com", Subject: "Feedback", Message: "The new UI looks amazing! Great job team.", Status: "closed"},
 		}
 		for _, t := range tickets {
@@ -340,7 +340,7 @@ func main() {
 
 	// Health check
 	r.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, "Welcome to the Scholars NG Backend API!")
+		fmt.Fprintf(w, "Welcome to the ResultsPro NG Backend API!")
 	})
 
 	// CORS
