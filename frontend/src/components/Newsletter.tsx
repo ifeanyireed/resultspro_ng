@@ -38,7 +38,7 @@ export default function Newsletter() {
         </div>
         
         <h2 className="heading-premium text-4xl md:text-6xl mb-6">Join the <span className="text-primary">Inner Circle</span></h2>
-        <p className="text-muted text-lg md:text-xl max-w-xl mx-auto mb-12 leading-relaxed">
+        <p className="text-gray-400 text-lg md:text-xl max-w-xl mx-auto mb-12 leading-relaxed">
           Get exclusive updates on new features, educational trends, and the future of ResultsProNG.
         </p>
 
@@ -64,7 +64,7 @@ export default function Newsletter() {
         {status === 'success' && <p className="mt-4 text-primary font-bold text-xs uppercase tracking-widest animate-pulse">Welcome to the family!</p>}
         {status === 'error' && <p className="mt-4 text-red-500 font-bold text-xs uppercase tracking-widest">Something went wrong. Try again?</p>}
         
-        <p className="mt-8 text-[10px] font-black uppercase tracking-[0.2em] text-muted italic">Join 5,000+ students & educators</p>
+        <p className="mt-8 text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 italic">Join 5,000+ students & educators</p>
       </div>
     </section>
   );

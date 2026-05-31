@@ -43,7 +43,7 @@ export default function WhyDats() {
               className="glass p-12 md:p-16 rounded-[3rem] hover:bg-foreground/[0.02] transition-all duration-700 group cursor-default border-foreground/5"
             >
               <h3 className="text-2xl md:text-3xl font-black text-foreground mb-6 group-hover:text-primary transition-colors font-display tracking-tight leading-none">{card.title}</h3>
-              <p className="text-muted text-lg leading-relaxed font-body">{card.desc}</p>
+              <p className="text-gray-400 text-lg leading-relaxed font-body">{card.desc}</p>
             </motion.div>
           ))}
         </div>

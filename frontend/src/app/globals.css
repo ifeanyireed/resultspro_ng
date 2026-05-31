@@ -1,76 +1,81 @@
 @import "tailwindcss";
 
-:root {
-  --background: #FFFFFF;
-  --foreground: #0F172A;
+@theme {
+  --color-navy: #0D1B2A;
+  --color-green: #00C853;
+  --color-blue: #1565C0;
+  --color-amber: #FF6F00;
   
-  /* Water Bubble Glass - Light */
-  --glass-bg: rgba(255, 255, 255, 0.4);
-  --glass-border: rgba(255, 255, 255, 0.7);
-  --glass-shadow: 
-    inset 0 0 15px rgba(255, 255, 255, 0.5),
-    0 10px 30px rgba(0, 0, 0, 0.12),
-    inset 0 0 2px rgba(255, 255, 255, 1);
-  --glass-blur: blur(25px);
-
-  --forest: #081C15;
-  --primary: #00C853;
-  --mid-green: #2D9B5F;
-  --light-green: #52B788;
-  --gold: #E8A838;
-  --light-bg: #F8FAFC;
-  --amber: #FF6F00;
-  --navy: #065A82;
-  --blue: #1565C0;
-  --muted: #64748B;
+  --font-display: var(--font-space-grotesk);
+  --font-body: var(--font-dm-sans);
+  
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
 }
 
-[data-theme='dark'] {
-  --background: #05090C;
-  --foreground: #F5F7F3;
+:root {
+  --background: #0D1B2A;
+  --foreground: #ffffff;
   
-  /* Deep Glass - Dark */
+  --primary: #00C853;
+  --primary-foreground: #ffffff;
+  
+  --secondary: #1565C0;
+  --secondary-foreground: #ffffff;
+  
+  --accent: #FF6F00;
+  --accent-foreground: #ffffff;
+  
+  --muted: #1F2937;
+  --muted-foreground: #9CA3AF;
+  
+  --card: #1F2937;
+  --card-foreground: #ffffff;
+  
+  --border: #374151;
+  --input: #374151;
+  --ring: #00C853;
+
+  /* Glass Effects Replicated from ExamsPRO Style */
   --glass-bg: rgba(255, 255, 255, 0.03);
   --glass-border: rgba(255, 255, 255, 0.08);
   --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
   --glass-blur: blur(20px);
-  
-  --muted: #94A3B8;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-muted: var(--muted);
-  --color-forest: var(--forest);
-  --color-primary: var(--primary);
-  --color-mid-green: var(--mid-green);
-  --color-light-green: var(--light-green);
-  --color-gold: var(--gold);
-  --color-light-bg: var(--light-bg);
-  --color-amber-brown: var(--amber);
-  --color-navy: var(--navy);
-  --color-blue: var(--blue);
-
-  --font-display: var(--font-inter);
-  --font-body: var(--font-dm-sans);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-body);
-  transition: background-color 0.5s cubic-bezier(0.4, 0, 0.2, 1), color 0.5s ease;
+  @apply antialiased;
 }
 
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-display);
-  letter-spacing: -0.04em;
-  color: var(--foreground);
+  @apply font-bold tracking-tight;
 }
 
 .heading-premium {
-  @apply font-display font-black tracking-tighter leading-[0.95] text-[--foreground];
+  @apply font-display font-black tracking-tighter leading-[0.95];
 }
 
 .glass {
@@ -79,14 +84,6 @@ h1, h2, h3, h4, h5, h6 {
   box-shadow: var(--glass-shadow);
   backdrop-filter: var(--glass-blur);
   transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.glass-green {
-  @apply backdrop-blur-[20px] bg-primary/[0.04] border border-primary/[0.15] shadow-[0_0_30px_0_rgba(0,200,83,0.2)];
-}
-
-.glass-gold {
-  @apply backdrop-blur-[20px] bg-gold/[0.04] border border-gold/[0.15] shadow-[0_0_30px_0_rgba(232,168,56,0.2)];
 }
 
 @layer base {

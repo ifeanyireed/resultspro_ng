@@ -64,7 +64,7 @@ export default function Problem() {
                 <div className="text-foreground text-6xl font-black mb-6 tracking-tighter font-display leading-none">
                   {stat.number}
                 </div>
-                <p className="text-muted text-lg leading-relaxed font-body">
+                <p className="text-gray-400 text-lg leading-relaxed font-body">
                   {stat.label}
                 </p>
               </div>

@@ -1,10 +1,10 @@
-import { Inter, DM_Sans } from "next/font/google";
+import { Space_Grotesk, DM_Sans } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import { ThemeProvider } from "@/components/ThemeContext";
 
-const inter = Inter({
-  variable: "--font-inter",
+const spaceGrotesk = Space_Grotesk({
+  variable: "--font-space-grotesk",
   subsets: ["latin"],
 });
 
@@ -25,7 +25,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${inter.variable} ${dmSans.variable} antialiased`} suppressHydrationWarning>
+      <body className={`${spaceGrotesk.variable} ${dmSans.variable} antialiased`} suppressHydrationWarning>
         <ThemeProvider>
           <Navbar />
           {children}

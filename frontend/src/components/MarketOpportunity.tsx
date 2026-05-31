@@ -66,7 +66,7 @@ export default function MarketOpportunity() {
               <div className={`${stat.accent} text-4xl md:text-5xl font-black mb-2 font-display tracking-tighter group-hover:scale-105 transition-transform duration-500`}>
                 {stat.value}
               </div>
-              <p className="text-muted text-[11px] font-black uppercase tracking-[0.1em] font-display">{stat.label}</p>
+              <p className="text-gray-400 text-[11px] font-black uppercase tracking-[0.1em] font-display">{stat.label}</p>
             </motion.div>
           ))}
         </div>
@@ -89,7 +89,7 @@ export default function MarketOpportunity() {
                 <span className="text-8xl font-black text-foreground/5 absolute -top-10 -left-6 font-display transition-colors group-hover/phase:text-foreground/10">{phase.number}</span>
                 <div className="relative z-10">
                   <h3 className="text-2xl font-black text-foreground mb-6 font-display tracking-tight leading-none">{phase.title}</h3>
-                  <p className="text-muted text-lg leading-relaxed font-body">{phase.desc}</p>
+                  <p className="text-gray-400 text-lg leading-relaxed font-body">{phase.desc}</p>
                 </div>
               </motion.div>
             ))}
