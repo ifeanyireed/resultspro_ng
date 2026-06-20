@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState, useMemo, useCallback } from 'react';
 import { 
   Inbox, Archive, Trash2, Search, 
   MoreVertical, Reply, Forward, ShieldAlert,
@@ -32,20 +32,21 @@ export default function InboxPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedEmail, setSelectedEmail] = useState<Email | null>(null);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await fetch('http://localhost:8080/api/inbox');
-        const data = await res.json();
-        setEmails(Array.isArray(data) ? data : []);
-      } catch (err) {
-        console.error('Error fetching emails:', err);
-      }
-      setLoading(false);
-    };
-
-    fetchData();
+  const fetchData = useCallback(async () => {
+    setLoading(true);
+    try {
+      const res = await fetch('http://localhost:8080/api/inbox');
+      const data = await res.json();
+      setEmails(Array.isArray(data) ? data : []);
+    } catch (err) {
+      console.error('Error fetching emails:', err);
+    }
+    setLoading(false);
   }, []);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
 
   const filteredEmails = useMemo(() => {
     return emails.filter(email => {

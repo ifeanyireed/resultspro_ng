@@ -45,7 +45,7 @@ export default function Home() {
 
       <section className="section section-white">
         <div className="container">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-[var(--space-xl)] items-center">
+          <div className="grid grid-cols-1 md:grid-cols-2 items-center" style={{ gap: 'var(--space-xl)' }}>
             <div>
               <ScrollReveal animation="fade-up">
                 <span className="caption">Our Mission</span>
@@ -58,7 +58,7 @@ export default function Home() {
               </ScrollReveal>
             </div>
             <ScrollReveal animation="slide-left">
-              <div className="p-[var(--space-md)] border-l-2 border-sky-blue">
+              <div className="border-l-2 border-sky-blue" style={{ padding: 'var(--space-md)', paddingLeft: 'var(--space-lg)' }}>
                 <p style={{ fontStyle: 'italic', fontSize: '1.25rem', color: 'var(--color-text-on-white)', textShadow: 'none' }}>
                   &ldquo;Technology is the bridge that connects potential to opportunity. We are building that bridge for African education.&rdquo;
                 </p>

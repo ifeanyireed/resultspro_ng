@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useMemo, useRef } from 'react';
+import { useEffect, useState, useMemo, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Mail, Users, BarChart3, TrendingUp, Send, 
@@ -75,28 +75,28 @@ export default function EmailMgmtPage() {
   const [modalType, setModalType] = useState<'list' | 'contact' | 'campaign'>('list');
   const [editingItem, setEditingItem] = useState<MailingList | Contact | Campaign | null>(null);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [listsRes, contactsRes, campaignsRes, metricsRes] = await Promise.all([
-          fetch('http://localhost:8080/api/mailing-lists').then(res => res.json()),
-          fetch('http://localhost:8080/api/contacts').then(res => res.json()),
-          fetch('http://localhost:8080/api/campaigns').then(res => res.json()),
-          fetch('http://localhost:8080/api/metrics/engagement').then(res => res.json())
-        ]);
+  const fetchData = useCallback(async () => {
+    try {
+      const [listsRes, contactsRes, campaignsRes, metricsRes] = await Promise.all([
+        fetch('http://localhost:8080/api/mailing-lists').then(res => res.json()),
+        fetch('http://localhost:8080/api/contacts').then(res => res.json()),
+        fetch('http://localhost:8080/api/campaigns').then(res => res.json()),
+        fetch('http://localhost:8080/api/metrics/engagement').then(res => res.json())
+      ]);
 
-        setLists(Array.isArray(listsRes) ? listsRes : []);
-        setContacts(Array.isArray(contactsRes) ? contactsRes : []);
-        setCampaigns(Array.isArray(campaignsRes) ? campaignsRes : []);
-        setMetrics(metricsRes);
-      } catch (err) {
-        console.error('Error fetching data:', err);
-      }
-      setLoading(false);
-    };
-
-    fetchData();
+      setLists(Array.isArray(listsRes) ? listsRes : []);
+      setContacts(Array.isArray(contactsRes) ? contactsRes : []);
+      setCampaigns(Array.isArray(campaignsRes) ? campaignsRes : []);
+      setMetrics(metricsRes);
+    } catch (err) {
+      console.error('Error fetching data:', err);
+    }
+    setLoading(false);
   }, []);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
 
   const handleSave = async (data: MailingList | Contact | Campaign) => {
     const endpoint = modalType === 'list' ? 'mailing-lists' : modalType === 'contact' ? 'contacts' : 'campaigns';
@@ -233,7 +233,7 @@ export default function EmailMgmtPage() {
           <p className="text-gray-500 text-[10px] font-black uppercase tracking-[0.2em]">Organize your audience into segments</p>
         </div>
         <button 
-          onClick={() => { setModalType('list'); setEditingItem({ name: '', description: '' }); setIsModalOpen(true); }}
+          onClick={() => { setModalType('list'); setEditingItem({ name: '', description: '' } as MailingList); setIsModalOpen(true); }}
           className="bg-primary text-background px-6 py-3 rounded-2xl font-black text-xs uppercase tracking-widest flex items-center gap-2"
         >
           <Plus className="w-4 h-4" /> Create List
@@ -290,7 +290,7 @@ export default function EmailMgmtPage() {
             <Download className="w-4 h-4" /> Export
           </button>
           <button 
-            onClick={() => { setModalType('contact'); setEditingItem({ full_name: '', email: '', phone: '', address: '', state: '', lga: '', status: 'active' }); setIsModalOpen(true); }}
+            onClick={() => { setModalType('contact'); setEditingItem({ full_name: '', email: '', phone: '', address: '', state: '', lga: '', status: 'active' } as Contact); setIsModalOpen(true); }}
             className="bg-primary text-background px-6 py-3 rounded-2xl font-black text-xs uppercase tracking-widest flex items-center gap-2"
           >
             <Plus className="w-4 h-4" /> Add Contact
@@ -378,7 +378,7 @@ export default function EmailMgmtPage() {
           <p className="text-gray-500 text-[10px] font-black uppercase tracking-[0.2em]">Design and broadcast your messages</p>
         </div>
         <button 
-          onClick={() => { setModalType('campaign'); setEditingItem({ subject: '', content: '', status: 'draft', mailing_list_id: lists[0]?.id }); setIsModalOpen(true); }}
+          onClick={() => { setModalType('campaign'); setEditingItem({ subject: '', content: '', status: 'draft', mailing_list_id: lists[0]?.id } as Campaign); setIsModalOpen(true); }}
           className="bg-primary text-background px-6 py-3 rounded-2xl font-black text-xs uppercase tracking-widest flex items-center gap-2"
         >
           <Plus className="w-4 h-4" /> New Campaign
@@ -666,7 +666,7 @@ export default function EmailMgmtPage() {
                 <motion.button 
                   whileHover={{ scale: 1.02, backgroundColor: '#00E65F' }}
                   whileTap={{ scale: 0.98 }}
-                  onClick={() => handleSave(editingItem)}
+                  onClick={() => editingItem && handleSave(editingItem)}
                   className="w-full bg-primary text-background py-5 rounded-2xl font-black transition-all shadow-lg shadow-primary/20 text-lg flex items-center justify-center gap-3 uppercase tracking-widest mt-8"
                 >
                   Save Changes <Save className="w-5 h-5" />

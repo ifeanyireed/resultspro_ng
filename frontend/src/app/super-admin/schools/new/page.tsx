@@ -35,7 +35,7 @@ export default function CreateSchoolPage() {
       const school = await res.json();
       router.push(`/super-admin/schools/${school.id}`);
     } catch (err: unknown) {
-      setError(err.message);
+      setError(err instanceof Error ? err.message : 'An error occurred');
       setLoading(false);
     }
   };

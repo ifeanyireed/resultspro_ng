@@ -36,7 +36,14 @@
   min-width: 180px;
   display: flex;
   align-items: center;
+  gap: 0.75rem;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.storeIcon {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
 }
 
 .storeButton:hover {
@@ -75,7 +82,7 @@
 .monsterWrapper {
   position: absolute;
   right: 50px;
-  bottom: 30px;
+  bottom: 5px;
   z-index: 10;
 }
 
@@ -137,5 +144,8 @@
   .monster {
     width: 180px;
     height: auto;
+  }
+  .monsterWrapper {
+    bottom: 10px;
   }
 }

@@ -79,7 +79,7 @@ export default function BrandCustomizer() {
       setSuccess(true);
       setTimeout(() => setSuccess(false), 3000);
     } catch (err: unknown) {
-      setError(err.message);
+      setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {
       setSaving(false);
     }
