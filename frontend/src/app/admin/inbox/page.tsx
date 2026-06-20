@@ -1,12 +1,11 @@
 'use client';
 
 import { useEffect, useState, useMemo } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
 import { 
-  Inbox, Star, Send, Archive, Trash2, Search, 
-  Filter, MoreVertical, Reply, Forward, ShieldAlert,
-  Mail, Clock, User, Tag, ChevronLeft, ChevronRight,
-  Loader2, CheckCircle2, AlertCircle, RefreshCw
+  Inbox, Archive, Trash2, Search, 
+  MoreVertical, Reply, Forward, ShieldAlert,
+  Mail, ChevronLeft, ChevronRight,
+  Loader2, AlertCircle, RefreshCw
 } from 'lucide-react';
 
 interface Email {
@@ -33,19 +32,18 @@ export default function InboxPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedEmail, setSelectedEmail] = useState<Email | null>(null);
 
-  const fetchData = async () => {
-    setLoading(true);
-    try {
-      const res = await fetch('http://localhost:8080/api/tickets');
-      const data = await res.json();
-      setEmails(Array.isArray(data) ? data : []);
-    } catch (err) {
-      console.error('Error fetching emails:', err);
-    }
-    setLoading(false);
-  };
-
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await fetch('http://localhost:8080/api/inbox');
+        const data = await res.json();
+        setEmails(Array.isArray(data) ? data : []);
+      } catch (err) {
+        console.error('Error fetching emails:', err);
+      }
+      setLoading(false);
+    };
+
     fetchData();
   }, []);
 

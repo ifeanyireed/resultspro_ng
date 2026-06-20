@@ -1,21 +1,32 @@
-import { Space_Grotesk, DM_Sans } from "next/font/google";
+import type { Metadata } from "next";
+import { Space_Grotesk, DM_Sans, Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
-import { ThemeProvider } from "@/components/ThemeContext";
+import Footer from "@/components/Footer";
+
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+});
 
 const spaceGrotesk = Space_Grotesk({
-  variable: "--font-space-grotesk",
   subsets: ["latin"],
+  variable: "--font-space-grotesk",
 });
 
 const dmSans = DM_Sans({
-  variable: "--font-dm-sans",
   subsets: ["latin"],
+  variable: "--font-dm-sans",
 });
 
-export const metadata = {
-  title: "ResultsPro.ng | Education Operating System",
-  description: "One OS for Learning, Engagement, Teaching & Intelligence.",
+export const metadata: Metadata = {
+  title: "ResultsPRO NG | Education Infrastructure",
+  description: "A premium digital campus platform for modern schools.",
+  icons: {
+    icon: "/logo.png",
+    shortcut: "/logo.png",
+    apple: "/logo.png",
+  },
 };
 
 export default function RootLayout({
@@ -24,12 +35,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className={`${spaceGrotesk.variable} ${dmSans.variable} antialiased`} suppressHydrationWarning>
-        <ThemeProvider>
-          <Navbar />
-          {children}
-        </ThemeProvider>
+    <html lang="en">
+      <body className={`${inter.variable} ${spaceGrotesk.variable} ${dmSans.variable} font-primary`}>
+        <Navbar />
+        {children}
+        <Footer />
       </body>
     </html>
   );

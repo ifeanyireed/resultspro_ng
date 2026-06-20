@@ -1,0 +1,18 @@
+
+> frontend@0.1.0 dev
+> next dev --turbo
+
+⚠ Port 3000 is in use by an unknown process, using available port 3003 instead.
+▲ Next.js 16.2.3 (Turbopack)
+- Local:         http://localhost:3003
+- Network:       http://192.168.100.49:3003
+✓ Ready in 7.1s
+⨯ Another next dev server is already running.
+
+- Local:        http://localhost:3000
+- PID:          46758
+- Dir:          /Volumes/ReedBreedCC/resultspro_ng/frontend
+- Log:          out/dev/logs/next-development.log
+
+Run kill 46758 to stop it.
+[?25h

@@ -1,0 +1,22 @@
+
+> frontend@0.1.0 build
+> next build
+
+▲ Next.js 16.2.3 (Turbopack)
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 2.3min
+  Running TypeScript ...
+Failed to type check.
+
+./src/app/admin/blog/page.tsx:145:11
+Type error: Cannot find name 'fetchData'.
+
+  [90m143 |[0m           setEditingItem([36mnull[0m);
+  [90m144 |[0m           setSuccess([36mnull[0m);
+[31m[1m>[0m [90m145 |[0m           fetchData();
+  [90m    |[0m           [31m[1m^[0m
+  [90m146 |[0m         }, [35m1000[0m);
+  [90m147 |[0m       } [36melse[0m {
+  [90m148 |[0m         setError(result.error || [32m'Failed to save'[0m);
+Next.js build worker exited with code: 1 and signal: null

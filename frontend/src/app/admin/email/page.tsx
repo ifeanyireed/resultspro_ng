@@ -3,9 +3,9 @@
 import { useEffect, useState, useMemo, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
-  Mail, Users, BarChart3, TrendingUp, UserPlus, Send, 
-  List, UserCheck, Calendar, PieChart, Plus, Search, 
-  Filter, MoreVertical, Edit3, Trash2, Globe, Clock, 
+  Mail, Users, BarChart3, TrendingUp, Send, 
+  List, PieChart, Plus, Search, 
+  Filter, MoreVertical, Edit3, Trash2, Clock, 
   ChevronRight, ArrowUpRight, Download, X, Save, Loader2, Upload
 } from 'lucide-react';
 import dynamic from 'next/dynamic';
@@ -75,26 +75,26 @@ export default function EmailMgmtPage() {
   const [modalType, setModalType] = useState<'list' | 'contact' | 'campaign'>('list');
   const [editingItem, setEditingItem] = useState<MailingList | Contact | Campaign | null>(null);
 
-  const fetchData = async () => {
-    try {
-      const [listsRes, contactsRes, campaignsRes, metricsRes] = await Promise.all([
-        fetch('http://localhost:8080/api/mailing-lists').then(res => res.json()),
-        fetch('http://localhost:8080/api/contacts').then(res => res.json()),
-        fetch('http://localhost:8080/api/campaigns').then(res => res.json()),
-        fetch('http://localhost:8080/api/metrics/engagement').then(res => res.json())
-      ]);
-
-      setLists(Array.isArray(listsRes) ? listsRes : []);
-      setContacts(Array.isArray(contactsRes) ? contactsRes : []);
-      setCampaigns(Array.isArray(campaignsRes) ? campaignsRes : []);
-      setMetrics(metricsRes);
-    } catch (err) {
-      console.error('Error fetching data:', err);
-    }
-    setLoading(false);
-  };
-
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [listsRes, contactsRes, campaignsRes, metricsRes] = await Promise.all([
+          fetch('http://localhost:8080/api/mailing-lists').then(res => res.json()),
+          fetch('http://localhost:8080/api/contacts').then(res => res.json()),
+          fetch('http://localhost:8080/api/campaigns').then(res => res.json()),
+          fetch('http://localhost:8080/api/metrics/engagement').then(res => res.json())
+        ]);
+
+        setLists(Array.isArray(listsRes) ? listsRes : []);
+        setContacts(Array.isArray(contactsRes) ? contactsRes : []);
+        setCampaigns(Array.isArray(campaignsRes) ? campaignsRes : []);
+        setMetrics(metricsRes);
+      } catch (err) {
+        console.error('Error fetching data:', err);
+      }
+      setLoading(false);
+    };
+
     fetchData();
   }, []);
 

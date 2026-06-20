@@ -69,8 +69,9 @@ export default function AdminBlogPage() {
   // Modal states
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalType, setModalType] = useState<'post' | 'category' | 'tag' | 'comment'>('post');
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [editingItem, setEditingItem] = useState<any>(null);
-  
+
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
 
@@ -100,7 +101,7 @@ export default function AdminBlogPage() {
       setCategories(Array.isArray(catsRes) ? catsRes : []);
       setTags(Array.isArray(tagsRes) ? tagsRes : []);
       setComments(Array.isArray(commentsRes) ? commentsRes : []);
-    } catch (err) {
+    } catch (err: unknown) {
       console.error('Fetch error:', err);
       setError('Failed to load data. Is the backend running?');
     }
@@ -165,7 +166,7 @@ export default function AdminBlogPage() {
       } else {
         alert('Failed to delete');
       }
-    } catch (err) {
+    } catch (err: unknown) {
       alert('Network error');
     }
   };

@@ -1,10 +1,8 @@
 'use client';
 
-import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { LayoutDashboard, FileText, Mail, MessageSquare, Home, Tag, Folder, MessageCircle, Inbox } from 'lucide-react';
-import ThemeToggle from '@/components/ThemeToggle';
+import { LayoutDashboard, FileText, Mail, MessageSquare, Home, Inbox } from 'lucide-react';
 
 export default function AdminLayout({
   children,
@@ -54,7 +52,6 @@ export default function AdminLayout({
         </nav>
 
         <div className="absolute bottom-8 px-8 w-full space-y-6">
-          <ThemeToggle />
           <Link href="/" className="flex items-center gap-2 text-muted hover:text-foreground transition-colors font-bold text-xs uppercase tracking-widest">
             <Home className="w-4 h-4" />
             Back to Site
