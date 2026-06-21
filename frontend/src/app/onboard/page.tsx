@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { ResultsProStepIndicator } from '@/components/onboarding/ResultsProStepIndicator';
 import {
   LayoutGrid,
   ClipboardList,
@@ -131,48 +132,21 @@ export default function OnboardPage() {
       <div className="h-2 md:h-4 w-full shrink-0" />
 
       {/* Top Navigation Steps */}
-      <div className="sticky top-0 z-50 w-full shrink-0 pt-8 pb-10 flex justify-center border-b border-gray-100 bg-white/50 backdrop-blur-sm">
-        <div className="flex items-center gap-8 md:gap-16 overflow-x-auto px-6 py-5 hide-scrollbar">
-          {currentSteps.map((step) => {
-            const isActive = step.id === 'ROLE';
-            const Icon = step.icon;
-            return (
-              <div key={step.id} className="flex flex-col items-center gap-2 shrink-0 p-2 cursor-pointer group">
-                {/* Outer Ring Container (using border and padding to contain the ring inside the box bounds) */}
-                <div
-                  className={`w-[44px] h-[44px] rounded-full flex items-center justify-center p-[3px] bg-transparent transition-all duration-300
-                    ${isActive
-                      ? 'border border-blue-600'
-                      : 'border border-transparent group-hover:border-blue-600'
-                    }`}
-                >
-                  {/* Inner Icon Circle */}
-                  <div
-                    className={`w-[36px] h-[36px] rounded-full flex items-center justify-center transition-all duration-300
-                      ${isActive
-                        ? 'bg-blue-600 text-white'
-                        : 'bg-white border border-gray-200 text-gray-400 group-hover:bg-blue-600 group-hover:border-blue-600 group-hover:text-white'
-                      }`}
-                  >
-                    <Icon size={16} strokeWidth={isActive ? 2.5 : 2} />
-                  </div>
-                </div>
-                <span className={`text-[9.5px] font-bold tracking-widest transition-colors duration-300 ${isActive ? 'text-gray-900' : 'text-gray-400 group-hover:text-gray-900'}`}>
-                  {step.label}
-                </span>
-              </div>
-            );
-          })}
-        </div>
-      </div>
+      <ResultsProStepIndicator 
+        steps={currentSteps} 
+        activeStepId="ROLE" 
+      />
 
       <div className="flex-1 w-full max-w-5xl self-center px-8 md:px-12 pt-12 md:pt-16 pb-0 md:pb-0 flex flex-col">
 
 
+        {/* Spacer above title for better breathing room */}
+        <div style={{ height: '4rem' }} />
+
         {/* Headers */}
         <div className="text-center mb-6 flex flex-col items-center">
-          <h1 className="!text-[3rem] md:!text-[4.2rem] font-bold text-[#0f172a] !text-[#0f172a] ![text-shadow:none] mb-3 leading-tight tracking-tight">Select Role</h1>
-          <p className="text-gray-500 !text-gray-500 ![text-shadow:none] text-sm md:text-[1.05rem] font-medium mb-4">Follow the steps to precisely categorize your business.</p>
+          <h1 className="!text-[2.25rem] md:!text-[3rem] font-bold text-[#0f172a] !text-[#0f172a] ![text-shadow:none] mb-3 leading-tight tracking-tight">Select Role</h1>
+          <p className="text-gray-500 !text-gray-500 ![text-shadow:none] text-sm md:text-base font-medium mb-4">Follow the steps to precisely categorize your business.</p>
           <button
             onClick={() => setSelectedRole(null)}
             className="text-[10.5px] font-bold text-gray-400 hover:text-red-500 tracking-[0.15em] uppercase transition-colors"

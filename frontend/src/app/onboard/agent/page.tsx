@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import { ResultsProRegistryForm } from '@/components/onboarding/ResultsProRegistryForm';
+import { ResultsProStepIndicator } from '@/components/onboarding/ResultsProStepIndicator';
 import {
   LayoutGrid,
   ClipboardList,
@@ -226,63 +227,26 @@ export default function AgentOnboarding() {
 
   const inputStyle = "w-full p-4 bg-slate-50 border border-slate-200/60 rounded-2xl focus:outline-none focus:ring-2 focus:ring-sky-500/20 focus:border-sky-500 transition-all text-sm font-bold text-slate-800 placeholder:text-slate-400 placeholder:font-medium";
   const labelStyle = "block text-[11px] font-extrabold uppercase tracking-widest text-slate-400 mb-2 pl-1";
-  const cardStyle = "bg-white/80 backdrop-blur-2xl border border-slate-200/60 rounded-[2rem] p-8 shadow-[0_8px_30px_rgb(0,0,0,0.04)] relative overflow-hidden";
+  const cardStyle = "bg-[#ffffff] border border-[#e2e8f0] p-10 max-w-[800px] mx-auto w-full";
 
   return (
     <>
-      <main className="bg-[#fafbfc] min-h-screen flex flex-col font-sans text-slate-900 selection:bg-blue-100" style={{ paddingBottom: '6rem' }}>
+      <main className="onboard-page bg-[#fafbfc] min-h-screen flex flex-col font-sans text-slate-900 selection:bg-blue-100" style={{ paddingBottom: '6rem' }}>
         <div className="h-2 md:h-4 w-full shrink-0" />
 
-        {/* Top Navigation Steps */}
-        <div className="sticky top-0 z-50 w-full shrink-0 pt-8 pb-10 flex justify-center border-b border-gray-100 bg-white/50 backdrop-blur-sm">
-          <div className="flex items-center gap-8 md:gap-16 overflow-x-auto px-6 py-5 hide-scrollbar">
-            {steps.map((s) => {
-              const isActive = s.id === step;
-              const isPast = s.id < step;
-              const Icon = s.icon;
+        <ResultsProStepIndicator 
+          steps={steps} 
+          activeStepId={step} 
+          onStepClick={(id) => {
+            if (id === 1) {
+              router.push('/onboard');
+            } else if (Number(id) < step) {
+              setStep(Number(id));
+            }
+          }} 
+        />
 
-              return (
-                <div
-                  key={s.id}
-                  onClick={() => {
-                    if (s.id === 1) {
-                      router.push('/onboard');
-                    } else if (isPast) {
-                      setStep(s.id);
-                    }
-                  }}
-                  className={`flex flex-col items-center gap-2 shrink-0 p-2 group transition-all
-                  ${(isPast || s.id === 1) ? 'cursor-pointer' : 'pointer-events-none'}`}
-                >
-                  {/* Outer Ring Container */}
-                  <div
-                    className={`w-[44px] h-[44px] rounded-full flex items-center justify-center p-[3px] bg-transparent transition-all duration-300
-                    ${isActive
-                        ? 'border border-blue-600'
-                        : 'border border-transparent group-hover:border-blue-600'
-                      }`}
-                  >
-                    {/* Inner Icon Circle */}
-                    <div
-                      className={`w-[36px] h-[36px] rounded-full flex items-center justify-center transition-all duration-300
-                      ${isActive
-                          ? 'bg-blue-600 text-white'
-                          : 'bg-white border border-gray-200 text-gray-400 group-hover:bg-blue-600 group-hover:border-blue-600 group-hover:text-white'
-                        }`}
-                    >
-                      <Icon size={16} strokeWidth={isActive ? 2.5 : 2} />
-                    </div>
-                  </div>
-                  <span className={`text-[9.5px] font-bold tracking-widest transition-colors duration-300 ${isActive ? 'text-gray-900' : 'text-gray-400 group-hover:text-gray-900'}`}>
-                    {s.label}
-                  </span>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-
-        <div className="flex-1 w-full max-w-5xl self-center px-8 md:px-12 pt-4 pb-0 md:pt-6 md:pb-0 flex flex-col">
+        <div className="flex-1 w-full max-w-5xl self-center px-6 md:px-10 pt-4 pb-8 flex flex-col overflow-y-auto custom-scrollbar">
           <AnimatePresence mode="wait">
 
             {/* SCREEN 1: ACCOUNT REGISTRATION */}
@@ -295,10 +259,11 @@ export default function AgentOnboarding() {
                 transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
                 className="space-y-8 flex flex-col"
               >
+                <div style={{ height: '4rem' }} />
                 {/* Form Header */}
                 <div className="text-center mb-6 flex flex-col items-center">
-                  <h1 className="!text-[3rem] md:!text-[4.2rem] font-bold text-[#0f172a] ![text-shadow:none] mb-3 leading-tight tracking-tight">Account Registration</h1>
-                  <p className="text-gray-500 !text-gray-500 ![text-shadow:none] text-sm md:text-[1.05rem] font-medium mb-4">Create your official partner credentials on the ResultsPRO network.</p>
+                  <h1 className="!text-[2.25rem] md:!text-[3rem] font-bold text-[#0f172a] !text-[#0f172a] ![text-shadow:none] mb-3 leading-tight tracking-tight">Account Registration</h1>
+                  <p className="text-gray-500 !text-gray-500 ![text-shadow:none] text-sm md:text-base font-medium mb-4">Provide accurate bio-data details. This cannot be easily changed.</p>
                 </div>
 
                 {/* Spacer above Section Label */}
@@ -311,36 +276,36 @@ export default function AgentOnboarding() {
                 </div>
                 <div style={{ height: '1.25rem' }} />
 
-                <div className={cardStyle}>
-                  <ResultsProRegistryForm 
-                    data={{
-                      name: formData.fullName,
-                      email: formData.email,
-                      phone: formData.phone,
-                      address: formData.address,
-                      zone: formData.zone
-                    }}
-                    onChange={(newData) => setFormData({ 
-                      ...formData, 
-                      fullName: newData.name ?? formData.fullName,
-                      email: newData.email ?? formData.email,
-                      phone: newData.phone ?? formData.phone,
-                      address: newData.address ?? formData.address,
-                      zone: newData.zone ?? formData.zone
-                    })}
-                    requireOtp={false}
-                    requirePassword={false}
-                    showAddress={true}
-                    showZone={true}
-                    zoneOptions={nigerianZones}
-                  />
-                </div>
+                <ResultsProRegistryForm 
+                  data={{
+                    name: formData.fullName,
+                    email: formData.email,
+                    phone: formData.phone,
+                    address: formData.address,
+                    zone: formData.zone,
+                  }}
+                  onChange={(newData) => setFormData({ 
+                    ...formData, 
+                    fullName: newData.name ?? formData.fullName,
+                    email: newData.email ?? formData.email,
+                    phone: newData.phone ?? formData.phone,
+                    address: newData.address ?? formData.address,
+                    zone: newData.zone ?? formData.zone
+                  })}
+                  requireOtp={false}
+                  requirePassword={false}
+                  showAddress={true}
+                  showZone={true}
+                  zoneOptions={nigerianZones}
+                />
 
+                <div style={{ height: '4rem' }} />
                 {/* Bottom Navigation Button Bar */}
-                <div className="w-full border-t border-gray-200 flex justify-between" style={{ marginTop: '2rem', paddingTop: '2rem' }}>
+                <div className="w-full shrink-0 border-t border-gray-200 flex justify-between sticky bottom-0 bg-[#fafbfc] px-6 py-6 z-10" style={{ marginTop: '2rem', paddingTop: '1.5rem', paddingBottom: '1.5rem' }}>
                   <button
                     onClick={() => router.push('/onboard')}
-                    className="h-12 px-6 bg-white text-slate-600 border border-slate-200/60 rounded-2xl font-bold flex items-center gap-2 hover:bg-slate-50 transition-all shadow-sm"
+                    className="bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 transition-all font-black uppercase tracking-widest text-xs flex items-center gap-2" 
+                    style={{ padding: '0.75rem 1.5rem', borderRadius: '9999px' }}
                   >
                     <ArrowLeft className="w-4 h-4" /> Change Role
                   </button>
@@ -348,9 +313,10 @@ export default function AgentOnboarding() {
                   <button
                     onClick={() => setStep(3)}
                     disabled={!isRegistrationValid}
-                    className="h-12 px-8 bg-[#146ef5] text-white rounded-2xl font-bold flex items-center gap-2 hover:bg-blue-600 transition-all shadow-md shadow-blue-500/20 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="bg-[#146ef5] hover:bg-[#146ef5]/90 text-white transition-all font-black uppercase tracking-widest text-xs flex items-center gap-2 shadow-md hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed" 
+                    style={{ padding: '0.75rem 1.5rem', borderRadius: '9999px' }}
                   >
-                    Next: KYC Verification <ArrowRight className="w-4 h-4" />
+                    <span>Next: KYC Verification</span> <ArrowRight className="w-4 h-4" />
                   </button>
                 </div>
               </motion.div>
@@ -366,10 +332,11 @@ export default function AgentOnboarding() {
                 transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
                 className="space-y-8 flex flex-col"
               >
+                <div style={{ height: '4rem' }} />
                 {/* Form Header */}
                 <div className="text-center mb-6 flex flex-col items-center">
-                  <h1 className="!text-[3rem] md:!text-[4.2rem] font-bold text-[#0f172a] ![text-shadow:none] mb-3 leading-tight tracking-tight">KYC Verification</h1>
-                  <p className="text-gray-500 !text-gray-500 ![text-shadow:none] text-sm md:text-[1.05rem] font-medium mb-4">Verify your identity profile to unlock referral commission limits.</p>
+                  <h1 className="!text-[2.25rem] md:!text-[3rem] font-bold text-[#0f172a] !text-[#0f172a] ![text-shadow:none] mb-3 leading-tight tracking-tight">KYC Verification</h1>
+                  <p className="text-gray-500 !text-gray-500 ![text-shadow:none] text-sm md:text-base font-medium mb-4">Verify your identity profile to unlock referral commission limits.</p>
                 </div>
 
                 {/* Spacer above Section Label */}
@@ -382,7 +349,7 @@ export default function AgentOnboarding() {
                 </div>
                 <div style={{ height: '1.25rem' }} />
 
-                <div className={cardStyle}>
+                <div className={cardStyle} style={{ boxShadow: '0 30px 60px rgba(0,0,0,0.02)', borderRadius: '4px', padding: '2.5rem', margin: '0 auto', maxWidth: '800px', width: '100%', backgroundColor: '#ffffff' }}>
 
                   {/* Visual verification processing loader animation overlay */}
                   {isVerifyingKYC && (
@@ -593,11 +560,13 @@ export default function AgentOnboarding() {
                   </div>
                 </div>
 
+                <div style={{ height: '4rem' }} />
                 {/* Bottom Navigation Button Bar */}
-                <div className="w-full border-t border-gray-200 flex justify-between" style={{ marginTop: '2rem', paddingTop: '2rem' }}>
+                <div className="w-full shrink-0 border-t border-gray-200 flex justify-between sticky bottom-0 bg-[#fafbfc] px-6 py-6 z-10" style={{ marginTop: '2rem', paddingTop: '1.5rem', paddingBottom: '1.5rem' }}>
                   <button
                     onClick={() => setStep(2)}
-                    className="h-12 px-6 bg-white text-slate-600 border border-slate-200/60 rounded-2xl font-bold flex items-center gap-2 hover:bg-slate-50 transition-all shadow-sm"
+                    className="bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 transition-all font-black uppercase tracking-widest text-xs flex items-center gap-2" 
+                    style={{ padding: '0.75rem 1.5rem', borderRadius: '9999px' }}
                   >
                     <ArrowLeft className="w-4 h-4" /> Back
                   </button>
@@ -605,9 +574,10 @@ export default function AgentOnboarding() {
                   <button
                     onClick={triggerKYCVerification}
                     disabled={!isKYCReady}
-                    className="h-12 px-8 bg-[#146ef5] text-white rounded-2xl font-bold flex items-center gap-2 hover:bg-blue-600 transition-all shadow-md shadow-blue-500/20 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="bg-[#146ef5] hover:bg-[#146ef5]/90 text-white transition-all font-black uppercase tracking-widest text-xs flex items-center gap-2 shadow-md hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed" 
+                    style={{ padding: '0.75rem 1.5rem', borderRadius: '9999px' }}
                   >
-                    Verify & Continue <ArrowRight className="w-4 h-4" />
+                    <span>Verify & Continue</span> <ArrowRight className="w-4 h-4" />
                   </button>
                 </div>
               </motion.div>
@@ -623,10 +593,11 @@ export default function AgentOnboarding() {
                 transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
                 className="space-y-8 flex flex-col"
               >
+                <div style={{ height: '4rem' }} />
                 {/* Form Header */}
                 <div className="text-center mb-6 flex flex-col items-center">
-                  <h1 className="!text-[3rem] md:!text-[4.2rem] font-bold text-[#0f172a] ![text-shadow:none] mb-3 leading-tight tracking-tight">Financial Ledger</h1>
-                  <p className="text-gray-500 !text-gray-500 ![text-shadow:none] text-sm md:text-[1.05rem] font-medium mb-4">Setup your designated bank details for automated commission payouts.</p>
+                  <h1 className="!text-[2.25rem] md:!text-[3rem] font-bold text-[#0f172a] !text-[#0f172a] ![text-shadow:none] mb-3 leading-tight tracking-tight">Financial Ledger</h1>
+                  <p className="text-gray-500 !text-gray-500 ![text-shadow:none] text-sm md:text-base font-medium mb-4">Setup your designated bank details for automated commission payouts.</p>
                 </div>
 
                 {/* Spacer above Section Label */}
@@ -638,8 +609,7 @@ export default function AgentOnboarding() {
                   <span className="text-[10.5px] font-bold text-gray-400 tracking-[0.2em] uppercase">4. LEDGER</span>
                 </div>
                 <div style={{ height: '1.25rem' }} />
-
-                <div className={cardStyle}>
+                <div className={cardStyle} style={{ boxShadow: '0 30px 60px rgba(0,0,0,0.02)', borderRadius: '4px', padding: '2.5rem', margin: '0 auto', maxWidth: '800px', width: '100%', backgroundColor: '#ffffff' }}>
                   <ResultsProRegistryForm 
                     data={{
                       name: formData.fullName,
@@ -658,27 +628,64 @@ export default function AgentOnboarding() {
                     })}
                     requireOtp={false}
                     requirePassword={false}
-                    showAddress={true}
-                    showZone={true}
-                    zoneOptions={nigerianZones}
+                    showAddress={false}
+                    showZone={false}
+                    customTopElement={
+                      <div className="space-y-6 mb-6">
+                        <div>
+                          <label className={labelStyle}>Bank Name</label>
+                          <select
+                            value={formData.bankName}
+                            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setFormData({ ...formData, bankName: e.target.value })}
+                            className={`${inputStyle} appearance-none cursor-pointer`}
+                          >
+                            {banks.map(b => <option key={b}>{b}</option>)}
+                          </select>
+                        </div>
+                        <div>
+                          <label className={labelStyle}>Account Number</label>
+                          <input
+                            type="text"
+                            placeholder="10-digit account number"
+                            value={formData.accountNumber}
+                            onChange={(e) => setFormData({ ...formData, accountNumber: e.target.value })}
+                            className={inputStyle}
+                            maxLength={10}
+                          />
+                        </div>
+                        <div>
+                          <label className={labelStyle}>Account Name (Auto-verified)</label>
+                          <input
+                            type="text"
+                            disabled
+                            placeholder="Will be auto-filled..."
+                            value={formData.accountName}
+                            className={`${inputStyle} bg-slate-100 text-slate-500 cursor-not-allowed border-slate-200`}
+                          />
+                        </div>
+                      </div>
+                    }
                   />
                 </div>
 
+                <div style={{ height: '4rem' }} />
                 {/* Bottom Navigation Button Bar */}
-                <div className="w-full border-t border-gray-200 flex justify-between" style={{ marginTop: '2rem', paddingTop: '2rem' }}>
+                <div className="w-full shrink-0 border-t border-gray-200 flex justify-between sticky bottom-0 bg-[#fafbfc] px-6 py-6 z-10" style={{ marginTop: '2rem', paddingTop: '1.5rem', paddingBottom: '1.5rem' }}>
                   <button
                     onClick={() => setStep(3)}
-                    className="h-12 px-6 bg-white text-slate-600 border border-slate-200/60 rounded-2xl font-bold flex items-center gap-2 hover:bg-slate-50 transition-all shadow-sm"
+                    className="bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 transition-all font-black uppercase tracking-widest text-xs flex items-center gap-2" 
+                    style={{ padding: '0.75rem 1.5rem', borderRadius: '9999px' }}
                   >
                     <ArrowLeft className="w-4 h-4" /> Back
                   </button>
 
                   <button
                     onClick={() => setStep(5)}
-                    disabled={!isLedgerValid}
-                    className="h-12 px-8 bg-[#146ef5] text-white rounded-2xl font-bold flex items-center gap-2 hover:bg-blue-600 transition-all shadow-md shadow-blue-500/20 disabled:opacity-50 disabled:cursor-not-allowed"
+                    disabled={formData.accountNumber.length < 10}
+                    className="bg-[#146ef5] hover:bg-[#146ef5]/90 text-white transition-all font-black uppercase tracking-widest text-xs flex items-center gap-2 shadow-md hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed" 
+                    style={{ padding: '0.75rem 1.5rem', borderRadius: '9999px' }}
                   >
-                    Next: Referral Console <ArrowRight className="w-4 h-4" />
+                    <span>Next: Set Profile URL</span> <ArrowRight className="w-4 h-4" />
                   </button>
                 </div>
               </motion.div>
@@ -704,10 +711,11 @@ export default function AgentOnboarding() {
                   </div>
                 </div>
 
+                <div style={{ height: '4rem' }} />
                 {/* Form Header */}
                 <div className="text-center mb-6 flex flex-col items-center">
-                  <h1 className="!text-[3rem] md:!text-[4.2rem] font-bold text-[#0f172a] ![text-shadow:none] mb-3 leading-tight tracking-tight">Referral Console</h1>
-                  <p className="text-gray-500 !text-gray-500 ![text-shadow:none] text-sm md:text-[1.05rem] font-medium mb-4">Configure your links, forecast payouts, and view marketing materials.</p>
+                  <h1 className="!text-[2.25rem] md:!text-[3rem] font-bold text-[#0f172a] !text-[#0f172a] ![text-shadow:none] mb-3 leading-tight tracking-tight">Referral Console</h1>
+                  <p className="text-gray-500 !text-gray-500 ![text-shadow:none] text-sm md:text-base font-medium mb-4">Configure your links, forecast payouts, and view marketing materials.</p>
                 </div>
 
                 {/* Spacer above Section Label */}
@@ -881,12 +889,14 @@ export default function AgentOnboarding() {
 
                 </div>
 
+                <div style={{ height: '4rem' }} />
                 {/* Bottom Navigation Button Bar */}
-                <div className="w-full border-t border-gray-200 flex justify-between" style={{ marginTop: '2rem', paddingTop: '2rem' }}>
+                <div className="w-full shrink-0 border-t border-gray-200 flex justify-between sticky bottom-0 bg-[#fafbfc] px-6 py-6 z-10" style={{ marginTop: '2rem', paddingTop: '1.5rem', paddingBottom: '1.5rem' }}>
                   <button
                     onClick={() => setStep(4)}
                     disabled={isSubmittingFinal}
-                    className="h-12 px-6 bg-white text-slate-600 border border-slate-200/60 rounded-2xl font-bold flex items-center gap-2 hover:bg-slate-50 transition-all shadow-sm"
+                    className="bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 transition-all font-black uppercase tracking-widest text-xs flex items-center gap-2" 
+                    style={{ padding: '0.75rem 1.5rem', borderRadius: '9999px' }}
                   >
                     <ArrowLeft className="w-4 h-4" /> Back
                   </button>
@@ -894,11 +904,13 @@ export default function AgentOnboarding() {
                   <button
                     onClick={handleFinalizeOnboarding}
                     disabled={isSubmittingFinal}
-                    className="h-12 px-10 bg-emerald-500 hover:bg-emerald-600 text-white rounded-2xl font-bold flex items-center gap-2 transition-all shadow-md shadow-emerald-500/20 disabled:opacity-50"
+                    className="bg-emerald-500 hover:bg-emerald-600 text-white transition-all font-black uppercase tracking-widest text-xs flex items-center gap-2 shadow-md hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed" 
+                    style={{ padding: '0.75rem 1.5rem', borderRadius: '9999px' }}
                   >
                     {isSubmittingFinal ? (
                       <>
-                        <Loader2 className="w-4 h-4 animate-spin" /> Customizing Console...
+                        <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                        <span>Customizing Console...</span>
                       </>
                     ) : (
                       <>

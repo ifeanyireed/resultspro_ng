@@ -23,11 +23,19 @@ import {
   ShieldCheck,
   Send,
   Sparkles,
+  ChevronDown,
   School,
-  X
+  Plus,
+  Camera,
+  X,
+  Calculator,
+  FlaskConical,
+  Globe,
+  BookText
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { ResultsProRegistryForm } from '@/components/onboarding/ResultsProRegistryForm';
+import { ResultsProStepIndicator } from '@/components/onboarding/ResultsProStepIndicator';
 
 const steps = [
   { id: 1, label: 'ROLE', icon: LayoutGrid },
@@ -61,7 +69,7 @@ export default function TeacherOnboarding() {
 
     // Step 3
     phone: '',
-    gender: '',
+    gender: 'Female',
     specialization: '',
     avatarUrl: '' as string | null,
     avatarFile: null as File | null,
@@ -143,15 +151,24 @@ export default function TeacherOnboarding() {
   const isStep3Valid =
     formData.phone.length >= 10 &&
     formData.gender !== '' &&
-    formData.specialization !== '' &&
-    formData.avatarCropped;
+    formData.specialization !== '';
 
   // Class assignment verification data
   const assignments = [
     { id: 1, class: 'Grade 10A', subject: 'Mathematics', type: 'Core Subject', periods: 4 },
-    { id: 2, class: 'Grade 10B', subject: 'Further Mathematics', type: 'Elective Subject', periods: 3 },
-    { id: 3, class: 'Grade 11A', subject: 'Mathematics', type: 'Core Subject', periods: 4 }
+    { id: 2, class: 'Grade 10B', subject: 'Physics', type: 'Core Subject', periods: 3 },
+    { id: 3, class: 'Grade 11A', subject: 'English Language', type: 'Core Subject', periods: 4 },
+    { id: 4, class: 'Grade 12A', subject: 'Further Mathematics', type: 'Elective Subject', periods: 2 }
   ];
+
+  const getSubjectIcon = (subject: string) => {
+    const s = subject.toLowerCase();
+    if (s.includes('math')) return <Calculator className="w-5 h-5" strokeWidth={1.5} />;
+    if (s.includes('physics') || s.includes('chemistry') || s.includes('science')) return <FlaskConical className="w-5 h-5" strokeWidth={1.5} />;
+    if (s.includes('english') || s.includes('language') || s.includes('history')) return <BookText className="w-5 h-5" strokeWidth={1.5} />;
+    if (s.includes('geography') || s.includes('social')) return <Globe className="w-5 h-5" strokeWidth={1.5} />;
+    return <BookOpen className="w-5 h-5" strokeWidth={1.5} />;
+  };
 
   // Steps navigation
   const nextStep = () => setStep(s => Math.min(s + 1, steps.length));
@@ -196,7 +213,7 @@ export default function TeacherOnboarding() {
   // Styling Variables (Matches resultspro UI aesthetics)
   const inputStyle = "w-full p-4 bg-slate-50 border border-slate-200/60 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all text-sm font-bold text-slate-800 placeholder:text-slate-400 placeholder:font-medium";
   const labelStyle = "block text-[11px] font-extrabold uppercase tracking-widest text-slate-400 mb-2 pl-1";
-  const cardStyle = "bg-white/80 backdrop-blur-2xl border border-slate-200/60 rounded-[2.25rem] p-8 shadow-[0_8px_30px_rgb(0,0,0,0.03)]";
+  const cardStyle = "bg-[#ffffff] border border-[#e2e8f0] p-10 max-w-[800px] mx-auto w-full";
 
   return (
     <>
@@ -221,57 +238,20 @@ export default function TeacherOnboarding() {
         )}
       </AnimatePresence>
 
-      <main className="bg-[#fafbfc] min-h-screen flex flex-col font-sans text-slate-900 selection:bg-blue-100" style={{ paddingBottom: '6rem' }}>
+      <main className="onboard-page bg-[#fafbfc] min-h-screen flex flex-col font-sans text-slate-900 selection:bg-blue-100" style={{ paddingBottom: '6rem' }}>
         <div className="h-2 md:h-4 w-full shrink-0" />
 
-        {/* Top Navigation Steps */}
-        <div className="sticky top-0 z-50 w-full shrink-0 pt-8 pb-10 flex justify-center border-b border-gray-100 bg-white/50 backdrop-blur-sm">
-          <div className="flex items-center gap-8 md:gap-16 overflow-x-auto px-6 py-5 hide-scrollbar">
-            {steps.map((s) => {
-              const isActive = s.id === step;
-              const isPast = s.id < step;
-              const Icon = s.icon;
-
-              return (
-                <div
-                  key={s.id}
-                  onClick={() => {
-                    if (s.id === 1) {
-                      router.push('/onboard');
-                    } else if (isPast) {
-                      setStep(s.id);
-                    }
-                  }}
-                  className={`flex flex-col items-center gap-2 shrink-0 p-2 group transition-all
-                    ${(isPast || s.id === 1) ? 'cursor-pointer' : 'pointer-events-none'}`}
-                >
-                  {/* Outer Ring Container */}
-                  <div
-                    className={`w-[44px] h-[44px] rounded-full flex items-center justify-center p-[3px] bg-transparent transition-all duration-300
-                      ${isActive
-                        ? 'border border-blue-600'
-                        : 'border border-transparent group-hover:border-blue-600'
-                      }`}
-                  >
-                    {/* Inner Icon Circle */}
-                    <div
-                      className={`w-[36px] h-[36px] rounded-full flex items-center justify-center transition-all duration-300
-                        ${isActive
-                          ? 'bg-blue-600 text-white'
-                          : 'bg-white border border-gray-200 text-gray-400 group-hover:bg-blue-600 group-hover:border-blue-600 group-hover:text-white'
-                        }`}
-                    >
-                      <Icon size={16} strokeWidth={isActive ? 2.5 : 2} />
-                    </div>
-                  </div>
-                  <span className={`text-[9.5px] font-bold tracking-widest transition-colors duration-300 ${isActive ? 'text-gray-900' : 'text-gray-400 group-hover:text-gray-900'}`}>
-                    {s.label}
-                  </span>
-                </div>
-              );
-            })}
-          </div>
-        </div>
+        <ResultsProStepIndicator 
+          steps={steps} 
+          activeStepId={step} 
+          onStepClick={(id) => {
+            if (id === 1) {
+              router.push('/onboard');
+            } else if (Number(id) < step) {
+              setStep(Number(id));
+            }
+          }} 
+        />
 
         <div className="flex-1 w-full max-w-5xl self-center px-6 md:px-10 pt-4 pb-8 flex flex-col overflow-y-auto custom-scrollbar">
           <AnimatePresence mode="wait">
@@ -285,14 +265,17 @@ export default function TeacherOnboarding() {
                 transition={{ duration: 0.35, ease: 'easeInOut' }}
                 className="space-y-8 flex flex-col"
               >
+                {/* Spacer above title for better breathing room */}
+                <div style={{ height: '4rem' }} />
+
                 {/* Headers */}
                 <div className="text-center mb-6 flex flex-col items-center">
                   <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 border border-blue-100 text-blue-600 font-extrabold text-[10px] tracking-wider uppercase mb-3">
                     <School className="w-3.5 h-3.5" />
                     <span>{formData.schoolName}</span>
                   </div>
-                  <h1 className="!text-[3rem] md:!text-[4.2rem] font-bold text-[#0f172a] ![text-shadow:none] mb-3 leading-tight tracking-tight">Invitation Verification</h1>
-                  <p className="text-gray-500 !text-gray-500 ![text-shadow:none] text-sm md:text-[1.05rem] font-medium mb-4">Verify your pre-approved classroom registry details and secure your access.</p>
+                  <h1 className="!text-[2.25rem] md:!text-[3rem] font-bold text-[#0f172a] !text-[#0f172a] ![text-shadow:none] mb-3 leading-tight tracking-tight">Invitation Verification</h1>
+                  <p className="text-gray-500 !text-gray-500 ![text-shadow:none] text-sm md:text-base font-medium mb-4">Verify your pre-approved classroom registry details and secure your access.</p>
                 </div>
 
                 {/* Spacer above Section Label */}
@@ -305,8 +288,7 @@ export default function TeacherOnboarding() {
                 </div>
                 <div style={{ height: '1.25rem' }} />
 
-                <div className={cardStyle}>
-                  <ResultsProRegistryForm 
+                <ResultsProRegistryForm 
                     data={{
                       name: formData.name,
                       email: formData.email,
@@ -323,38 +305,42 @@ export default function TeacherOnboarding() {
                     showPhone={false}
                     readOnlyFields={['email']}
                     customTopElement={
-                      <div className="mb-6">
-                        <label className={labelStyle}>Assigned School</label>
-                        <div className="relative">
-                          <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                            <School className="w-4 h-4 text-slate-400" />
+                      <div className="mb-8 flex flex-row items-center gap-3 w-full">
+                        <div className="w-12 h-12 shrink-0 rounded-full bg-white border border-slate-200 shadow-sm flex items-center justify-center overflow-hidden">
+                          <div className="w-full h-full bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center text-white text-lg font-black">
+                            {formData.schoolName.charAt(0)}
                           </div>
-                          <input
-                            type="text"
-                            value={formData.schoolName}
-                            readOnly
-                            className={`${inputStyle} pl-11 text-slate-400 select-all cursor-default bg-slate-100 border-slate-200`}
-                          />
+                        </div>
+
+                        <div className="flex flex-col justify-center">
+                          <h2 className="font-extrabold text-slate-800 text-left tracking-tight leading-none mb-1" style={{ fontSize: '33px' }}>
+                            {formData.schoolName}
+                          </h2>
+                          <span className="text-[9px] font-bold uppercase tracking-wider text-slate-400 text-left block">
+                            Assigned School
+                          </span>
                         </div>
                       </div>
                     }
                   />
-                </div>
 
+                <div style={{ height: '4rem' }} />
                 {/* Bottom Navigation Button Bar */}
-                <div className="w-full shrink-0 border-t border-gray-200 flex justify-between sticky bottom-0 bg-[#fafbfc] px-6 py-6 z-10" style={{ marginTop: '2rem' }}>
+                <div className="w-full shrink-0 border-t border-gray-200 flex justify-between sticky bottom-0 bg-[#fafbfc] px-6 py-6 z-10" style={{ marginTop: '2rem', paddingTop: '1.5rem', paddingBottom: '1.5rem' }}>
                   <button
                     onClick={prevStep}
-                    className="h-12 px-6 bg-white text-slate-600 border border-slate-200/60 rounded-2xl font-bold flex items-center gap-2 hover:bg-slate-50 transition-all shadow-sm"
+                    className="bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 transition-all font-black uppercase tracking-widest text-xs flex items-center gap-2" 
+                    style={{ padding: '0.75rem 1.5rem', borderRadius: '9999px' }}
                   >
                     <ArrowLeft className="w-4 h-4" /> Cancel
                   </button>
                   <button
                     onClick={nextStep}
                     disabled={!isStep2Valid}
-                    className="h-12 px-8 bg-[#146ef5] hover:bg-blue-600 text-white rounded-2xl font-bold flex items-center gap-2 transition-all shadow-md shadow-blue-500/20 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="bg-blue-600 hover:bg-blue-700 text-white transition-all font-black uppercase tracking-widest text-xs flex items-center gap-2 shadow-md hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed" 
+                    style={{ padding: '0.75rem 1.5rem', borderRadius: '9999px' }}
                   >
-                    <span>Next: Complete Profile</span> <ArrowRight className="w-4 h-4" />
+                    <span>Next Step</span> <ArrowRight className="w-4 h-4" />
                   </button>
                 </div>
               </motion.div>
@@ -370,10 +356,13 @@ export default function TeacherOnboarding() {
                 transition={{ duration: 0.35 }}
                 className="space-y-8 flex flex-col"
               >
+                {/* Spacer above title for better breathing room */}
+                <div style={{ height: '4rem' }} />
+
                 {/* Headers */}
                 <div className="text-center mb-6 flex flex-col items-center">
-                  <h1 className="!text-[3rem] md:!text-[4.2rem] font-bold text-[#0f172a] ![text-shadow:none] mb-3 leading-tight tracking-tight">Profile Completion</h1>
-                  <p className="text-gray-500 !text-gray-500 ![text-shadow:none] text-sm md:text-[1.05rem] font-medium mb-4">Verify bio-data items and align specialization preferences.</p>
+                  <h1 className="!text-[2.25rem] md:!text-[3rem] font-bold text-[#0f172a] !text-[#0f172a] ![text-shadow:none] mb-3 leading-tight tracking-tight">Profile Completion</h1>
+                  <p className="text-gray-500 !text-gray-500 ![text-shadow:none] text-sm md:text-base font-medium mb-4">Verify bio-data items and align specialization preferences.</p>
                 </div>
 
                 {/* Spacer above Section Label */}
@@ -389,14 +378,14 @@ export default function TeacherOnboarding() {
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
                   {/* Inputs Column */}
                   <div className="lg:col-span-7 space-y-6">
-                    <div className={cardStyle}>
-                      <div className="space-y-5">
+                    <div className={cardStyle} style={{ boxShadow: '0 30px 60px rgba(0,0,0,0.02)', borderRadius: '4px', padding: '2.5rem', margin: '0 auto', maxWidth: '800px', width: '100%', backgroundColor: '#ffffff' }}>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
 
                         {/* Phone Number */}
                         <div>
                           <label className={labelStyle}>Contact Phone Number</label>
                           <div className="relative">
-                            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                            <div className="absolute inset-y-0 left-0 flex items-center pointer-events-none z-10" style={{ paddingLeft: '1rem' }}>
                               <Phone className="w-4 h-4 text-slate-400" />
                             </div>
                             <input
@@ -404,7 +393,7 @@ export default function TeacherOnboarding() {
                               placeholder="+234 803 123 4567"
                               value={formData.phone}
                               onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                              className={`${inputStyle} pl-11`}
+                              style={{ padding: '0.75rem 1.25rem', paddingLeft: '2.75rem', border: '1px solid #e2e8f0', borderRadius: '4px', outline: 'none', fontSize: '0.875rem', width: '100%', background: 'white' }}
                             />
                           </div>
                         </div>
@@ -412,20 +401,32 @@ export default function TeacherOnboarding() {
                         {/* Gender Selection */}
                         <div>
                           <label className={labelStyle}>Gender</label>
-                          <div className="grid grid-cols-3 gap-3">
-                            {['Female', 'Male', 'Other'].map((g) => (
-                              <button
-                                key={g}
-                                type="button"
-                                onClick={() => setFormData({ ...formData, gender: g })}
-                                className={`p-3.5 rounded-xl border text-xs font-bold transition-all ${formData.gender === g
-                                    ? 'border-blue-600 bg-blue-50 text-blue-700'
-                                    : 'border-slate-200 bg-white text-slate-600 hover:bg-slate-50'
-                                  }`}
-                              >
-                                {g}
-                              </button>
-                            ))}
+                          <div style={{ display: 'flex', background: '#f1f5f9', padding: '0.375rem', borderRadius: '9999px', width: '100%', maxWidth: '350px', position: 'relative' }}>
+                            {['Female', 'Male', 'Other'].map((g) => {
+                              const isSelected = formData.gender === g;
+                              return (
+                                <button
+                                  key={g}
+                                  type="button"
+                                  onClick={() => setFormData({ ...formData, gender: g })}
+                                  style={{
+                                    flex: 1,
+                                    padding: '0.875rem 0',
+                                    borderRadius: '9999px',
+                                    backgroundColor: isSelected ? '#ffffff' : 'transparent',
+                                    color: isSelected ? '#146ef5' : '#64748b',
+                                    boxShadow: isSelected ? '0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03)' : 'none',
+                                    fontWeight: isSelected ? '800' : '600',
+                                    fontSize: '0.75rem',
+                                    textTransform: 'uppercase',
+                                    letterSpacing: '0.05em',
+                                    transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)'
+                                  }}
+                                >
+                                  {g}
+                                </button>
+                              );
+                            })}
                           </div>
                         </div>
 
@@ -433,10 +434,14 @@ export default function TeacherOnboarding() {
                         <div>
                           <label className={labelStyle}>Academic Specialization</label>
                           <div className="relative">
+                            <div className="absolute inset-y-0 left-0 flex items-center pointer-events-none z-10" style={{ paddingLeft: '1rem' }}>
+                              <Compass className="w-4 h-4 text-slate-400" />
+                            </div>
                             <select
                               value={formData.specialization}
                               onChange={(e) => setFormData({ ...formData, specialization: e.target.value })}
-                              className={`${inputStyle} appearance-none bg-white cursor-pointer pr-10`}
+                              className="appearance-none cursor-pointer relative"
+                              style={{ padding: '0.75rem 1.25rem', paddingLeft: '2.75rem', paddingRight: '2.5rem', border: '1px solid #e2e8f0', borderRadius: '4px', outline: 'none', fontSize: '0.875rem', width: '100%', background: 'white' }}
                             >
                               <option value="" disabled>Select Specialization Degree</option>
                               <option value="B.Sc. Mathematics">B.Sc. Mathematics</option>
@@ -447,8 +452,8 @@ export default function TeacherOnboarding() {
                               <option value="B.Ed. Science Education">B.Ed. Science Education</option>
                               <option value="M.Ed. Educational Management">M.Ed. Educational Management</option>
                             </select>
-                            <div className="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none text-slate-400">
-                              <Compass className="w-4 h-4" />
+                            <div className="absolute inset-y-0 right-0 flex items-center pointer-events-none text-slate-400" style={{ paddingRight: '1rem' }}>
+                              <ChevronDown className="w-4 h-4" />
                             </div>
                           </div>
                         </div>
@@ -458,65 +463,58 @@ export default function TeacherOnboarding() {
                   </div>
 
                   {/* Avatar Upload / Crop UI Column */}
-                  <div className="lg:col-span-5 space-y-6">
-                    <div className="bg-white border border-slate-200/60 rounded-[2.25rem] p-6 shadow-md">
-                      <label className={labelStyle}>Profile Avatar Setup</label>
+                  <div className="lg:col-span-5 flex flex-col items-center justify-start pt-4 space-y-6">
+                    <label 
+                      className="relative w-52 h-52 rounded-full flex items-center justify-center cursor-pointer group transition-all mt-4"
+                      style={{ boxShadow: '0 15px 35px -5px rgba(0,0,0,0.1), 0 10px 15px -5px rgba(0,0,0,0.04)' }}
+                    >
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handleAvatarChange}
+                        className="hidden"
+                      />
 
-                      <div className="mt-3 flex flex-col items-center">
-                        {/* Image Box */}
-                        <div className="relative w-40 h-40 rounded-full border-4 border-slate-100 overflow-hidden bg-slate-50 flex items-center justify-center shadow-inner group">
-                          {formData.avatarUrl ? (
-                            <motion.div
-                              className="relative w-full h-full"
-                              animate={{ scale: formData.avatarCropped ? 1 : 1.05 }}
-                            >
-                              {/* Crop viewport screen */}
-                              <img
-                                src={formData.avatarUrl}
-                                alt="Avatar Source"
-                                className="absolute object-cover transition-transform duration-75"
-                                style={{
-                                  width: '100%',
-                                  height: '100%',
-                                  transform: `scale(${formData.avatarZoom}) rotate(${formData.avatarRotate}deg)`,
-                                }}
-                              />
-
-                              {/* Overlay circle crop boundary */}
-                              {!formData.avatarCropped && (
-                                <div className="absolute inset-0 border-2 border-dashed border-blue-500 rounded-full pointer-events-none bg-black/15 shadow-[0_0_0_9999px_rgba(0,0,0,0.4)]" />
-                              )}
-                            </motion.div>
-                          ) : (
-                            <div className="text-center p-4">
-                              <Upload className="w-8 h-8 text-slate-400 mx-auto mb-2" />
-                              <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">No Photo</span>
-                            </div>
-                          )}
+                      {formData.avatarUrl ? (
+                        <div className="w-full h-full rounded-full overflow-hidden relative">
+                          <motion.div
+                            className="relative w-full h-full"
+                            animate={{ scale: formData.avatarCropped ? 1 : 1.05 }}
+                          >
+                            <img
+                              src={formData.avatarUrl}
+                              alt="Avatar Source"
+                              className="absolute object-cover transition-transform duration-75"
+                              style={{
+                                width: '100%',
+                                height: '100%',
+                                transform: `scale(${formData.avatarZoom}) rotate(${formData.avatarRotate}deg)`,
+                              }}
+                            />
+                            {!formData.avatarCropped && (
+                              <div className="absolute inset-0 border-2 border-dashed border-blue-500 rounded-full pointer-events-none bg-black/15 shadow-[0_0_0_9999px_rgba(0,0,0,0.4)]" />
+                            )}
+                          </motion.div>
                         </div>
+                      ) : (
+                        <div 
+                          className="w-full h-full rounded-full flex items-center justify-center overflow-hidden"
+                          style={{
+                            backgroundImage: 'url(/abstract-blue-1.jpg)',
+                            backgroundSize: 'cover',
+                            backgroundPosition: 'center',
+                          }}
+                        >
+                          <div className="absolute inset-0 bg-black/40 rounded-full group-hover:bg-black/50 transition-colors"></div>
+                          <Camera className="w-12 h-12 text-white/90 transition-colors group-hover:text-white z-10 relative drop-shadow-md" strokeWidth={1} />
+                        </div>
+                      )}
 
-                        {/* Upload / Sandbox Triggers */}
-                        <div className="mt-4 flex flex-col gap-2 w-full">
-                          <div className="flex gap-2">
-                            <label className="flex-1 h-9 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl flex items-center justify-center gap-1.5 cursor-pointer transition-all">
-                              <Upload className="w-3.5 h-3.5" />
-                              <span>Upload</span>
-                              <input
-                                type="file"
-                                accept="image/*"
-                                onChange={handleAvatarChange}
-                                className="hidden"
-                              />
-                            </label>
-
-                            <button
-                              type="button"
-                              onClick={useSampleAvatar}
-                              className="px-3 h-9 bg-blue-50 hover:bg-blue-100 text-blue-600 text-xs font-bold rounded-xl border border-blue-100 transition-all"
-                            >
-                              Use Sample
-                            </button>
-                          </div>
+                      {/* Plus icon badge at bottom right */}
+                      <div className="absolute bottom-2 right-2 w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center text-white border border-white shadow-sm group-hover:scale-110 transition-transform">
+                        <Plus className="w-6 h-6" strokeWidth={2} />
+                      </div>
+                    </label>
 
                           {/* CROP CONTROLS (Only if image loaded and not finalized) */}
                           {formData.avatarUrl && !formData.avatarCropped && (
@@ -586,23 +584,26 @@ export default function TeacherOnboarding() {
                               </button>
                             </div>
                           )}
-                        </div>
-                      </div>
-                    </div>
                   </div>
                 </div>
 
+                <div style={{ height: '4rem' }} />
                 {/* Bottom Navigation Button Bar */}
-                <div className="w-full shrink-0 border-t border-gray-200 flex justify-between sticky bottom-0 bg-[#fafbfc] px-6 py-6 z-10" style={{ marginTop: '2rem' }}>
-                  <button onClick={prevStep} className="h-12 px-6 bg-white text-slate-600 border border-slate-200/60 rounded-2xl font-bold flex items-center gap-2 hover:bg-slate-50 transition-all shadow-sm">
+                <div className="w-full shrink-0 border-t border-gray-200 flex justify-between sticky bottom-0 bg-[#fafbfc] px-6 py-6 z-10" style={{ marginTop: '2rem', paddingTop: '1.5rem', paddingBottom: '1.5rem' }}>
+                  <button 
+                    onClick={prevStep} 
+                    className="bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 transition-all font-black uppercase tracking-widest text-xs flex items-center gap-2" 
+                    style={{ padding: '0.75rem 1.5rem', borderRadius: '9999px' }}
+                  >
                     <ArrowLeft className="w-4 h-4" /> Back
                   </button>
                   <button
                     onClick={nextStep}
                     disabled={!isStep3Valid}
-                    className="h-12 px-8 bg-[#146ef5] hover:bg-blue-600 text-white rounded-2xl font-bold flex items-center gap-2 transition-all shadow-md shadow-blue-500/20 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="bg-blue-600 hover:bg-blue-700 text-white transition-all font-black uppercase tracking-widest text-xs flex items-center gap-2 shadow-md hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed" 
+                    style={{ padding: '0.75rem 1.5rem', borderRadius: '9999px' }}
                   >
-                    <span>Next: Classes & Subjects</span> <ArrowRight className="w-4 h-4" />
+                    <span>Next Step</span> <ArrowRight className="w-4 h-4" />
                   </button>
                 </div>
               </motion.div>
@@ -618,10 +619,13 @@ export default function TeacherOnboarding() {
                 transition={{ duration: 0.35 }}
                 className="space-y-8 flex flex-col"
               >
+                {/* Spacer above title for better breathing room */}
+                <div style={{ height: '4rem' }} />
+
                 {/* Headers */}
                 <div className="text-center mb-6 flex flex-col items-center">
-                  <h1 className="!text-[3rem] md:!text-[4.2rem] font-bold text-[#0f172a] ![text-shadow:none] mb-3 leading-tight tracking-tight">Assignment Verification</h1>
-                  <p className="text-gray-500 !text-gray-500 ![text-shadow:none] text-sm md:text-[1.05rem] font-medium mb-4">Verify classrooms and curriculums assigned to your staff profile.</p>
+                  <h1 className="!text-[2.25rem] md:!text-[3rem] font-bold text-[#0f172a] !text-[#0f172a] ![text-shadow:none] mb-3 leading-tight tracking-tight">Assignment Verification</h1>
+                  <p className="text-gray-500 !text-gray-500 ![text-shadow:none] text-sm md:text-base font-medium mb-4">Verify classrooms and curriculums assigned to your staff profile.</p>
                 </div>
 
                 {/* Spacer above Section Label */}
@@ -634,56 +638,63 @@ export default function TeacherOnboarding() {
                 </div>
                 <div style={{ height: '1.25rem' }} />
 
-                <div className={cardStyle}>
+                <div className="border border-slate-200 bg-white" style={{ borderRadius: '6px', padding: '2rem', margin: '0 auto', maxWidth: '800px', width: '100%' }}>
                   <div className="space-y-6">
 
-                    <div className="flex justify-between items-center border-b border-slate-100 pb-4">
+                    <div className="flex justify-between items-center" style={{ paddingBottom: '1rem' }}>
                       <div>
-                        <span className="text-[10px] font-extrabold uppercase tracking-widest text-slate-400">Class & Course Assignments</span>
-                        <h4 className="text-sm font-bold text-slate-800 mt-1">Landed Schedule Profile</h4>
+                        <span className="text-[11px] font-extrabold uppercase tracking-widest text-slate-400">Class & Course Assignments</span>
+                        <h4 className="font-bold text-slate-800 mt-1" style={{ fontSize: '22px' }}>Landed Schedule Profile</h4>
                       </div>
 
                       <button
                         type="button"
                         onClick={() => setIsCorrectionModalOpen(true)}
-                        className={`h-9 px-4 rounded-xl text-xs font-bold border transition-all flex items-center gap-1.5 ${formData.correctionSubmitted
+                        className={`transition-all font-black uppercase tracking-widest text-[10px] flex items-center gap-2 shadow-sm hover:shadow-md hover:-translate-y-0.5 border ${formData.correctionSubmitted
                             ? 'bg-amber-50 text-amber-700 border-amber-200'
-                            : 'bg-white hover:bg-slate-50 text-slate-700 border-slate-200 hover:border-slate-300'
+                            : 'text-white'
                           }`}
+                        style={{ 
+                          padding: '0.6rem 1.25rem', 
+                          borderRadius: '9999px',
+                          ...(formData.correctionSubmitted ? {} : { backgroundColor: '#146ef5', borderColor: '#146ef5' })
+                        }}
                       >
-                        <AlertCircle className="w-3.5 h-3.5 shrink-0" />
+                        <AlertCircle className="w-4 h-4 shrink-0" />
                         <span>{formData.correctionSubmitted ? "Review Request Sent" : "Request Correction"}</span>
                       </button>
                     </div>
 
                     {/* Read-Only Table/Cards List */}
-                    <div className="space-y-3">
+                    <div className="flex flex-col" style={{ gap: '1.25rem', paddingTop: '0.5rem', paddingBottom: '0.5rem' }}>
                       {assignments.map((asg) => (
                         <div
                           key={asg.id}
-                          className="p-4 bg-slate-50 border border-slate-200/50 hover:border-blue-500/20 rounded-2.5xl transition-all flex items-center justify-between"
+                          className="flex items-center justify-between"
                         >
-                          <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-xl bg-blue-50 border border-blue-100 text-blue-600 flex items-center justify-center shrink-0">
-                              <BookOpen className="w-5 h-5" />
+                          <div className="flex items-center gap-4">
+                            <div className="w-10 h-10 rounded-xl bg-[#f4f7fd] border border-blue-100 text-blue-600 flex items-center justify-center shrink-0">
+                              {getSubjectIcon(asg.subject)}
                             </div>
                             <div>
-                              <h5 className="text-sm font-bold text-slate-800 leading-tight">{asg.class} - {asg.subject}</h5>
-                              <span className="text-[10px] font-medium text-slate-400 mt-1 block">{asg.type} • {asg.periods} periods per week</span>
+                              <h5 className="text-[15px] font-bold text-slate-800 leading-tight">{asg.class} - {asg.subject}</h5>
+                              <span className="font-bold text-slate-400 uppercase tracking-widest block" style={{ fontSize: '9.5px', marginTop: '0.1rem' }}>
+                                {asg.type} • {asg.periods} periods per week
+                              </span>
                             </div>
                           </div>
-                          <span className="text-[10px] font-extrabold uppercase tracking-wider bg-slate-100 border border-slate-200/40 text-slate-600 px-3 py-1.5 rounded-xl shrink-0">
+                          <span className="text-[10px] font-bold uppercase tracking-widest text-slate-500 shrink-0 pr-2">
                             Active Listing
                           </span>
                         </div>
                       ))}
                     </div>
 
-                    <div className="p-4 bg-sky-50 rounded-2xl border border-sky-100/60 flex items-start gap-3 mt-4">
-                      <AlertCircle className="w-4 h-4 text-sky-600 mt-0.5 shrink-0 animate-bounce" />
-                      <div className="text-[11px] font-semibold text-sky-900 leading-relaxed">
-                        Verify that these classes match your physical workload allocation. If there is a discrepancy, click
-                        <span className="font-extrabold text-blue-600 px-1">Request Correction</span>. The wizard can still be finalized.
+                    <div className="flex items-start gap-3" style={{ marginTop: '2rem' }}>
+                      <AlertCircle className="w-4 h-4 text-blue-500 mt-0.5 shrink-0" strokeWidth={2} />
+                      <div className="text-[12px] font-medium text-slate-600 leading-relaxed">
+                        Verify that these classes match your physical workload allocation. If there is a discrepancy, click 
+                        <span className="font-bold text-blue-600 px-1 cursor-pointer hover:underline" onClick={() => setIsCorrectionModalOpen(true)}>Request Correction</span>. The wizard can still be finalized.
                       </div>
                     </div>
 
@@ -702,25 +713,31 @@ export default function TeacherOnboarding() {
                   </div>
                 </div>
 
+                <div style={{ height: '4rem' }} />
                 {/* Bottom Navigation Button Bar */}
-                <div className="w-full shrink-0 border-t border-gray-200 flex justify-between sticky bottom-0 bg-[#fafbfc] px-6 py-6 z-10" style={{ marginTop: '2rem' }}>
-                  <button onClick={prevStep} className="h-12 px-6 bg-white text-slate-600 border border-slate-200/60 rounded-2xl font-bold flex items-center gap-2 hover:bg-slate-50 transition-all shadow-sm">
+                <div className="w-full shrink-0 border-t border-gray-200 flex justify-between sticky bottom-0 bg-[#fafbfc] px-6 py-6 z-10" style={{ marginTop: '2rem', paddingTop: '1.5rem', paddingBottom: '1.5rem' }}>
+                  <button 
+                    onClick={prevStep} 
+                    className="bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 transition-all font-black uppercase tracking-widest text-xs flex items-center gap-2" 
+                    style={{ padding: '0.75rem 1.5rem', borderRadius: '9999px' }}
+                  >
                     <ArrowLeft className="w-4 h-4" /> Back
                   </button>
 
                   <button
                     onClick={handleFinalize}
                     disabled={isSubmitting}
-                    className="h-12 px-10 bg-emerald-500 hover:bg-emerald-600 text-white rounded-2xl font-bold flex items-center gap-2 transition-all shadow-md shadow-emerald-500/20 disabled:opacity-50"
+                    className="text-white transition-all font-black uppercase tracking-widest text-xs flex items-center gap-2 shadow-md hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed" 
+                    style={{ padding: '0.75rem 1.5rem', borderRadius: '9999px', backgroundColor: '#146ef5' }}
                   >
                     {isSubmitting ? (
                       <>
                         <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                        <span>Provisioning Gradebook...</span>
+                        <span>Provisioning...</span>
                       </>
                     ) : (
                       <>
-                        <span>Complete Onboarding</span>
+                        <span>Complete Setup</span>
                         <CheckCircle2 className="w-4 h-4" />
                       </>
                     )}
