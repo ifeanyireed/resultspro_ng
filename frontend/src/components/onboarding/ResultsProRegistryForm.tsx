@@ -243,9 +243,9 @@ export function ResultsProRegistryForm({
         {/* OTP Verification Modal Box */}
         {requireOtp && otpSent && !effectiveIsVerified && (
           <div style={{ padding: '1.5rem', background: '#f0f9ff', border: '1px solid #bae6fd', borderRadius: '4px', marginTop: '1rem' }}>
-            <h4 style={{ fontSize: '1rem', fontWeight: 'bold', color: '#1e293b', marginBottom: '0.5rem' }}>Verify Your Number</h4>
-            <p style={{ fontSize: '0.875rem', color: '#64748b', marginBottom: '1.5rem' }}>
-              We sent a 4-digit code to <strong>{data.phone}</strong>. (SIMULATOR: Type 4892)
+            <h4 style={{ fontSize: '1rem', fontWeight: 'bold', color: '#1e293b', marginBottom: '0.5rem', textShadow: 'none' }}>Verify Your Number</h4>
+            <p style={{ fontSize: '0.875rem', color: '#64748b', marginBottom: '1.5rem', textShadow: 'none' }}>
+              We sent a 4-digit code to <strong style={{ textShadow: 'none' }}>{data.phone}</strong>. (SIMULATOR: Type 4892)
             </p>
             
             <div style={{ display: 'flex', gap: '1rem' }}>

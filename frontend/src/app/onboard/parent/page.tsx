@@ -55,6 +55,10 @@ export default function ParentOnboarding() {
     // Step 3: Student Verification
     admissionNumber: '',
     studentDob: '',
+    newChildFirstName: '',
+    newChildLastName: '',
+    newChildClass: 'Grade 1',
+    newChildDob: '',
     
     // Step 4: Family Profile
     relationshipType: 'Mother', // Default
@@ -71,6 +75,8 @@ export default function ParentOnboarding() {
 
   // Student Search Simulation States
   const [isSearchingStudent, setIsSearchingStudent] = useState(false);
+  const [isAddingNewChild, setIsAddingNewChild] = useState(false);
+  const [isRegisteringChild, setIsRegisteringChild] = useState(false);
   const [studentVerified, setStudentVerified] = useState(false);
   const [verifiedStudentData, setVerifiedStudentData] = useState<{
     name: string;
@@ -106,9 +112,9 @@ export default function ParentOnboarding() {
 
 
   // Styling Variables (Matches resultspro UI aesthetics)
-  const inputStyle = "w-full p-4 bg-slate-50 border border-slate-200/60 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#146ef5]/20 focus:border-[#146ef5] transition-all text-sm font-bold text-slate-800 placeholder:text-slate-400 placeholder:font-medium shadow-inner";
+  const inputStyle = "w-full px-4 py-3 bg-white border border-[#e2e8f0] rounded focus:outline-none focus:border-[#146ef5] focus:ring-1 focus:ring-[#146ef5] transition-all text-[0.875rem] text-slate-800 placeholder:text-slate-400";
   const labelStyle = "block text-[11px] font-extrabold uppercase tracking-widest text-slate-400 mb-2 pl-1";
-  const cardStyle = "bg-white/90 backdrop-blur-2xl border border-slate-200/60 rounded-[2.5rem] p-8 md:p-10 shadow-[0_20px_50px_rgba(20,110,245,0.04)]";
+  const cardStyle = "bg-[#ffffff] border border-[#e2e8f0] p-10 max-w-[800px] mx-auto w-full";
 
 
 
@@ -140,6 +146,33 @@ export default function ParentOnboarding() {
         }, 600);
       }, 600);
     }, 600);
+  };
+
+  // Add new child simulator
+  const handleRegisterNewChild = () => {
+    if (!formData.newChildFirstName || !formData.newChildLastName || !formData.newChildDob || !formData.newChildClass) {
+      setSearchError('All fields are required to register a new child.');
+      return;
+    }
+    setIsRegisteringChild(true);
+    setSearchError('');
+    setStudentVerified(false);
+    
+    setSearchStage('Creating student profile...');
+    setTimeout(() => {
+      setSearchStage('Generating Admission ID...');
+      setTimeout(() => {
+        setIsRegisteringChild(false);
+        setVerifiedStudentData({
+          name: `${formData.newChildFirstName} ${formData.newChildLastName}`,
+          class: formData.newChildClass,
+          admissionNumber: `NEW-${Math.floor(1000 + Math.random() * 9000)}`
+        });
+        setStudentVerified(true);
+        setLinkConfirmed(true);
+        setIsAddingNewChild(false);
+      }, 800);
+    }, 800);
   };
 
   // Sibling lookup simulator
@@ -316,7 +349,7 @@ export default function ParentOnboarding() {
                 className="space-y-8 flex flex-col"
               >
                 {/* Spacer above title for better breathing room */}
-                <div style={{ height: '2rem' }} />
+                <div style={{ height: '4rem' }} />
 
                 <ResultsProPageHeader 
                   title="Parent Registry" 
@@ -370,6 +403,9 @@ export default function ParentOnboarding() {
                 transition={{ duration: 0.3 }}
                 className="space-y-8 flex flex-col"
               >
+                {/* Spacer above title for better breathing room */}
+                <div style={{ height: '4rem' }} />
+
                 <ResultsProPageHeader 
                   title="Student Verification" 
                   subtitle="Link your child to your parent dashboard. Input their official Admission/Student ID and Date of Birth to search the institutional database." 
@@ -381,108 +417,263 @@ export default function ParentOnboarding() {
                 <ResultsProSectionLabel label="3. STUDENT" />
                 <div style={{ height: '1.25rem' }} />
 
-                <div className={cardStyle}>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                    <div>
-                      <label className={labelStyle}>Student Admission Number</label>
-                      <input
-                        type="text"
-                        placeholder="e.g. GHS-2026-001"
-                        value={formData.admissionNumber}
-                        onChange={(e) => setFormData({ ...formData, admissionNumber: e.target.value })}
-                        className={inputStyle}
-                        disabled={studentVerified}
-                      />
-                    </div>
-                    <div>
-                      <label className={labelStyle}>Date of Birth</label>
-                      <input
-                        type="date"
-                        value={formData.studentDob}
-                        onChange={(e) => setFormData({ ...formData, studentDob: e.target.value })}
-                        className={inputStyle}
-                        disabled={studentVerified}
-                      />
-                    </div>
-                  </div>
+                <ResultsProRegistryForm
+                  data={{ name: '', email: '', phone: '' }}
+                  onChange={() => {}}
+                  requireOtp={false}
+                  requirePassword={false}
+                  showName={false}
+                  showEmail={false}
+                  showPhone={false}
+                  customTopElement={
+                    <>
+                      {/* Tabs / Toggle */}
+                      {!studentVerified && (
+                        <div className="flex gap-4 mb-6 pb-4 border-b border-slate-100">
+                          <button
+                            type="button"
+                            onClick={() => { setIsAddingNewChild(false); setSearchError(''); }}
+                            className={`text-xs font-black uppercase tracking-widest transition-colors ${!isAddingNewChild ? 'text-[#146ef5]' : 'text-slate-400 hover:text-slate-600'}`}
+                          >
+                            Find Existing Child
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => { setIsAddingNewChild(true); setSearchError(''); }}
+                            className={`text-xs font-black uppercase tracking-widest transition-colors ${isAddingNewChild ? 'text-[#146ef5]' : 'text-slate-400 hover:text-slate-600'}`}
+                          >
+                            Register New Child
+                          </button>
+                        </div>
+                      )}
 
-                  {searchError && (
-                    <div className="mb-6 p-4 bg-rose-50 border border-rose-100 rounded-2xl flex items-center gap-2.5 text-xs font-bold text-rose-500">
-                      <AlertCircle className="w-4 h-4 shrink-0" />
-                      <span>{searchError}</span>
-                    </div>
-                  )}
-
-                  {/* Lookup Action Trigger */}
-                  {!studentVerified && !isSearchingStudent && (
-                    <button
-                      type="button"
-                      onClick={handleStudentLookup}
-                      className="w-full py-4 bg-slate-800 hover:bg-slate-900 text-white font-extrabold rounded-2xl text-xs uppercase tracking-widest transition-all shadow-md"
-                    >
-                      Look Up Student Records
-                    </button>
-                  )}
-
-                  {/* Looking Up Loading state */}
-                  {isSearchingStudent && (
-                    <div className="p-8 border border-slate-100 bg-slate-50/50 rounded-3xl flex flex-col items-center justify-center text-center">
-                      <div className="w-10 h-10 border-4 border-[#146ef5]/20 border-t-[#146ef5] rounded-full animate-spin mb-4" />
-                      <h4 className="text-sm font-extrabold text-slate-700 uppercase tracking-wider mb-1">Database Queries In Progress</h4>
-                      <p className="text-xs text-slate-400 font-medium">{searchStage}</p>
-                    </div>
-                  )}
-
-                  {/* Match results resolved display */}
-                  {studentVerified && verifiedStudentData && (
-                    <motion.div
-                      initial={{ scale: 0.95, opacity: 0 }}
-                      animate={{ scale: 1, opacity: 1 }}
-                      className="p-6 border border-emerald-100 bg-emerald-50/20 rounded-[1.75rem]"
-                    >
-                      <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-                        <div className="flex items-center gap-4">
-                          <div className="w-14 h-14 bg-gradient-to-tr from-[#146ef5] to-indigo-500 rounded-2xl flex items-center justify-center text-white font-black text-lg shadow-md shrink-0">
-                            TG
-                          </div>
-                          <div>
-                            <div className="flex items-center gap-2 mb-0.5">
-                              <h4 className="text-base font-extrabold text-slate-800">{verifiedStudentData.name}</h4>
-                              <span className="px-2 py-0.5 bg-emerald-500/10 text-emerald-600 rounded-full text-[9px] font-black uppercase tracking-widest">Verified</span>
+                      {!studentVerified && !isAddingNewChild && (
+                        <>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                            <div>
+                              <label className={labelStyle}>Student Admission Number</label>
+                              <input
+                                type="text"
+                                placeholder="e.g. GHS-2026-001"
+                                value={formData.admissionNumber}
+                                onChange={(e) => setFormData({ ...formData, admissionNumber: e.target.value })}
+                                className={inputStyle}
+                                disabled={isSearchingStudent}
+                                style={{ paddingLeft: '1.25rem', paddingRight: '1.25rem', height: '46px', appearance: 'none', boxSizing: 'border-box' }}
+                              />
                             </div>
-                            <p className="text-xs text-slate-500 font-semibold">{verifiedStudentData.class} • Reg ID: {verifiedStudentData.admissionNumber}</p>
-                            <p className="text-[10px] text-slate-400 font-medium mt-0.5">Greenwood High School Portal</p>
+                            <div>
+                              <label className={labelStyle}>Date of Birth</label>
+                              <input
+                                type="date"
+                                value={formData.studentDob}
+                                onChange={(e) => setFormData({ ...formData, studentDob: e.target.value })}
+                                className={inputStyle}
+                                disabled={isSearchingStudent}
+                                style={{ paddingLeft: '1.25rem', paddingRight: '1.25rem', height: '46px', appearance: 'none', boxSizing: 'border-box' }}
+                              />
+                            </div>
+                          </div>
+
+                          {/* Lookup Action Trigger */}
+                          {!isSearchingStudent && (
+                            <button
+                              type="button"
+                              onClick={handleStudentLookup}
+                              className="w-full h-[2.5rem] bg-[#146ef5] hover:bg-[#146ef5]/90 text-white font-bold rounded-full text-sm flex items-center justify-center transition-all hover:-translate-y-0.5"
+                            >
+                              Look Up Student Records
+                            </button>
+                          )}
+                        </>
+                      )}
+
+                      {!studentVerified && isAddingNewChild && (
+                        <>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                            <div>
+                              <label className={labelStyle}>First Name</label>
+                              <input
+                                type="text"
+                                placeholder="e.g. John"
+                                value={formData.newChildFirstName}
+                                onChange={(e) => setFormData({ ...formData, newChildFirstName: e.target.value })}
+                                className={inputStyle}
+                                disabled={isRegisteringChild}
+                                style={{ paddingLeft: '1.25rem', paddingRight: '1.25rem', height: '46px', appearance: 'none', boxSizing: 'border-box' }}
+                              />
+                            </div>
+                            <div>
+                              <label className={labelStyle}>Last Name</label>
+                              <input
+                                type="text"
+                                placeholder="e.g. Doe"
+                                value={formData.newChildLastName}
+                                onChange={(e) => setFormData({ ...formData, newChildLastName: e.target.value })}
+                                className={inputStyle}
+                                disabled={isRegisteringChild}
+                                style={{ paddingLeft: '1.25rem', paddingRight: '1.25rem', height: '46px', appearance: 'none', boxSizing: 'border-box' }}
+                              />
+                            </div>
+                            <div>
+                              <label className={labelStyle}>Class / Grade</label>
+                              <select
+                                value={formData.newChildClass}
+                                onChange={(e) => setFormData({ ...formData, newChildClass: e.target.value })}
+                                className={inputStyle}
+                                disabled={isRegisteringChild}
+                                style={{ paddingLeft: '1.25rem', paddingRight: '1.25rem', height: '46px', appearance: 'none', boxSizing: 'border-box' }}
+                              >
+                                <option>Grade 1</option>
+                                <option>Grade 2</option>
+                                <option>Grade 3</option>
+                                <option>Grade 4</option>
+                                <option>Grade 5</option>
+                                <option>Grade 10A</option>
+                              </select>
+                            </div>
+                            <div>
+                              <label className={labelStyle}>Date of Birth</label>
+                              <input
+                                type="date"
+                                value={formData.newChildDob}
+                                onChange={(e) => setFormData({ ...formData, newChildDob: e.target.value })}
+                                className={inputStyle}
+                                disabled={isRegisteringChild}
+                                style={{ paddingLeft: '1.25rem', paddingRight: '1.25rem', height: '46px', appearance: 'none', boxSizing: 'border-box' }}
+                              />
+                            </div>
+                          </div>
+
+                          {!isRegisteringChild && (
+                            <button
+                              type="button"
+                              onClick={handleRegisterNewChild}
+                              className="w-full h-[2.5rem] bg-[#146ef5] hover:bg-[#146ef5]/90 text-white font-bold rounded-full text-sm flex items-center justify-center transition-all hover:-translate-y-0.5"
+                            >
+                              Register New Child
+                            </button>
+                          )}
+                        </>
+                      )}
+
+                      {searchError && !studentVerified && (
+                        <div className="mt-6 p-4 bg-rose-50 border border-rose-100 rounded-2xl flex items-center gap-2.5 text-xs font-bold text-rose-500">
+                          <AlertCircle className="w-4 h-4 shrink-0" />
+                          <span>{searchError}</span>
+                        </div>
+                      )}
+
+                      {/* Loading States */}
+                      {(isSearchingStudent || isRegisteringChild) && (
+                        <div className="animate-pulse mt-4">
+                          <div className="flex items-center gap-4 mb-8">
+                            <div className="w-6 h-6 border-[3px] border-[#146ef5]/20 border-t-[#146ef5] rounded-full animate-spin shrink-0" />
+                            <div>
+                              <h4 className="text-[11px] font-extrabold uppercase tracking-wider" style={{ color: '#000000' }}>
+                                {isSearchingStudent ? 'Database Queries In Progress' : 'Processing Registration'}
+                              </h4>
+                              <p className="text-[10px] font-medium" style={{ color: '#000000' }}>{searchStage}</p>
+                            </div>
+                          </div>
+
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6 opacity-40">
+                            <div>
+                              <label className={labelStyle}>Student Name</label>
+                              <div className="h-[20px] w-3/4 bg-slate-200 rounded"></div>
+                            </div>
+                            <div>
+                              <label className={labelStyle}>Class / Grade</label>
+                              <div className="h-[20px] w-1/2 bg-slate-200 rounded"></div>
+                            </div>
+                            <div>
+                              <label className={labelStyle}>Admission Number</label>
+                              <div className="h-[20px] w-2/3 bg-slate-200 rounded"></div>
+                            </div>
+                            <div>
+                              <label className={labelStyle}>Institution</label>
+                              <div className="h-[20px] w-full bg-slate-200 rounded"></div>
+                            </div>
                           </div>
                         </div>
+                      )}
 
-                        {/* Confirmation Box */}
-                        <label className="flex items-center gap-3 bg-white p-3 border border-slate-100 rounded-2xl cursor-pointer hover:shadow-sm transition-all shrink-0">
-                          <input
-                            type="checkbox"
-                            checked={linkConfirmed}
-                            onChange={(e) => setLinkConfirmed(e.target.checked)}
-                            className="w-4.5 h-4.5 text-[#146ef5] border-slate-300 rounded focus:ring-[#146ef5]"
-                          />
-                          <div className="text-left">
-                            <span className="block text-[10px] font-black uppercase tracking-wider text-slate-800">Confirm Link</span>
-                            <span className="block text-[9px] text-slate-400 font-medium">Link child to family unit</span>
+                      {/* Match results resolved display */}
+                      {studentVerified && verifiedStudentData && (
+                        <motion.div
+                          initial={{ scale: 0.95, opacity: 0 }}
+                          animate={{ scale: 1, opacity: 1 }}
+                        >
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                            <div>
+                              <label className={labelStyle}>Student Name</label>
+                              <div className="flex items-center gap-3">
+                                <span className="text-xl font-bold text-slate-800">{verifiedStudentData.name}</span>
+                                <span className="px-2 py-0.5 bg-emerald-500/10 text-emerald-600 rounded-full text-[9px] font-black uppercase tracking-widest">Verified</span>
+                              </div>
+                            </div>
+                            <div>
+                              <label className={labelStyle}>Class / Grade</label>
+                              <span className="block text-xl font-bold text-slate-800">{verifiedStudentData.class}</span>
+                            </div>
+                            <div>
+                              <label className={labelStyle}>Admission Number</label>
+                              <span className="block text-xl font-bold text-slate-800">{verifiedStudentData.admissionNumber}</span>
+                            </div>
+                            <div>
+                              <label className={labelStyle}>Institution</label>
+                              <span className="block text-xl font-bold text-slate-800">Greenwood High School</span>
+                            </div>
                           </div>
-                        </label>
-                      </div>
 
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setStudentVerified(false);
-                          setLinkConfirmed(false);
-                        }}
-                        className="mt-4 text-[10px] font-bold text-slate-400 hover:text-slate-600 uppercase tracking-widest block transition-colors"
-                      >
-                        Reset Search Parameter
-                      </button>
-                    </motion.div>
-                  )}
-                </div>
+                          <button
+                            type="button"
+                            onClick={() => setLinkConfirmed(!linkConfirmed)}
+                            className="flex items-center gap-3 transition-colors group"
+                            style={{ marginTop: '2.5rem' }}
+                          >
+                            <div
+                              className={`w-[44px] h-[44px] rounded-full flex items-center justify-center p-[3px] bg-transparent transition-all duration-300 ${
+                                linkConfirmed
+                                  ? 'border border-[#146ef5]'
+                                  : 'border border-transparent group-hover:border-[#146ef5]'
+                              }`}
+                            >
+                              <div
+                                className={`w-[36px] h-[36px] rounded-full flex items-center justify-center transition-all duration-300 ${
+                                  linkConfirmed
+                                    ? 'bg-[#146ef5] text-white'
+                                    : 'bg-white border border-gray-200 text-slate-300 group-hover:bg-[#146ef5] group-hover:border-[#146ef5] group-hover:text-white'
+                                }`}
+                              >
+                                <Check size={16} strokeWidth={linkConfirmed ? 2.5 : 2} />
+                              </div>
+                            </div>
+                            <div className="text-left">
+                              <span className={`block text-xs font-black uppercase tracking-wider ${linkConfirmed ? 'text-[#146ef5]' : 'text-slate-500 group-hover:text-slate-700'}`}>
+                                Confirm Link
+                              </span>
+                            </div>
+                          </button>
+
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setStudentVerified(false);
+                              setLinkConfirmed(false);
+                            }}
+                            className="mt-6 text-[10px] font-bold text-slate-400 hover:text-slate-600 uppercase tracking-widest block transition-colors w-full text-center"
+                          >
+                            Reset Search Parameter
+                          </button>
+                        </motion.div>
+                      )}
+                    </>
+                  }
+                />
+
+                {/* Spacer between form and bottom nav */}
+                <div style={{ height: '4rem' }} />
 
                 <ResultsProBottomNav 
                   onBack={handlePrevStep}
@@ -504,6 +695,9 @@ export default function ParentOnboarding() {
                 transition={{ duration: 0.3 }}
                 className="space-y-8 flex flex-col"
               >
+                {/* Spacer above title for better breathing room */}
+                <div style={{ height: '4rem' }} />
+
                 <ResultsProPageHeader 
                   title="Family Profile" 
                   subtitle="Define your specific relationship context with linked students and configure emergency safety triggers." 
@@ -515,11 +709,11 @@ export default function ParentOnboarding() {
                 <ResultsProSectionLabel label="4. FAMILY" />
                 <div style={{ height: '1.25rem' }} />
 
-                <div className={cardStyle}>
+                <div className={cardStyle} style={{ boxShadow: '0 30px 60px rgba(0,0,0,0.02)', borderRadius: '4px', padding: '2.5rem', margin: '0 auto', maxWidth: '800px', width: '100%', backgroundColor: '#ffffff' }}>
                   {/* Relationship Cards */}
-                  <div className="mb-8">
+                  <div className="mb-8" style={{ marginBottom: '2rem' }}>
                     <label className={labelStyle}>Select Relationship Type</label>
-                    <div className="grid grid-cols-3 gap-4">
+                    <div style={{ display: 'flex', background: '#f1f5f9', padding: '0.375rem', borderRadius: '9999px', width: '100%', maxWidth: '400px', position: 'relative' }}>
                       {['Mother', 'Father', 'Guardian'].map((rel) => {
                         const isSelected = formData.relationshipType === rel;
                         return (
@@ -527,83 +721,108 @@ export default function ParentOnboarding() {
                             key={rel}
                             type="button"
                             onClick={() => setFormData({ ...formData, relationshipType: rel })}
-                            className={`p-4 border rounded-2xl flex flex-col items-center justify-center gap-2 text-center transition-all ${
-                              isSelected 
-                                ? 'border-[#146ef5] bg-[#146ef5]/5 text-[#146ef5] font-black' 
-                                : 'border-slate-200 hover:border-slate-300 text-slate-500 hover:text-slate-700'
-                            }`}
+                            style={{
+                              flex: 1,
+                              padding: '0.875rem 0',
+                              borderRadius: '9999px',
+                              backgroundColor: isSelected ? '#ffffff' : 'transparent',
+                              color: isSelected ? '#146ef5' : '#64748b',
+                              boxShadow: isSelected ? '0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03)' : 'none',
+                              fontWeight: isSelected ? '800' : '600',
+                              fontSize: '0.75rem',
+                              textTransform: 'uppercase',
+                              letterSpacing: '0.05em',
+                              transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)'
+                            }}
                           >
-                            <span className="text-xs font-bold uppercase tracking-wider">{rel}</span>
-                            {isSelected && <div className="w-1.5 h-1.5 bg-[#146ef5] rounded-full" />}
+                            {rel}
                           </button>
                         );
                       })}
                     </div>
                   </div>
 
-                  {/* Emergency Toggle */}
-                  <div className="p-5 bg-slate-50 border border-slate-200/60 rounded-2xl flex items-center justify-between gap-4 mb-8">
-                    <div className="text-left">
-                      <h4 className="text-xs font-extrabold uppercase tracking-wider text-slate-800 mb-0.5">Emergency Contact</h4>
-                      <p className="text-[11px] text-slate-400 font-medium">Designate this device as primary emergency alert hub</p>
+                  {/* Emergency Toggle (Matching Confirm Link Style) */}
+                  <button
+                    type="button"
+                    onClick={() => setFormData({ ...formData, isEmergencyContact: !formData.isEmergencyContact })}
+                    className="w-full flex flex-row items-center justify-start group transition-all"
+                    style={{ marginBottom: '2.5rem', marginTop: '1.5rem', gap: '1.25rem', textAlign: 'left' }}
+                  >
+                    <div
+                      className={`shrink-0 w-[44px] h-[44px] rounded-full flex items-center justify-center p-[3px] bg-transparent transition-all duration-300 ${
+                        formData.isEmergencyContact
+                          ? 'border border-blue-600'
+                          : 'border border-transparent group-hover:border-blue-600'
+                      }`}
+                    >
+                      <div
+                        className={`w-[36px] h-[36px] rounded-full flex items-center justify-center transition-all duration-300 ${
+                          formData.isEmergencyContact
+                            ? 'bg-blue-600 text-white'
+                            : 'bg-white border border-gray-200 text-gray-400 group-hover:bg-blue-600 group-hover:border-blue-600 group-hover:text-white'
+                        }`}
+                      >
+                        <Check size={16} strokeWidth={formData.isEmergencyContact ? 2.5 : 2} />
+                      </div>
                     </div>
-                    <label className="relative inline-flex items-center cursor-pointer">
-                      <input 
-                        type="checkbox" 
-                        checked={formData.isEmergencyContact} 
-                        onChange={(e) => setFormData({ ...formData, isEmergencyContact: e.target.checked })}
-                        className="sr-only peer" 
-                      />
-                      <div className="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#146ef5]"></div>
-                    </label>
-                  </div>
+                    <div className="text-left flex-1">
+                      <span 
+                        className="block text-xs font-black uppercase tracking-wider transition-colors duration-300"
+                        style={{ color: formData.isEmergencyContact ? '#146ef5' : '#64748b' }}
+                      >
+                        Set As Emergency Contact
+                      </span>
+                    </div>
+                  </button>
 
                   {/* Linked Students List */}
-                  <div className="mb-6">
-                    <div className="flex items-center justify-between mb-4">
+                  <div className="mb-6" style={{ marginBottom: '1.5rem' }}>
+                    <div className="flex items-center justify-between mb-4" style={{ marginBottom: '1rem' }}>
                       <h4 className="text-xs font-extrabold uppercase tracking-wider text-slate-500">Linked Household Children</h4>
                       <button
                         type="button"
                         onClick={() => setShowAddSibling(!showAddSibling)}
-                        className="text-xs font-bold text-[#146ef5] hover:text-[#146ef5]/80 flex items-center gap-1 transition-colors"
+                        className="bg-[#146ef5] hover:bg-[#146ef5]/90 text-white rounded-full text-xs font-extrabold uppercase tracking-widest flex items-center shadow-md hover:-translate-y-0.5 transition-all"
+                        style={{ padding: '0.75rem 1.5rem', gap: '0.5rem' }}
                       >
-                        <Plus size={14} /> Add Sibling
+                        <Plus size={16} strokeWidth={3} /> Add Sibling
                       </button>
                     </div>
 
                     <div className="flex flex-col gap-3">
                       {/* Primary Verified Student */}
-                      <div className="p-4 border border-slate-100 bg-white rounded-2xl flex items-center justify-between">
-                        <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 bg-slate-100 rounded-xl flex items-center justify-center text-slate-500 font-bold text-xs shrink-0">
+                      <div className="flex items-center justify-between py-4 border-b border-slate-100 last:border-0">
+                        <div className="flex items-center gap-4">
+                          <div className="bg-slate-100 flex items-center justify-center text-slate-500 font-bold shrink-0" style={{ width: '3.5rem', height: '3.5rem', borderRadius: '50%', fontSize: '1.125rem' }}>
                             TG
                           </div>
                           <div>
-                            <span className="block text-xs font-bold text-slate-800">Tunde Greenwood</span>
-                            <span className="block text-[10px] text-slate-400 font-semibold">Grade 10A • Primary Account Link</span>
+                            <span className="block text-xl font-bold text-slate-800">Tunde Greenwood</span>
+                            <span className="block text-xs text-slate-500 font-bold mt-1">Grade 10A • Anchor Student</span>
                           </div>
                         </div>
-                        <span className="px-2.5 py-1 bg-blue-50 text-[#146ef5] rounded-full text-[9px] font-black uppercase tracking-wider">Primary</span>
+                        <span className="px-3 py-1 bg-blue-50 text-[#146ef5] rounded-full text-[10px] font-black uppercase tracking-wider">Primary</span>
                       </div>
 
                       {/* Siblings */}
                       {formData.siblings.map((sib) => (
-                        <div key={sib.admissionNumber} className="p-4 border border-slate-100 bg-white rounded-2xl flex items-center justify-between">
-                          <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 bg-slate-100 rounded-xl flex items-center justify-center text-slate-500 font-bold text-xs shrink-0">
+                        <div key={sib.admissionNumber} className="flex items-center justify-between py-4 border-b border-slate-100 last:border-0 group">
+                          <div className="flex items-center gap-4">
+                            <div className="bg-slate-100 flex items-center justify-center text-slate-500 font-bold shrink-0" style={{ width: '3.5rem', height: '3.5rem', borderRadius: '50%', fontSize: '1.125rem' }}>
                               AG
                             </div>
                             <div>
-                              <span className="block text-xs font-bold text-slate-800">{sib.name}</span>
-                              <span className="block text-[10px] text-slate-400 font-semibold">{sib.class} • Sibling</span>
+                              <span className="block text-xl font-bold text-slate-800">{sib.name}</span>
+                              <span className="block text-xs text-slate-500 font-bold mt-1">{sib.class} • Sibling</span>
                             </div>
                           </div>
                           <button
                             type="button"
                             onClick={() => removeSibling(sib.admissionNumber)}
-                            className="p-2 text-slate-300 hover:text-red-500 transition-colors"
+                            className="p-2 text-slate-300 hover:text-rose-500 transition-colors opacity-0 group-hover:opacity-100"
                           >
-                            <Trash2 size={16} />
+                            <Trash2 size={20} />
                           </button>
                         </div>
                       ))}
@@ -619,8 +838,11 @@ export default function ParentOnboarding() {
                         exit={{ opacity: 0, height: 0 }}
                         className="overflow-hidden mb-6"
                       >
-                        <div className="p-6 bg-slate-50 border border-slate-200/60 rounded-[1.75rem] flex flex-col gap-4">
-                          <div className="flex items-center justify-between">
+                        <div 
+                          style={{ padding: '2.5rem', border: '1px solid #e2e8f0', background: '#ffffff', boxShadow: '0 30px 60px rgba(0,0,0,0.02)', borderRadius: '4px' }} 
+                          className="flex flex-col gap-6"
+                        >
+                          <div className="flex items-center justify-between pb-4 border-b border-slate-100">
                             <h4 className="text-xs font-extrabold uppercase tracking-wider text-slate-800">Link Sibling Student</h4>
                             <button 
                               type="button" 
@@ -631,24 +853,26 @@ export default function ParentOnboarding() {
                             </button>
                           </div>
 
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
                             <div>
-                              <label className={labelStyle}>Sibling ID / Admission No</label>
+                              <label className="block text-[11px] font-extrabold uppercase tracking-widest text-slate-400 mb-2 pl-1">Sibling ID / Admission No</label>
                               <input
                                 type="text"
                                 placeholder="e.g. GHS-2026-002"
                                 value={siblingAdminNo}
                                 onChange={(e) => setSiblingAdminNo(e.target.value)}
-                                className="w-full p-3 bg-white border border-slate-200 rounded-xl text-xs font-bold"
+                                className="focus:border-[#146ef5] focus:ring-1 focus:ring-[#146ef5] transition-all"
+                                style={{ padding: '0.75rem 1rem', border: '1px solid #e2e8f0', borderRadius: '4px', outline: 'none', fontSize: '0.875rem', width: '100%', background: 'white' }}
                               />
                             </div>
                             <div>
-                              <label className={labelStyle}>Date of Birth</label>
+                              <label className="block text-[11px] font-extrabold uppercase tracking-widest text-slate-400 mb-2 pl-1">Date of Birth</label>
                               <input
                                 type="date"
                                 value={siblingDob}
                                 onChange={(e) => setSiblingDob(e.target.value)}
-                                className="w-full p-3 bg-white border border-slate-200 rounded-xl text-xs font-bold"
+                                className="focus:border-[#146ef5] focus:ring-1 focus:ring-[#146ef5] transition-all"
+                                style={{ padding: '0.75rem 1rem', border: '1px solid #e2e8f0', borderRadius: '4px', outline: 'none', fontSize: '0.875rem', width: '100%', background: 'white' }}
                               />
                             </div>
                           </div>
@@ -663,39 +887,55 @@ export default function ParentOnboarding() {
                             <button
                               type="button"
                               onClick={handleSiblingLookup}
-                              className="w-full py-3 bg-slate-800 text-white rounded-xl text-xs font-bold uppercase tracking-wider"
+                              className="w-full bg-[#146ef5] text-white py-3 rounded text-sm font-bold mt-2 hover:bg-[#146ef5]/90 transition-colors"
                             >
                               Verify Sibling Record
                             </button>
                           )}
 
                           {isSearchingSibling && (
-                            <div className="py-4 text-center">
-                              <div className="w-6 h-6 border-2 border-[#146ef5]/20 border-t-[#146ef5] rounded-full animate-spin mx-auto mb-2" />
-                              <span className="text-xs text-slate-400">Searching records...</span>
+                            <div className="animate-pulse mt-4">
+                              <div className="flex items-center gap-4 mb-6">
+                                <div className="w-6 h-6 border-[3px] border-[#146ef5]/20 border-t-[#146ef5] rounded-full animate-spin shrink-0" />
+                                <span className="text-[11px] font-extrabold uppercase tracking-wider" style={{ color: '#000000' }}>Searching records...</span>
+                              </div>
+                              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 opacity-40">
+                                <div>
+                                  <div className="h-[24px] w-48 bg-slate-200 rounded mb-2"></div>
+                                  <div className="h-[16px] w-24 bg-slate-200 rounded"></div>
+                                </div>
+                                <div className="h-[44px] w-32 bg-slate-200 rounded-full"></div>
+                              </div>
                             </div>
                           )}
 
                           {siblingSearchResult && (
-                            <div className="p-4 border border-emerald-100 bg-emerald-50/20 rounded-2xl flex flex-col md:flex-row md:items-center justify-between gap-3">
+                            <motion.div 
+                              initial={{ opacity: 0, y: 10 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              className="mt-4 flex flex-col md:flex-row md:items-center justify-between gap-6"
+                            >
                               <div>
-                                <span className="block text-xs font-bold text-slate-800">{siblingSearchResult.name}</span>
-                                <span className="block text-[10px] text-slate-400 font-semibold">{siblingSearchResult.class}</span>
+                                <span className="block text-xl font-bold text-slate-800">{siblingSearchResult.name}</span>
+                                <span className="block text-sm text-slate-500 font-bold mt-1">{siblingSearchResult.class}</span>
                               </div>
                               <button
                                 type="button"
                                 onClick={addSiblingToProfile}
-                                className="px-4 py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl text-xs font-bold transition-all"
+                                className="px-6 py-3 bg-[#146ef5] hover:bg-[#146ef5]/90 text-white rounded-full text-xs font-extrabold uppercase tracking-widest transition-all shadow-md hover:-translate-y-0.5"
                               >
                                 Add Sibling
                               </button>
-                            </div>
+                            </motion.div>
                           )}
                         </div>
                       </motion.div>
                     )}
                   </AnimatePresence>
                 </div>
+
+                {/* Spacer between form and bottom nav */}
+                <div style={{ height: '4rem' }} />
 
                 <ResultsProBottomNav 
                   onBack={handlePrevStep}
@@ -717,6 +957,9 @@ export default function ParentOnboarding() {
                 transition={{ duration: 0.3 }}
                 className="space-y-8 flex flex-col"
               >
+                {/* Spacer above title for better breathing room */}
+                <div style={{ height: '4rem' }} />
+
                 <ResultsProPageHeader 
                   title="Payment & Activation" 
                   subtitle="Activate your portal lookup. Choose to settle access using a scratch card pin or subscribe termly via our payment processors." 
@@ -728,7 +971,7 @@ export default function ParentOnboarding() {
                 <ResultsProSectionLabel label="5. PAYMENT" />
                 <div style={{ height: '1.25rem' }} />
 
-                <div className={cardStyle}>
+                <div className={cardStyle} style={{ boxShadow: '0 30px 60px rgba(0,0,0,0.02)', borderRadius: '4px', padding: '2.5rem', margin: '0 auto', maxWidth: '800px', width: '100%', backgroundColor: '#ffffff' }}>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                     {/* Option A: Scratch Card */}
                     <button
@@ -860,6 +1103,9 @@ export default function ParentOnboarding() {
                     )}
                   </AnimatePresence>
                 </div>
+
+                {/* Spacer between form and bottom nav */}
+                <div style={{ height: '4rem' }} />
 
                 <ResultsProBottomNav 
                   onBack={handlePrevStep}
@@ -1029,7 +1275,7 @@ export default function ParentOnboarding() {
 
                     <button
                       type="submit"
-                      className="w-full py-4 bg-[#1fcb87] hover:bg-[#1fcb87]/90 text-white font-extrabold rounded-2xl text-xs uppercase tracking-widest transition-all shadow-md mt-4 flex items-center justify-center gap-1.5"
+                      className="w-full h-[2.5rem] bg-[#1fcb87] hover:bg-[#1fcb87]/90 text-white font-bold rounded-full text-sm flex items-center justify-center transition-all hover:-translate-y-0.5 mt-4 gap-1.5"
                     >
                       <Lock size={12} className="stroke-[2.5]" /> Pay ₦2,500.00
                     </button>

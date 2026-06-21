@@ -15,7 +15,7 @@ interface Props {
 
 export function ResultsProStepIndicator({ steps, activeStepId, onStepClick }: Props) {
   return (
-    <div className="sticky top-0 z-50 w-full shrink-0 pt-8 pb-10 flex justify-center border-b border-gray-100 bg-white/50 backdrop-blur-sm">
+    <div className="sticky top-0 z-50 w-full shrink-0 pt-8 pb-10 flex justify-center border-b border-gray-100 bg-white/50 backdrop-blur-sm" style={{ paddingTop: '2.5rem' }}>
       <div className="flex items-center gap-8 md:gap-16 overflow-x-auto px-6 py-5 hide-scrollbar">
         {steps.map((step) => {
           const isActive = step.id === activeStepId;
