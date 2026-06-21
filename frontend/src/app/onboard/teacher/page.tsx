@@ -2,31 +2,32 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  Key, 
-  User, 
-  BookOpen, 
-  ArrowRight, 
-  ArrowLeft, 
-  CheckCircle2, 
-  Upload, 
-  AlertCircle, 
-  LayoutGrid, 
-  Eye, 
-  EyeOff, 
-  Phone, 
-  Compass, 
-  Check, 
-  RotateCw, 
-  Scissors, 
-  Mail, 
-  ShieldCheck, 
+import {
+  Key,
+  User,
+  BookOpen,
+  ArrowRight,
+  ArrowLeft,
+  CheckCircle2,
+  Upload,
+  AlertCircle,
+  LayoutGrid,
+  Eye,
+  EyeOff,
+  Phone,
+  Compass,
+  Check,
+  RotateCw,
+  Scissors,
+  Mail,
+  ShieldCheck,
   Send,
   Sparkles,
   School,
   X
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { ResultsProRegistryForm } from '@/components/onboarding/ResultsProRegistryForm';
 
 const steps = [
   { id: 1, label: 'ROLE', icon: LayoutGrid },
@@ -44,7 +45,7 @@ export default function TeacherOnboarding() {
   const [isSendingCorrection, setIsSendingCorrection] = useState(false);
   const [correctionSuccess, setCorrectionSuccess] = useState(false);
   const [correctionText, setCorrectionText] = useState('');
-  
+
   // Custom alerts/toasts
   const [notification, setNotification] = useState<string | null>(null);
 
@@ -54,10 +55,10 @@ export default function TeacherOnboarding() {
     name: 'Mrs. Grace Daniels',
     email: 'teacher@greenwood.edu.ng',
     schoolName: 'Greenwood High School',
-    
+
     // Step 2
     password: '',
-    
+
     // Step 3
     phone: '',
     gender: '',
@@ -67,7 +68,7 @@ export default function TeacherOnboarding() {
     avatarZoom: 1.5,
     avatarRotate: 0,
     avatarCropped: false,
-    
+
     // Step 4
     correctionSubmitted: false,
   });
@@ -139,10 +140,10 @@ export default function TeacherOnboarding() {
     }, 4000);
   };
 
-  const isStep3Valid = 
-    formData.phone.length >= 10 && 
-    formData.gender !== '' && 
-    formData.specialization !== '' && 
+  const isStep3Valid =
+    formData.phone.length >= 10 &&
+    formData.gender !== '' &&
+    formData.specialization !== '' &&
     formData.avatarCropped;
 
   // Class assignment verification data
@@ -202,7 +203,7 @@ export default function TeacherOnboarding() {
       {/* Global Notifications/Alert Banner */}
       <AnimatePresence>
         {notification && (
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: -50, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -20, scale: 0.95 }}
@@ -221,19 +222,19 @@ export default function TeacherOnboarding() {
       </AnimatePresence>
 
       <main className="bg-[#fafbfc] min-h-screen flex flex-col font-sans text-slate-900 selection:bg-blue-100" style={{ paddingBottom: '6rem' }}>
-        <div className="h-10 md:h-16 w-full shrink-0" />
-        
+        <div className="h-2 md:h-4 w-full shrink-0" />
+
         {/* Top Navigation Steps */}
-        <div className="w-full pt-5 pb-4 flex justify-center border-b border-gray-100 bg-white/50 backdrop-blur-sm">
+        <div className="sticky top-0 z-50 w-full shrink-0 pt-8 pb-10 flex justify-center border-b border-gray-100 bg-white/50 backdrop-blur-sm">
           <div className="flex items-center gap-8 md:gap-16 overflow-x-auto px-6 py-5 hide-scrollbar">
             {steps.map((s) => {
               const isActive = s.id === step;
               const isPast = s.id < step;
               const Icon = s.icon;
-              
+
               return (
-                <div 
-                  key={s.id} 
+                <div
+                  key={s.id}
                   onClick={() => {
                     if (s.id === 1) {
                       router.push('/onboard');
@@ -245,18 +246,18 @@ export default function TeacherOnboarding() {
                     ${(isPast || s.id === 1) ? 'cursor-pointer' : 'pointer-events-none'}`}
                 >
                   {/* Outer Ring Container */}
-                  <div 
+                  <div
                     className={`w-[44px] h-[44px] rounded-full flex items-center justify-center p-[3px] bg-transparent transition-all duration-300
-                      ${isActive 
-                        ? 'border border-blue-600' 
+                      ${isActive
+                        ? 'border border-blue-600'
                         : 'border border-transparent group-hover:border-blue-600'
                       }`}
                   >
                     {/* Inner Icon Circle */}
-                    <div 
+                    <div
                       className={`w-[36px] h-[36px] rounded-full flex items-center justify-center transition-all duration-300
-                        ${isActive 
-                          ? 'bg-blue-600 text-white' 
+                        ${isActive
+                          ? 'bg-blue-600 text-white'
                           : 'bg-white border border-gray-200 text-gray-400 group-hover:bg-blue-600 group-hover:border-blue-600 group-hover:text-white'
                         }`}
                     >
@@ -272,7 +273,7 @@ export default function TeacherOnboarding() {
           </div>
         </div>
 
-        <div className="flex-1 w-full max-w-5xl self-center px-8 md:px-12 pt-14 pb-0 md:pt-20 md:pb-0 flex flex-col">
+        <div className="flex-1 w-full max-w-5xl self-center px-6 md:px-10 pt-4 pb-8 flex flex-col overflow-y-auto custom-scrollbar">
           <AnimatePresence mode="wait">
             {/* SCREEN 1 / STEP 2: INVITATION VERIFICATION */}
             {step === 2 && (
@@ -305,116 +306,51 @@ export default function TeacherOnboarding() {
                 <div style={{ height: '1.25rem' }} />
 
                 <div className={cardStyle}>
-                  <div className="space-y-6">
-                    
-                    {/* Name Card (Read-only) */}
-                    <div className="p-5 rounded-2.5xl bg-slate-50 border border-slate-200/60 flex items-center justify-between">
-                      <div className="flex items-center gap-4">
-                        <div className="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center text-xl font-bold shrink-0">
-                          GD
-                        </div>
-                        <div>
-                          <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-none">Pre-registered Name</span>
-                          <h3 className="text-base font-bold text-slate-800 leading-tight mt-1">{formData.name}</h3>
+                  <ResultsProRegistryForm 
+                    data={{
+                      name: formData.name,
+                      email: formData.email,
+                      phone: formData.phone,
+                      password: formData.password
+                    }}
+                    onChange={(newData) => {
+                      if (newData.password !== undefined) {
+                        setFormData({ ...formData, password: newData.password });
+                      }
+                    }}
+                    requireOtp={false}
+                    showName={false}
+                    showPhone={false}
+                    readOnlyFields={['email']}
+                    customTopElement={
+                      <div className="mb-6">
+                        <label className={labelStyle}>Assigned School</label>
+                        <div className="relative">
+                          <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                            <School className="w-4 h-4 text-slate-400" />
+                          </div>
+                          <input
+                            type="text"
+                            value={formData.schoolName}
+                            readOnly
+                            className={`${inputStyle} pl-11 text-slate-400 select-all cursor-default bg-slate-100 border-slate-200`}
+                          />
                         </div>
                       </div>
-                      <span className="text-[9px] font-extrabold uppercase bg-emerald-50 text-emerald-600 border border-emerald-100 px-3 py-1 rounded-full">Invited Staff</span>
-                    </div>
-
-                    {/* Email Address (Read-only) */}
-                    <div>
-                      <label className={labelStyle}>Pre-registered Email</label>
-                      <div className="relative">
-                        <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                          <Mail className="w-4 h-4 text-slate-400" />
-                        </div>
-                        <input 
-                          type="email" 
-                          value={formData.email}
-                          readOnly
-                          className={`${inputStyle} pl-11 text-slate-400 select-all cursor-default bg-slate-100 border-slate-200`}
-                        />
-                      </div>
-                      <span className="text-[10px] text-slate-400 mt-2 block pl-1">
-                        This email was registered by the school administrator. Contact them if this is incorrect.
-                      </span>
-                    </div>
-
-                    {/* Password creation with validations */}
-                    <div>
-                      <label className={labelStyle}>Create Portal Password</label>
-                      <div className="relative">
-                        <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                          <Key className="w-4 h-4 text-slate-400" />
-                        </div>
-                        <input 
-                          type={showPassword ? "text" : "password"} 
-                          placeholder="Create a strong password" 
-                          value={formData.password}
-                          onChange={handlePasswordChange}
-                          className={`${inputStyle} pl-11 pr-12`}
-                        />
-                        <button
-                          type="button"
-                          onClick={() => setShowPassword(!showPassword)}
-                          className="absolute inset-y-0 right-0 pr-4 flex items-center text-slate-400 hover:text-slate-600"
-                        >
-                          {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-                        </button>
-                      </div>
-
-                      {/* Password strength meter */}
-                      {formData.password && (
-                        <div className="mt-4 p-4 bg-slate-50 border border-slate-200/50 rounded-2xl">
-                          <div className="flex items-center justify-between mb-2">
-                            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Password Strength:</span>
-                            <span className={`text-[10px] font-extrabold uppercase tracking-widest ${
-                              passwordStrength.score === 1 ? 'text-rose-500' :
-                              passwordStrength.score === 2 ? 'text-amber-500' : 'text-emerald-500'
-                            }`}>{passwordStrength.text}</span>
-                          </div>
-                          <div className="h-1.5 rounded-full bg-slate-200/60 overflow-hidden mb-3">
-                            <div 
-                              className={`h-full transition-all duration-500 ${passwordStrength.color}`} 
-                              style={{ width: `${(passwordStrength.score / 3) * 100}%` }} 
-                            />
-                          </div>
-
-                          {/* Rules grid */}
-                          <div className="grid grid-cols-2 gap-2 text-[10.5px]">
-                            <div className="flex items-center gap-1.5 font-semibold">
-                              <span className={`w-3.5 h-3.5 rounded-full flex items-center justify-center shrink-0 text-[8px] font-extrabold text-white ${passLength ? 'bg-emerald-500' : 'bg-slate-300'}`}>✓</span>
-                              <span className={passLength ? 'text-slate-600' : 'text-slate-400'}>Min 8 characters</span>
-                            </div>
-                            <div className="flex items-center gap-1.5 font-semibold">
-                              <span className={`w-3.5 h-3.5 rounded-full flex items-center justify-center shrink-0 text-[8px] font-extrabold text-white ${passHasUpper ? 'bg-emerald-500' : 'bg-slate-300'}`}>✓</span>
-                              <span className={passHasUpper ? 'text-slate-600' : 'text-slate-400'}>Uppercase letter</span>
-                            </div>
-                            <div className="flex items-center gap-1.5 font-semibold">
-                              <span className={`w-3.5 h-3.5 rounded-full flex items-center justify-center shrink-0 text-[8px] font-extrabold text-white ${passHasNumber ? 'bg-emerald-500' : 'bg-slate-300'}`}>✓</span>
-                              <span className={passHasNumber ? 'text-slate-600' : 'text-slate-400'}>At least one number</span>
-                            </div>
-                            <div className="flex items-center gap-1.5 font-semibold">
-                              <span className={`w-3.5 h-3.5 rounded-full flex items-center justify-center shrink-0 text-[8px] font-extrabold text-white ${passHasSpecial ? 'bg-emerald-500' : 'bg-slate-300'}`}>✓</span>
-                              <span className={passHasSpecial ? 'text-slate-600' : 'text-slate-400'}>Special symbol</span>
-                            </div>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  </div>
+                    }
+                  />
                 </div>
 
                 {/* Bottom Navigation Button Bar */}
-                <div className="w-full border-t border-gray-200 flex justify-between" style={{ marginTop: '2rem', paddingTop: '2rem' }}>
-                  <button 
-                    onClick={prevStep} 
+                <div className="w-full shrink-0 border-t border-gray-200 flex justify-between sticky bottom-0 bg-[#fafbfc] px-6 py-6 z-10" style={{ marginTop: '2rem' }}>
+                  <button
+                    onClick={prevStep}
                     className="h-12 px-6 bg-white text-slate-600 border border-slate-200/60 rounded-2xl font-bold flex items-center gap-2 hover:bg-slate-50 transition-all shadow-sm"
                   >
                     <ArrowLeft className="w-4 h-4" /> Cancel
                   </button>
-                  <button 
-                    onClick={nextStep} 
+                  <button
+                    onClick={nextStep}
                     disabled={!isStep2Valid}
                     className="h-12 px-8 bg-[#146ef5] hover:bg-blue-600 text-white rounded-2xl font-bold flex items-center gap-2 transition-all shadow-md shadow-blue-500/20 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
@@ -455,7 +391,7 @@ export default function TeacherOnboarding() {
                   <div className="lg:col-span-7 space-y-6">
                     <div className={cardStyle}>
                       <div className="space-y-5">
-                        
+
                         {/* Phone Number */}
                         <div>
                           <label className={labelStyle}>Contact Phone Number</label>
@@ -463,9 +399,9 @@ export default function TeacherOnboarding() {
                             <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                               <Phone className="w-4 h-4 text-slate-400" />
                             </div>
-                            <input 
-                              type="tel" 
-                              placeholder="+234 803 123 4567" 
+                            <input
+                              type="tel"
+                              placeholder="+234 803 123 4567"
                               value={formData.phone}
                               onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                               className={`${inputStyle} pl-11`}
@@ -482,11 +418,10 @@ export default function TeacherOnboarding() {
                                 key={g}
                                 type="button"
                                 onClick={() => setFormData({ ...formData, gender: g })}
-                                className={`p-3.5 rounded-xl border text-xs font-bold transition-all ${
-                                  formData.gender === g
+                                className={`p-3.5 rounded-xl border text-xs font-bold transition-all ${formData.gender === g
                                     ? 'border-blue-600 bg-blue-50 text-blue-700'
                                     : 'border-slate-200 bg-white text-slate-600 hover:bg-slate-50'
-                                }`}
+                                  }`}
                               >
                                 {g}
                               </button>
@@ -498,7 +433,7 @@ export default function TeacherOnboarding() {
                         <div>
                           <label className={labelStyle}>Academic Specialization</label>
                           <div className="relative">
-                            <select 
+                            <select
                               value={formData.specialization}
                               onChange={(e) => setFormData({ ...formData, specialization: e.target.value })}
                               className={`${inputStyle} appearance-none bg-white cursor-pointer pr-10`}
@@ -526,19 +461,19 @@ export default function TeacherOnboarding() {
                   <div className="lg:col-span-5 space-y-6">
                     <div className="bg-white border border-slate-200/60 rounded-[2.25rem] p-6 shadow-md">
                       <label className={labelStyle}>Profile Avatar Setup</label>
-                      
+
                       <div className="mt-3 flex flex-col items-center">
                         {/* Image Box */}
                         <div className="relative w-40 h-40 rounded-full border-4 border-slate-100 overflow-hidden bg-slate-50 flex items-center justify-center shadow-inner group">
                           {formData.avatarUrl ? (
-                            <motion.div 
+                            <motion.div
                               className="relative w-full h-full"
                               animate={{ scale: formData.avatarCropped ? 1 : 1.05 }}
                             >
                               {/* Crop viewport screen */}
-                              <img 
-                                src={formData.avatarUrl} 
-                                alt="Avatar Source" 
+                              <img
+                                src={formData.avatarUrl}
+                                alt="Avatar Source"
                                 className="absolute object-cover transition-transform duration-75"
                                 style={{
                                   width: '100%',
@@ -546,7 +481,7 @@ export default function TeacherOnboarding() {
                                   transform: `scale(${formData.avatarZoom}) rotate(${formData.avatarRotate}deg)`,
                                 }}
                               />
-                              
+
                               {/* Overlay circle crop boundary */}
                               {!formData.avatarCropped && (
                                 <div className="absolute inset-0 border-2 border-dashed border-blue-500 rounded-full pointer-events-none bg-black/15 shadow-[0_0_0_9999px_rgba(0,0,0,0.4)]" />
@@ -566,16 +501,16 @@ export default function TeacherOnboarding() {
                             <label className="flex-1 h-9 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl flex items-center justify-center gap-1.5 cursor-pointer transition-all">
                               <Upload className="w-3.5 h-3.5" />
                               <span>Upload</span>
-                              <input 
-                                type="file" 
-                                accept="image/*" 
-                                onChange={handleAvatarChange} 
-                                className="hidden" 
+                              <input
+                                type="file"
+                                accept="image/*"
+                                onChange={handleAvatarChange}
+                                className="hidden"
                               />
                             </label>
-                            
-                            <button 
-                              type="button" 
+
+                            <button
+                              type="button"
                               onClick={useSampleAvatar}
                               className="px-3 h-9 bg-blue-50 hover:bg-blue-100 text-blue-600 text-xs font-bold rounded-xl border border-blue-100 transition-all"
                             >
@@ -585,7 +520,7 @@ export default function TeacherOnboarding() {
 
                           {/* CROP CONTROLS (Only if image loaded and not finalized) */}
                           {formData.avatarUrl && !formData.avatarCropped && (
-                            <motion.div 
+                            <motion.div
                               initial={{ opacity: 0, height: 0 }}
                               animate={{ opacity: 1, height: 'auto' }}
                               className="mt-3 p-3 bg-slate-50 border border-slate-100 rounded-xl space-y-3"
@@ -600,11 +535,11 @@ export default function TeacherOnboarding() {
                                   <span>Zoom Scale</span>
                                   <span>{formData.avatarZoom.toFixed(1)}x</span>
                                 </div>
-                                <input 
-                                  type="range" 
-                                  min="1" 
-                                  max="3" 
-                                  step="0.1" 
+                                <input
+                                  type="range"
+                                  min="1"
+                                  max="3"
+                                  step="0.1"
                                   value={formData.avatarZoom}
                                   onChange={(e) => setFormData({ ...formData, avatarZoom: parseFloat(e.target.value) })}
                                   className="w-full h-1 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
@@ -617,10 +552,10 @@ export default function TeacherOnboarding() {
                                   <span>Rotate Angle</span>
                                   <span>{formData.avatarRotate}°</span>
                                 </div>
-                                <input 
-                                  type="range" 
-                                  min="0" 
-                                  max="360" 
+                                <input
+                                  type="range"
+                                  min="0"
+                                  max="360"
                                   value={formData.avatarRotate}
                                   onChange={(e) => setFormData({ ...formData, avatarRotate: parseInt(e.target.value) })}
                                   className="w-full h-1 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
@@ -658,12 +593,12 @@ export default function TeacherOnboarding() {
                 </div>
 
                 {/* Bottom Navigation Button Bar */}
-                <div className="w-full border-t border-gray-200 flex justify-between" style={{ marginTop: '2rem', paddingTop: '2rem' }}>
+                <div className="w-full shrink-0 border-t border-gray-200 flex justify-between sticky bottom-0 bg-[#fafbfc] px-6 py-6 z-10" style={{ marginTop: '2rem' }}>
                   <button onClick={prevStep} className="h-12 px-6 bg-white text-slate-600 border border-slate-200/60 rounded-2xl font-bold flex items-center gap-2 hover:bg-slate-50 transition-all shadow-sm">
                     <ArrowLeft className="w-4 h-4" /> Back
                   </button>
-                  <button 
-                    onClick={nextStep} 
+                  <button
+                    onClick={nextStep}
                     disabled={!isStep3Valid}
                     className="h-12 px-8 bg-[#146ef5] hover:bg-blue-600 text-white rounded-2xl font-bold flex items-center gap-2 transition-all shadow-md shadow-blue-500/20 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
@@ -701,21 +636,20 @@ export default function TeacherOnboarding() {
 
                 <div className={cardStyle}>
                   <div className="space-y-6">
-                    
+
                     <div className="flex justify-between items-center border-b border-slate-100 pb-4">
                       <div>
                         <span className="text-[10px] font-extrabold uppercase tracking-widest text-slate-400">Class & Course Assignments</span>
                         <h4 className="text-sm font-bold text-slate-800 mt-1">Landed Schedule Profile</h4>
                       </div>
-                      
+
                       <button
                         type="button"
                         onClick={() => setIsCorrectionModalOpen(true)}
-                        className={`h-9 px-4 rounded-xl text-xs font-bold border transition-all flex items-center gap-1.5 ${
-                          formData.correctionSubmitted
+                        className={`h-9 px-4 rounded-xl text-xs font-bold border transition-all flex items-center gap-1.5 ${formData.correctionSubmitted
                             ? 'bg-amber-50 text-amber-700 border-amber-200'
                             : 'bg-white hover:bg-slate-50 text-slate-700 border-slate-200 hover:border-slate-300'
-                        }`}
+                          }`}
                       >
                         <AlertCircle className="w-3.5 h-3.5 shrink-0" />
                         <span>{formData.correctionSubmitted ? "Review Request Sent" : "Request Correction"}</span>
@@ -725,7 +659,7 @@ export default function TeacherOnboarding() {
                     {/* Read-Only Table/Cards List */}
                     <div className="space-y-3">
                       {assignments.map((asg) => (
-                        <div 
+                        <div
                           key={asg.id}
                           className="p-4 bg-slate-50 border border-slate-200/50 hover:border-blue-500/20 rounded-2.5xl transition-all flex items-center justify-between"
                         >
@@ -748,7 +682,7 @@ export default function TeacherOnboarding() {
                     <div className="p-4 bg-sky-50 rounded-2xl border border-sky-100/60 flex items-start gap-3 mt-4">
                       <AlertCircle className="w-4 h-4 text-sky-600 mt-0.5 shrink-0 animate-bounce" />
                       <div className="text-[11px] font-semibold text-sky-900 leading-relaxed">
-                        Verify that these classes match your physical workload allocation. If there is a discrepancy, click 
+                        Verify that these classes match your physical workload allocation. If there is a discrepancy, click
                         <span className="font-extrabold text-blue-600 px-1">Request Correction</span>. The wizard can still be finalized.
                       </div>
                     </div>
@@ -769,13 +703,13 @@ export default function TeacherOnboarding() {
                 </div>
 
                 {/* Bottom Navigation Button Bar */}
-                <div className="w-full border-t border-gray-200 flex justify-between" style={{ marginTop: '2rem', paddingTop: '2rem' }}>
+                <div className="w-full shrink-0 border-t border-gray-200 flex justify-between sticky bottom-0 bg-[#fafbfc] px-6 py-6 z-10" style={{ marginTop: '2rem' }}>
                   <button onClick={prevStep} className="h-12 px-6 bg-white text-slate-600 border border-slate-200/60 rounded-2xl font-bold flex items-center gap-2 hover:bg-slate-50 transition-all shadow-sm">
                     <ArrowLeft className="w-4 h-4" /> Back
                   </button>
-                  
-                  <button 
-                    onClick={handleFinalize} 
+
+                  <button
+                    onClick={handleFinalize}
                     disabled={isSubmitting}
                     className="h-12 px-10 bg-emerald-500 hover:bg-emerald-600 text-white rounded-2xl font-bold flex items-center gap-2 transition-all shadow-md shadow-emerald-500/20 disabled:opacity-50"
                   >
@@ -802,7 +736,7 @@ export default function TeacherOnboarding() {
       <AnimatePresence>
         {isCorrectionModalOpen && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm">
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, scale: 0.95, y: 15 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 15 }}
@@ -882,7 +816,7 @@ export default function TeacherOnboarding() {
                   </div>
                 </form>
               ) : (
-                <motion.div 
+                <motion.div
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
                   className="py-8 flex flex-col items-center justify-center text-center space-y-4"

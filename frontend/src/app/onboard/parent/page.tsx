@@ -27,6 +27,11 @@ import {
   HelpCircle
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { ResultsProStepIndicator } from '@/components/onboarding/ResultsProStepIndicator';
+import { ResultsProPageHeader } from '@/components/onboarding/ResultsProPageHeader';
+import { ResultsProSectionLabel } from '@/components/onboarding/ResultsProSectionLabel';
+import { ResultsProBottomNav } from '@/components/onboarding/ResultsProBottomNav';
+import { ResultsProRegistryForm } from '@/components/onboarding/ResultsProRegistryForm';
 const steps = [
   { id: 1, label: 'ROLE', icon: LayoutGrid },
   { id: 2, label: 'REGISTRY', icon: User },
@@ -62,13 +67,7 @@ export default function ParentOnboarding() {
   });
 
   // OTP Simulator States
-  const [otpSent, setOtpSent] = useState(false);
-  const [otpCode, setOtpCode] = useState('');
-  const [otpError, setOtpError] = useState('');
   const [otpVerified, setOtpVerified] = useState(false);
-  const [otpSending, setOtpSending] = useState(false);
-  const [otpVerifying, setOtpVerifying] = useState(false);
-  const [otpTimer, setOtpTimer] = useState(60);
 
   // Student Search Simulation States
   const [isSearchingStudent, setIsSearchingStudent] = useState(false);
@@ -104,60 +103,14 @@ export default function ParentOnboarding() {
   const [paymentSuccess, setPaymentSuccess] = useState(false);
   const [scratchCardError, setScratchCardError] = useState('');
 
-  // OTP Timer countdown simulator
-  useEffect(() => {
-    let interval: NodeJS.Timeout;
-    if (otpSent && otpTimer > 0 && !otpVerified) {
-      interval = setInterval(() => {
-        setOtpTimer((prev) => prev - 1);
-      }, 1000);
-    }
-    return () => clearInterval(interval);
-  }, [otpSent, otpTimer, otpVerified]);
 
-  // Input styling
+
+  // Styling Variables (Matches resultspro UI aesthetics)
   const inputStyle = "w-full p-4 bg-slate-50 border border-slate-200/60 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#146ef5]/20 focus:border-[#146ef5] transition-all text-sm font-bold text-slate-800 placeholder:text-slate-400 placeholder:font-medium shadow-inner";
   const labelStyle = "block text-[11px] font-extrabold uppercase tracking-widest text-slate-400 mb-2 pl-1";
   const cardStyle = "bg-white/90 backdrop-blur-2xl border border-slate-200/60 rounded-[2.5rem] p-8 md:p-10 shadow-[0_20px_50px_rgba(20,110,245,0.04)]";
 
-  // Password Strength Evaluator
-  const getPasswordStrength = () => {
-    if (!formData.parentPassword) return { score: 0, text: 'No Password', color: 'bg-slate-200' };
-    const len = formData.parentPassword.length;
-    if (len < 6) return { score: 1, text: 'Weak', color: 'bg-rose-500' };
-    if (len < 10) return { score: 2, text: 'Medium', color: 'bg-amber-500' };
-    return { score: 3, text: 'Strong', color: 'bg-emerald-500' };
-  };
 
-  const passwordStrength = getPasswordStrength();
-
-  // OTP actions
-  const handleSendOtp = () => {
-    if (!formData.parentPhone || !formData.parentEmail) {
-      setOtpError('Please fill out Email and Phone Number first.');
-      return;
-    }
-    setOtpSending(true);
-    setOtpError('');
-    setTimeout(() => {
-      setOtpSending(false);
-      setOtpSent(true);
-      setOtpTimer(60);
-    }, 1200);
-  };
-
-  const handleVerifyOtp = () => {
-    setOtpVerifying(true);
-    setOtpError('');
-    setTimeout(() => {
-      setOtpVerifying(false);
-      if (otpCode === '4892') {
-        setOtpVerified(true);
-      } else {
-        setOtpError('Invalid OTP code. Use 4892 to simulate success.');
-      }
-    }, 900);
-  };
 
   // Student search simulator
   const handleStudentLookup = () => {
@@ -324,7 +277,11 @@ export default function ParentOnboarding() {
   };
 
   const handlePrevStep = () => {
-    setStep((s) => Math.max(s - 1, 2));
+    if (step === 2) {
+      router.push('/onboard');
+    } else {
+      setStep((s) => Math.max(s - 1, 2));
+    }
   };
 
   const handleStepTrackerNavigation = (targetStep: number) => {
@@ -332,62 +289,22 @@ export default function ParentOnboarding() {
       router.push('/onboard');
     } else if (targetStep < step) {
       setStep(targetStep);
+    }
+  };
+
   return (
     <>
       <main className="bg-[#fafbfc] min-h-screen flex flex-col font-sans text-slate-900 selection:bg-blue-100" style={{ paddingBottom: '6rem' }}>
-        <div className="h-10 md:h-16 w-full shrink-0" />
+        <div className="h-2 md:h-4 w-full shrink-0" />
         
-        {/* Top Navigation Steps */}
-        <div className="w-full pt-5 pb-4 flex justify-center border-b border-gray-100 bg-white/50 backdrop-blur-sm">
-          <div className="flex items-center gap-8 md:gap-16 overflow-x-auto px-6 py-5 hide-scrollbar">
-            {steps.map((s) => {
-              const isActive = s.id === step;
-              const isPast = s.id < step;
-              const Icon = s.icon;
-              
-              return (
-                <div 
-                  key={s.id} 
-                  onClick={() => {
-                    if (s.id === 1) {
-                      router.push('/onboard');
-                    } else if (isPast) {
-                      setStep(s.id);
-                    }
-                  }}
-                  className={`flex flex-col items-center gap-2 shrink-0 p-2 group transition-all
-                    ${(isPast || s.id === 1) ? 'cursor-pointer' : 'pointer-events-none'}`}
-                >
-                  {/* Outer Ring Container */}
-                  <div 
-                    className={`w-[44px] h-[44px] rounded-full flex items-center justify-center p-[3px] bg-transparent transition-all duration-300
-                      ${isActive 
-                        ? 'border border-blue-600' 
-                        : 'border border-transparent group-hover:border-blue-600'
-                      }`}
-                  >
-                    {/* Inner Icon Circle */}
-                    <div 
-                      className={`w-[36px] h-[36px] rounded-full flex items-center justify-center transition-all duration-300
-                        ${isActive 
-                          ? 'bg-blue-600 text-white' 
-                          : 'bg-white border border-gray-200 text-gray-400 group-hover:bg-blue-600 group-hover:border-blue-600 group-hover:text-white'
-                        }`}
-                    >
-                      <Icon size={16} strokeWidth={isActive ? 2.5 : 2} />
-                    </div>
-                  </div>
-                  <span className={`text-[9.5px] font-bold tracking-widest transition-colors duration-300 ${isActive ? 'text-gray-900' : 'text-gray-400 group-hover:text-gray-900'}`}>
-                    {s.label}
-                  </span>
-                </div>
-              );
-            })}
-          </div>
-        </div>
+        <ResultsProStepIndicator 
+          steps={steps} 
+          activeStepId={step} 
+          onStepClick={(id) => handleStepTrackerNavigation(id as number)} 
+        />
 
         {/* TRANSITIONAL STEP CONTENT */}
-        <div className="flex-1 w-full max-w-5xl self-center px-8 md:px-12 pt-14 pb-0 md:pt-20 md:pb-0 flex flex-col">
+        <div className="flex-1 w-full max-w-5xl self-center px-6 md:px-10 pt-4 pb-8 flex flex-col overflow-y-auto custom-scrollbar">
           <AnimatePresence mode="wait">
             {step === 2 && (
               <motion.div
@@ -398,178 +315,49 @@ export default function ParentOnboarding() {
                 transition={{ duration: 0.3 }}
                 className="space-y-8 flex flex-col"
               >
-                {/* Form Header */}
-                <div className="text-center mb-6 flex flex-col items-center">
-                  <h1 className="!text-[3rem] md:!text-[4.2rem] font-bold text-[#0f172a] ![text-shadow:none] mb-3 leading-tight tracking-tight">Parent Registry</h1>
-                  <p className="text-gray-500 !text-gray-500 ![text-shadow:none] text-sm md:text-[1.05rem] font-medium mb-4">Set up your parent credentials. We will verify your email and phone number to enable instant notification flags for academic results.</p>
-                </div>
+                {/* Spacer above title for better breathing room */}
+                <div style={{ height: '2rem' }} />
+
+                <ResultsProPageHeader 
+                  title="Parent Registry" 
+                  subtitle="Set up your parent credentials. We will verify your email and phone number to enable instant notification flags for academic results." 
+                />
 
                 {/* Spacer above Section Label */}
                 <div style={{ height: '1.5rem' }} />
 
-                {/* Sub-sections/Step label indicator */}
-                <div className="flex items-center gap-3">
-                  <div className="w-1.5 h-3.5 bg-blue-600 rounded-full" />
-                  <span className="text-[10.5px] font-bold text-gray-400 tracking-[0.2em] uppercase">2. REGISTRY</span>
-                </div>
+                <ResultsProSectionLabel label="2. REGISTRY" />
                 <div style={{ height: '1.25rem' }} />
 
-                <div className={cardStyle}>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                    <div>
-                      <label className={labelStyle}>Full Name</label>
-                      <input
-                        type="text"
-                        disabled={otpVerified}
-                        placeholder="e.g. Adebayo Greenwood"
-                        value={formData.parentName}
-                        onChange={(e) => setFormData({ ...formData, parentName: e.target.value })}
-                        className={inputStyle}
-                      />
-                    </div>
-                    <div>
-                      <label className={labelStyle}>Email Address</label>
-                      <input
-                        type="email"
-                        disabled={otpVerified}
-                        placeholder="parent@example.com"
-                        value={formData.parentEmail}
-                        onChange={(e) => setFormData({ ...formData, parentEmail: e.target.value })}
-                        className={inputStyle}
-                      />
-                    </div>
-                  </div>
+                <ResultsProRegistryForm 
+                  data={{
+                    name: formData.parentName,
+                    email: formData.parentEmail,
+                    phone: formData.parentPhone,
+                    password: formData.parentPassword
+                  }}
+                  onChange={(newData) => setFormData({ 
+                    ...formData, 
+                    parentName: newData.name ?? formData.parentName,
+                    parentEmail: newData.email ?? formData.parentEmail,
+                    parentPhone: newData.phone ?? formData.parentPhone,
+                    parentPassword: newData.password ?? formData.parentPassword
+                  })}
+                  isVerified={otpVerified}
+                  onVerifiedChange={setOtpVerified}
+                />
+                
+                {/* Spacer between form and bottom nav */}
+                <div style={{ height: '4rem' }} />
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                    <div>
-                      <label className={labelStyle}>Phone Number</label>
-                      <div className="relative">
-                        <input
-                          type="tel"
-                          disabled={otpVerified}
-                          placeholder="+2348012345678"
-                          value={formData.parentPhone}
-                          onChange={(e) => setFormData({ ...formData, parentPhone: e.target.value })}
-                          className={inputStyle}
-                        />
-                        {!otpVerified && (
-                          <button
-                            type="button"
-                            onClick={handleSendOtp}
-                            disabled={otpSending || !formData.parentPhone}
-                            className="absolute right-2 top-2 px-4 py-2 bg-[#146ef5] hover:bg-[#146ef5]/90 disabled:bg-slate-200 text-white rounded-xl text-xs font-bold transition-all"
-                          >
-                            {otpSending ? 'Sending...' : otpSent ? 'Resend' : 'Send OTP'}
-                          </button>
-                        )}
-                        {otpVerified && (
-                          <div className="absolute right-4 top-4 text-emerald-500 flex items-center gap-1 text-xs font-bold">
-                            <Check className="w-4 h-4 stroke-[3]" /> Verified
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                    <div>
-                      <label className={labelStyle}>Password</label>
-                      <input
-                        type="password"
-                        disabled={otpVerified}
-                        placeholder="Min. 6 characters"
-                        value={formData.parentPassword}
-                        onChange={(e) => setFormData({ ...formData, parentPassword: e.target.value })}
-                        className={inputStyle}
-                      />
-                      
-                      {/* Password strength meter */}
-                      {formData.parentPassword && (
-                        <div className="mt-2.5 px-1">
-                          <div className="flex justify-between items-center text-[10px] font-bold text-slate-400 uppercase mb-1">
-                            <span>Strength: {passwordStrength.text}</span>
-                          </div>
-                          <div className="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden flex">
-                            <div 
-                              className={`h-full ${passwordStrength.color} transition-all duration-500`}
-                              style={{ width: `${(passwordStrength.score / 3) * 100}%` }}
-                            />
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  </div>
+                <ResultsProBottomNav 
+                  onBack={handlePrevStep}
+                  backLabel="Role Selection"
+                  onNext={handleNextStep}
+                  nextLabel="Verify & Continue"
+                  isNextDisabled={!isStepValid(2)}
 
-                  {/* OTP Simulation Panel */}
-                  <AnimatePresence>
-                    {otpSent && !otpVerified && (
-                      <motion.div
-                        initial={{ opacity: 0, height: 0 }}
-                        animate={{ opacity: 1, height: 'auto' }}
-                        exit={{ opacity: 0, height: 0 }}
-                        className="overflow-hidden mt-2 mb-6"
-                      >
-                        <div className="p-6 bg-slate-50 border border-slate-200/60 rounded-[1.75rem] flex flex-col gap-4">
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-2 text-slate-700 text-xs font-extrabold uppercase tracking-wider">
-                              <Smartphone className="w-4 h-4 text-[#146ef5]" />
-                              <span>Verify Phone Number OTP</span>
-                            </div>
-                            <div className="flex items-center gap-1.5 text-xs text-[#146ef5] font-bold bg-[#146ef5]/5 px-2.5 py-1 rounded-full">
-                              <Clock size={12} className="animate-spin" />
-                              <span>0:{otpTimer < 10 ? `0${otpTimer}` : otpTimer}</span>
-                            </div>
-                          </div>
-
-                          <div className="bg-blue-50 border border-blue-200/60 text-[#146ef5] px-4 py-3 rounded-2xl flex items-start gap-2.5 text-xs font-medium">
-                            <Sparkles className="w-5 h-5 text-[#146ef5] shrink-0 mt-0.5 animate-pulse" />
-                            <div>
-                              <span className="font-extrabold text-blue-900">SIMULATOR ALERT:</span> An OTP was sent. Please type <span className="underline font-black text-blue-955">4892</span> to complete mock verification.
-                            </div>
-                          </div>
-
-                          <div className="flex gap-3">
-                            <input
-                              type="text"
-                              maxLength={4}
-                              placeholder="Enter 4-digit code"
-                              value={otpCode}
-                              onChange={(e) => setOtpCode(e.target.value)}
-                              className="flex-1 p-3 bg-white border border-slate-200 rounded-xl text-center font-black tracking-widest text-lg focus:outline-none focus:border-[#146ef5]"
-                            />
-                            <button
-                              type="button"
-                              onClick={handleVerifyOtp}
-                              disabled={otpVerifying || otpCode.length !== 4}
-                              className="px-6 bg-[#146ef5] text-white hover:bg-[#146ef5]/90 rounded-xl font-bold text-xs transition-all uppercase tracking-wider"
-                            >
-                              {otpVerifying ? 'Verifying...' : 'Verify Code'}
-                            </button>
-                          </div>
-                          {otpError && (
-                            <span className="text-xs text-rose-500 font-bold flex items-center gap-1">
-                              <AlertCircle size={12} /> {otpError}
-                            </span>
-                          )}
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
-
-                {/* Bottom Navigation Button Bar */}
-                <div className="w-full border-t border-gray-200 flex justify-between" style={{ marginTop: '2rem', paddingTop: '2rem' }}>
-                  <button
-                    onClick={handlePrevStep}
-                    className="h-12 px-6 bg-white text-slate-600 border border-slate-200/60 rounded-2xl font-bold flex items-center gap-2 hover:bg-slate-50 transition-all shadow-sm"
-                  >
-                    <ArrowLeft className="w-4 h-4" /> Role Selection
-                  </button>
-                  <button
-                    onClick={handleNextStep}
-                    disabled={!isStepValid(2)}
-                    className="h-12 px-8 bg-[#146ef5] text-white rounded-2xl font-bold flex items-center gap-2 hover:bg-blue-600 transition-all shadow-md shadow-blue-500/20 disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    Verify & Continue <ArrowRight className="w-4 h-4" />
-                  </button>
-                </div>
+                />
               </motion.div>
             )}
 
@@ -582,20 +370,15 @@ export default function ParentOnboarding() {
                 transition={{ duration: 0.3 }}
                 className="space-y-8 flex flex-col"
               >
-                {/* Form Header */}
-                <div className="text-center mb-6 flex flex-col items-center">
-                  <h1 className="!text-[3rem] md:!text-[4.2rem] font-bold text-[#0f172a] ![text-shadow:none] mb-3 leading-tight tracking-tight">Student Verification</h1>
-                  <p className="text-gray-500 !text-gray-500 ![text-shadow:none] text-sm md:text-[1.05rem] font-medium mb-4">Link your child to your parent dashboard. Input their official Admission/Student ID and Date of Birth to search the institutional database.</p>
-                </div>
+                <ResultsProPageHeader 
+                  title="Student Verification" 
+                  subtitle="Link your child to your parent dashboard. Input their official Admission/Student ID and Date of Birth to search the institutional database." 
+                />
 
                 {/* Spacer above Section Label */}
                 <div style={{ height: '1.5rem' }} />
 
-                {/* Sub-sections/Step label indicator */}
-                <div className="flex items-center gap-3">
-                  <div className="w-1.5 h-3.5 bg-blue-600 rounded-full" />
-                  <span className="text-[10.5px] font-bold text-gray-400 tracking-[0.2em] uppercase">3. STUDENT</span>
-                </div>
+                <ResultsProSectionLabel label="3. STUDENT" />
                 <div style={{ height: '1.25rem' }} />
 
                 <div className={cardStyle}>
@@ -701,22 +484,14 @@ export default function ParentOnboarding() {
                   )}
                 </div>
 
-                {/* Bottom Navigation Button Bar */}
-                <div className="w-full border-t border-gray-200 flex justify-between" style={{ marginTop: '2rem', paddingTop: '2rem' }}>
-                  <button
-                    onClick={handlePrevStep}
-                    className="h-12 px-6 bg-white text-slate-600 border border-slate-200/60 rounded-2xl font-bold flex items-center gap-2 hover:bg-slate-50 transition-all shadow-sm"
-                  >
-                    <ArrowLeft className="w-4 h-4" /> Parent Registry
-                  </button>
-                  <button
-                    onClick={handleNextStep}
-                    disabled={!isStepValid(3)}
-                    className="h-12 px-8 bg-[#146ef5] text-white rounded-2xl font-bold flex items-center gap-2 hover:bg-blue-600 transition-all shadow-md shadow-blue-500/20 disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    Verify Relationship <ArrowRight className="w-4 h-4" />
-                  </button>
-                </div>
+                <ResultsProBottomNav 
+                  onBack={handlePrevStep}
+                  backLabel="Parent Registry"
+                  onNext={handleNextStep}
+                  nextLabel="Verify Relationship"
+                  isNextDisabled={!isStepValid(3)}
+
+                />
               </motion.div>
             )}
 
@@ -729,20 +504,15 @@ export default function ParentOnboarding() {
                 transition={{ duration: 0.3 }}
                 className="space-y-8 flex flex-col"
               >
-                {/* Form Header */}
-                <div className="text-center mb-6 flex flex-col items-center">
-                  <h1 className="!text-[3rem] md:!text-[4.2rem] font-bold text-[#0f172a] ![text-shadow:none] mb-3 leading-tight tracking-tight">Family Profile</h1>
-                  <p className="text-gray-500 !text-gray-500 ![text-shadow:none] text-sm md:text-[1.05rem] font-medium mb-4">Define your specific relationship context with linked students and configure emergency safety triggers.</p>
-                </div>
+                <ResultsProPageHeader 
+                  title="Family Profile" 
+                  subtitle="Define your specific relationship context with linked students and configure emergency safety triggers." 
+                />
 
                 {/* Spacer above Section Label */}
                 <div style={{ height: '1.5rem' }} />
 
-                {/* Sub-sections/Step label indicator */}
-                <div className="flex items-center gap-3">
-                  <div className="w-1.5 h-3.5 bg-blue-600 rounded-full" />
-                  <span className="text-[10.5px] font-bold text-gray-400 tracking-[0.2em] uppercase">4. FAMILY</span>
-                </div>
+                <ResultsProSectionLabel label="4. FAMILY" />
                 <div style={{ height: '1.25rem' }} />
 
                 <div className={cardStyle}>
@@ -927,22 +697,14 @@ export default function ParentOnboarding() {
                   </AnimatePresence>
                 </div>
 
-                {/* Bottom Navigation Button Bar */}
-                <div className="w-full border-t border-gray-200 flex justify-between" style={{ marginTop: '2rem', paddingTop: '2rem' }}>
-                  <button
-                    onClick={handlePrevStep}
-                    className="h-12 px-6 bg-white text-slate-600 border border-slate-200/60 rounded-2xl font-bold flex items-center gap-2 hover:bg-slate-50 transition-all shadow-sm"
-                  >
-                    <ArrowLeft className="w-4 h-4" /> Student Verification
-                  </button>
-                  <button
-                    onClick={handleNextStep}
-                    disabled={!isStepValid(4)}
-                    className="h-12 px-8 bg-[#146ef5] text-white rounded-2xl font-bold flex items-center gap-2 hover:bg-blue-600 transition-all shadow-md shadow-blue-500/20 disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    Proceed to Billing <ArrowRight className="w-4 h-4" />
-                  </button>
-                </div>
+                <ResultsProBottomNav 
+                  onBack={handlePrevStep}
+                  backLabel="Student Verification"
+                  onNext={handleNextStep}
+                  nextLabel="Proceed to Billing"
+                  isNextDisabled={!isStepValid(4)}
+
+                />
               </motion.div>
             )}
 
@@ -955,20 +717,15 @@ export default function ParentOnboarding() {
                 transition={{ duration: 0.3 }}
                 className="space-y-8 flex flex-col"
               >
-                {/* Form Header */}
-                <div className="text-center mb-6 flex flex-col items-center">
-                  <h1 className="!text-[3rem] md:!text-[4.2rem] font-bold text-[#0f172a] ![text-shadow:none] mb-3 leading-tight tracking-tight">Payment & Activation</h1>
-                  <p className="text-gray-500 !text-gray-500 ![text-shadow:none] text-sm md:text-[1.05rem] font-medium mb-4">Activate your portal lookup. Choose to settle access using a scratch card pin or subscribe termly via our payment processors.</p>
-                </div>
+                <ResultsProPageHeader 
+                  title="Payment & Activation" 
+                  subtitle="Activate your portal lookup. Choose to settle access using a scratch card pin or subscribe termly via our payment processors." 
+                />
 
                 {/* Spacer above Section Label */}
                 <div style={{ height: '1.5rem' }} />
 
-                {/* Sub-sections/Step label indicator */}
-                <div className="flex items-center gap-3">
-                  <div className="w-1.5 h-3.5 bg-blue-600 rounded-full" />
-                  <span className="text-[10.5px] font-bold text-gray-400 tracking-[0.2em] uppercase">5. PAYMENT</span>
-                </div>
+                <ResultsProSectionLabel label="5. PAYMENT" />
                 <div style={{ height: '1.25rem' }} />
 
                 <div className={cardStyle}>
@@ -1104,32 +861,15 @@ export default function ParentOnboarding() {
                   </AnimatePresence>
                 </div>
 
-                {/* Bottom Navigation Button Bar */}
-                <div className="w-full border-t border-gray-200 flex justify-between" style={{ marginTop: '2rem', paddingTop: '2rem' }}>
-                  <button
-                    onClick={handlePrevStep}
-                    disabled={isSubmitting}
-                    className="h-12 px-6 bg-white text-slate-600 border border-slate-200/60 rounded-2xl font-bold flex items-center gap-2 hover:bg-slate-50 transition-all shadow-sm"
-                  >
-                    <ArrowLeft className="w-4 h-4" /> Family Profile
-                  </button>
-                  <button
-                    onClick={handleNextStep}
-                    disabled={!isStepValid(5) || isSubmitting}
-                    className="h-12 px-10 bg-emerald-500 hover:bg-emerald-600 text-white rounded-2xl font-bold flex items-center gap-2 transition-all shadow-md shadow-emerald-500/20 disabled:opacity-50"
-                  >
-                    {isSubmitting ? (
-                      <>
-                        <div className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin" />
-                        <span>Activating Setup...</span>
-                      </>
-                    ) : (
-                      <>
-                        <span>Complete Onboarding</span> <ArrowRight className="w-4 h-4" />
-                      </>
-                    )}
-                  </button>
-                </div>
+                <ResultsProBottomNav 
+                  onBack={handlePrevStep}
+                  backLabel="Family Profile"
+                  onNext={handleNextStep}
+                  nextLabel="Complete Onboarding"
+                  isNextDisabled={!isStepValid(5) || isSubmitting}
+                  isNextLoading={isSubmitting}
+
+                />
               </motion.div>
             )}
 

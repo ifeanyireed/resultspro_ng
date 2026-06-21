@@ -51,7 +51,7 @@
 html, body {
   max-width: 100vw;
   min-height: 100vh;
-  overflow-x: hidden;
+  overflow-x: clip;
   margin: 0 !important;
   padding: 0 !important;
   display: flex;
@@ -241,4 +241,25 @@ p {
 
 article:hover .hover-zoom {
   transform: scale(1.08);
+}
+
+/* Onboarding pages reset - to override default global skies.jpeg theme color styles */
+.onboard-page h1,
+.onboard-page h2,
+.onboard-page h3 {
+  color: #0f172a !important;
+  text-shadow: none !important;
+}
+
+.onboard-page p {
+  color: #4a5568 !important;
+  text-shadow: none !important;
+}
+
+.onboard-page span,
+.onboard-page label,
+.onboard-page button,
+.onboard-page select,
+.onboard-page input {
+  text-shadow: none !important;
 }
