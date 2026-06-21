@@ -246,7 +246,10 @@ article:hover .hover-zoom {
 /* Onboarding pages reset - to override default global skies.jpeg theme color styles */
 .onboard-page h1,
 .onboard-page h2,
-.onboard-page h3 {
+.onboard-page h3,
+.onboard-page h4,
+.onboard-page h5,
+.onboard-page h6 {
   color: #0f172a !important;
   text-shadow: none !important;
 }
@@ -256,10 +259,6 @@ article:hover .hover-zoom {
   text-shadow: none !important;
 }
 
-.onboard-page span,
-.onboard-page label,
-.onboard-page button,
-.onboard-page select,
-.onboard-page input {
+.onboard-page * {
   text-shadow: none !important;
 }

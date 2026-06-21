@@ -66,7 +66,7 @@ export default function ParentOnboarding() {
     siblings: [] as { name: string; admissionNumber: string; class: string }[],
     
     // Step 5: Payment
-    paymentOption: 'scratch' as 'scratch' | 'subscription',
+    paymentOption: 'PRO' as string,
     scratchCardPin: '',
   });
 
@@ -288,9 +288,7 @@ export default function ParentOnboarding() {
       case 4:
         return formData.relationshipType !== '';
       case 5:
-        if (formData.paymentOption === 'scratch') {
-          return formData.scratchCardPin.replace(/[-\s]/g, '').length === 12;
-        }
+        if (formData.paymentOption === 'FREE') return paymentSuccess; // Or true if Free doesn't require button click, but let's require clicking 'Activate'
         return paymentSuccess;
       default:
         return false;
@@ -327,7 +325,7 @@ export default function ParentOnboarding() {
 
   return (
     <>
-      <main className="bg-[#fafbfc] min-h-screen flex flex-col font-sans text-slate-900 selection:bg-blue-100" style={{ paddingBottom: '6rem' }}>
+      <main className="onboard-page bg-[#fafbfc] min-h-screen flex flex-col font-sans text-slate-900 selection:bg-blue-100" style={{ paddingBottom: '6rem' }}>
         <div className="h-2 md:h-4 w-full shrink-0" />
         
         <ResultsProStepIndicator 
@@ -887,7 +885,8 @@ export default function ParentOnboarding() {
                             <button
                               type="button"
                               onClick={handleSiblingLookup}
-                              className="w-full bg-[#146ef5] text-white py-3 rounded text-sm font-bold mt-2 hover:bg-[#146ef5]/90 transition-colors"
+                              className="w-full bg-[#146ef5] text-white rounded-full text-xs font-extrabold uppercase tracking-widest transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5 mt-2 flex items-center justify-center gap-2"
+                              style={{ padding: '1rem', backgroundColor: '#146ef5' }}
                             >
                               Verify Sibling Record
                             </button>
@@ -922,7 +921,8 @@ export default function ParentOnboarding() {
                               <button
                                 type="button"
                                 onClick={addSiblingToProfile}
-                                className="px-6 py-3 bg-[#146ef5] hover:bg-[#146ef5]/90 text-white rounded-full text-xs font-extrabold uppercase tracking-widest transition-all shadow-md hover:-translate-y-0.5"
+                                className="bg-[#146ef5] hover:bg-[#146ef5]/90 text-white rounded-full text-xs font-extrabold uppercase tracking-widest transition-all shadow-md hover:-translate-y-0.5"
+                                style={{ padding: '0.75rem 1.5rem', backgroundColor: '#146ef5' }}
                               >
                                 Add Sibling
                               </button>
@@ -972,136 +972,91 @@ export default function ParentOnboarding() {
                 <div style={{ height: '1.25rem' }} />
 
                 <div className={cardStyle} style={{ boxShadow: '0 30px 60px rgba(0,0,0,0.02)', borderRadius: '4px', padding: '2.5rem', margin: '0 auto', maxWidth: '800px', width: '100%', backgroundColor: '#ffffff' }}>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                    {/* Option A: Scratch Card */}
-                    <button
-                      type="button"
-                      onClick={() => setFormData({ ...formData, paymentOption: 'scratch' })}
-                      className={`p-6 border rounded-[2rem] text-left transition-all ${
-                        formData.paymentOption === 'scratch'
-                          ? 'border-[#146ef5] bg-[#146ef5]/5 shadow-sm'
-                          : 'border-slate-200 hover:border-slate-300'
-                      }`}
-                    >
-                      <div className="flex justify-between items-start mb-4">
-                        <div className="p-3 bg-[#146ef5]/10 rounded-xl text-[#146ef5]">
-                          <Ticket size={24} />
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8" style={{ marginBottom: '2.5rem' }}>
+                    {[
+                      { id: 'FREE', name: 'FREE', price: '₦0', period: 'forever', desc: '1 Student Profile • Basic View' },
+                      { id: 'BASIC', name: 'BASIC', price: '₦5,000', period: 'per month', desc: '1 Student Tracking • Full Access' },
+                      { id: 'PRO', name: 'PRO', price: '₦12,000', period: 'per month', desc: 'Up to 3 Students • AI Insights', highlight: true },
+                      { id: 'PREMIUM', name: 'PREMIUM', price: '₦20,000', period: 'per month', desc: 'Up to 5 Students • Expert Consult' }
+                    ].map((plan) => (
+                      <button
+                        key={plan.id}
+                        type="button"
+                        onClick={() => {
+                          setFormData({ ...formData, paymentOption: plan.id });
+                          setPaymentSuccess(false); // Reset on plan switch
+                        }}
+                        className={`group border text-left transition-all relative ${
+                          formData.paymentOption === plan.id
+                            ? 'border-[#146ef5] bg-[#146ef5]/5 shadow-sm'
+                            : 'border-slate-200 hover:border-slate-300'
+                        }`}
+                        style={{ borderRadius: '1.5rem', padding: '1.5rem' }}
+                      >
+                        {plan.highlight && (
+                          <div 
+                            className="absolute left-1/2 -translate-x-1/2 bg-[#146ef5] text-white text-[9px] font-black uppercase tracking-widest rounded-full shadow-sm"
+                            style={{ top: '-0.75rem', padding: '0.25rem 0.75rem', whiteSpace: 'nowrap' }}
+                          >
+                            Most Popular
+                          </div>
+                        )}
+                        <div className="flex justify-between items-start mb-2" style={{ marginBottom: '0.5rem' }}>
+                          <h4 className="text-xs font-black uppercase tracking-wider" style={{ color: '#1e293b' }}>{plan.name}</h4>
+                          <div className="relative flex items-center justify-center pointer-events-none">
+                            <div 
+                              className={`absolute inset-0 rounded-full transition-transform duration-300 ${
+                                formData.paymentOption === plan.id ? 'scale-100 bg-blue-100' : 'scale-0'
+                              }`}
+                            />
+                            <div className={`w-[28px] h-[28px] rounded-full flex items-center justify-center transition-all duration-300 relative z-10 ${
+                              formData.paymentOption === plan.id 
+                                ? 'bg-blue-600 border border-blue-600 text-white shadow-sm' 
+                                : 'bg-white border border-gray-200 text-gray-400 group-hover:bg-blue-600 group-hover:border-blue-600 group-hover:text-white'
+                            }`}>
+                              <Check size={14} strokeWidth={formData.paymentOption === plan.id ? 2.5 : 2} />
+                            </div>
+                          </div>
                         </div>
-                        <input
-                          type="radio"
-                          checked={formData.paymentOption === 'scratch'}
-                          onChange={() => setFormData({ ...formData, paymentOption: 'scratch' })}
-                          className="w-4 h-4 text-[#146ef5]"
-                        />
-                      </div>
-                      <h4 className="text-xs font-black uppercase tracking-wider text-slate-800 mb-1">Scratch Card Activation</h4>
-                      <p className="text-[11px] text-slate-400 font-semibold leading-relaxed">Use PIN from physical school card to unlock access.</p>
-                    </button>
-
-                    {/* Option B: Online Subscription */}
-                    <button
-                      type="button"
-                      onClick={() => setFormData({ ...formData, paymentOption: 'subscription' })}
-                      className={`p-6 border rounded-[2rem] text-left transition-all ${
-                        formData.paymentOption === 'subscription'
-                          ? 'border-[#146ef5] bg-[#146ef5]/5 shadow-sm'
-                          : 'border-slate-200 hover:border-slate-300'
-                      }`}
-                    >
-                      <div className="flex justify-between items-start mb-4">
-                        <div className="p-3 bg-indigo-500/10 rounded-xl text-indigo-500">
-                          <CardIcon size={24} />
+                        <div className="flex items-baseline gap-1 mb-2" style={{ marginBottom: '0.5rem' }}>
+                          <span className="text-2xl font-black" style={{ color: '#0f172a' }}>{plan.price}</span>
+                          <span className="text-[10px] font-bold uppercase tracking-widest" style={{ color: '#94a3b8' }}>/ {plan.period}</span>
                         </div>
-                        <input
-                          type="radio"
-                          checked={formData.paymentOption === 'subscription'}
-                          onChange={() => setFormData({ ...formData, paymentOption: 'subscription' })}
-                          className="w-4 h-4 text-[#146ef5]"
-                        />
-                      </div>
-                      <h4 className="text-xs font-black uppercase tracking-wider text-slate-800 mb-1">Online Portal Subscription</h4>
-                      <p className="text-[11px] text-slate-400 font-semibold leading-relaxed">Pay termly via card/bank transfer instantly. ₦2,500/term.</p>
-                    </button>
+                        <p className="text-[11px] font-semibold" style={{ color: '#64748b' }}>{plan.desc}</p>
+                      </button>
+                    ))}
                   </div>
 
                   {/* Payment Inner Actions Panel */}
-                  <AnimatePresence mode="wait">
-                    {formData.paymentOption === 'scratch' ? (
-                      <motion.div
-                        key="scratchPanel"
-                        initial={{ opacity: 0, height: 0 }}
-                        animate={{ opacity: 1, height: 'auto' }}
-                        exit={{ opacity: 0, height: 0 }}
-                        className="overflow-hidden"
+                  <div className="flex flex-col gap-4 text-center mt-4">
+                    <h4 className="text-xs font-extrabold uppercase tracking-wider text-slate-800 text-left mb-2">Plan Activation</h4>
+                    
+                    {!paymentSuccess ? (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (formData.paymentOption === 'FREE') {
+                            setPaymentSuccess(true);
+                          } else {
+                            triggerOnlinePayment();
+                          }
+                        }}
+                        className="w-full bg-[#146ef5] text-white font-extrabold text-xs uppercase tracking-widest transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5 flex items-center justify-center gap-2"
+                        style={{ padding: '1.25rem', borderRadius: '1.5rem', marginTop: '1rem' }}
                       >
-                        <div className="p-6 bg-slate-50 border border-slate-200/60 rounded-[1.75rem] flex flex-col gap-4 mb-6">
-                          <h4 className="text-xs font-extrabold uppercase tracking-wider text-slate-800">Enter Scratch Card PIN</h4>
-                          <div className="relative">
-                            <input
-                              type="text"
-                              placeholder="e.g. 1234-5678-9012"
-                              value={formData.scratchCardPin}
-                              onChange={handleScratchCardChange}
-                              className="w-full p-4 bg-white border border-slate-200 rounded-2xl text-center text-lg font-black tracking-widest focus:outline-none focus:border-[#146ef5]"
-                            />
-                            {formData.scratchCardPin.replace(/[-\s]/g, '').length === 12 && (
-                              <div className="absolute right-4 top-5 text-emerald-500 flex items-center gap-1 text-xs font-bold">
-                                <CheckCircle2 className="w-5 h-5 stroke-[2.5]" /> Validated
-                              </div>
-                            )}
-                          </div>
-                          
-                          {scratchCardError && (
-                            <span className="text-xs text-rose-500 font-semibold flex items-center gap-1">
-                              <AlertCircle size={12} /> {scratchCardError}
-                            </span>
-                          )}
-
-                          <div className="flex gap-2.5 items-start bg-slate-100/50 p-4 rounded-xl text-[10px] text-slate-400 font-semibold leading-relaxed">
-                            <Info size={14} className="text-[#146ef5] shrink-0 mt-0.5" />
-                            <span>PIN layout must contain exactly 12 numeric digits. Simulation auto-accepts any valid format. Try typing: <b className="text-slate-600">123456789012</b></span>
-                          </div>
-                        </div>
-                      </motion.div>
+                        {formData.paymentOption === 'FREE' ? 'Activate Free Plan' : `Proceed to Pay via Paystack`}
+                      </button>
                     ) : (
-                      <motion.div
-                        key="onlinePanel"
-                        initial={{ opacity: 0, height: 0 }}
-                        animate={{ opacity: 1, height: 'auto' }}
-                        exit={{ opacity: 0, height: 0 }}
-                        className="overflow-hidden"
-                      >
-                        <div className="p-6 bg-slate-50 border border-slate-200/60 rounded-[1.75rem] flex flex-col gap-4 mb-6 text-center">
-                          <h4 className="text-xs font-extrabold uppercase tracking-wider text-slate-800 text-left">Termly Subscription Billing</h4>
-                          
-                          <div className="py-6 flex flex-col items-center">
-                            <span className="text-sm font-extrabold uppercase tracking-widest text-slate-400 mb-1">Access Billing Settler</span>
-                            <span className="text-3xl font-black text-slate-800">₦2,500.00</span>
-                            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wide mt-1">per student / academic term</span>
-                          </div>
-
-                          {!paymentSuccess ? (
-                            <button
-                              type="button"
-                              onClick={triggerOnlinePayment}
-                              className="w-full py-4 bg-[#146ef5] hover:bg-[#146ef5]/90 text-white font-extrabold rounded-2xl text-xs uppercase tracking-widest transition-all shadow-md flex items-center justify-center gap-2"
-                            >
-                              <CardIcon size={16} /> Pay ₦2,500.00 via Paystack
-                            </button>
-                          ) : (
-                            <div className="p-4 border border-emerald-100 bg-emerald-50/20 rounded-2xl flex items-center justify-center gap-2 text-xs font-black text-emerald-600 uppercase tracking-wider">
-                              <CheckCircle2 className="w-5 h-5" /> Online Payment Confirmed Successfully!
-                            </div>
-                          )}
-
-                          <div className="flex gap-2.5 items-start bg-slate-100/50 p-4 rounded-xl text-[10px] text-slate-400 font-semibold text-left leading-relaxed">
-                            <Lock size={14} className="text-[#146ef5] shrink-0 mt-0.5" />
-                            <span>Transactions processed securely under standard sandbox profiles. Settle instantly to activate portal sync operations.</span>
-                          </div>
-                        </div>
-                      </motion.div>
+                      <div className="border border-emerald-100 bg-emerald-50/20 flex items-center justify-center gap-2 text-xs font-black text-emerald-600 uppercase tracking-wider" style={{ padding: '1.25rem', borderRadius: '1.5rem', marginTop: '1rem' }}>
+                        <CheckCircle2 className="w-5 h-5" /> {formData.paymentOption === 'FREE' ? 'Free Plan Activated!' : 'Payment Confirmed Successfully!'}
+                      </div>
                     )}
-                  </AnimatePresence>
+
+                    <div className="flex gap-2.5 items-start p-4 rounded-xl text-[10px] text-slate-400 font-semibold text-left leading-relaxed mt-2" style={{ backgroundColor: '#f8fafc' }}>
+                      <Lock size={14} className="text-[#146ef5] shrink-0 mt-0.5" />
+                      <span>Transactions processed securely. Subscriptions can be managed or canceled anytime from your parent dashboard.</span>
+                    </div>
+                  </div>
                 </div>
 
                 {/* Spacer between form and bottom nav */}
