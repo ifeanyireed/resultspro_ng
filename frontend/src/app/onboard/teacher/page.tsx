@@ -679,7 +679,7 @@ export default function TeacherOnboarding() {
                             <div>
                               <h5 className="text-[15px] font-bold text-slate-800 leading-tight">{asg.class} - {asg.subject}</h5>
                               <span className="font-bold text-slate-400 uppercase tracking-widest block" style={{ fontSize: '9.5px', marginTop: '0.1rem' }}>
-                                {asg.type} • {asg.periods} periods per week
+                                {asg.type} • {asg.periods} periods per week 
                               </span>
                             </div>
                           </div>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Check, AlertCircle, Eye, EyeOff } from 'lucide-react';
+import { Check, AlertCircle, Eye, EyeOff, Mail, Phone } from 'lucide-react';
 
 export interface RegistryFormData {
   name: string;
@@ -140,24 +140,30 @@ export function ResultsProRegistryForm({
               </div>
             )}
             {showEmail && (
-              <div>
-                {nameLabel && <div className="block text-[11px] mb-2">&nbsp;</div>}
-                <input 
-                  type="email" 
-                placeholder="Email Address" 
-                disabled={(effectiveIsVerified && requireOtp) || readOnlyFields.includes('email')}
-                value={data.email}
-                onChange={(e) => onChange({ email: e.target.value })}
-                className={inputClass}
-                style={inputStyle} 
-                />
+              <div className="relative">
+                <label className="block text-[11px] font-extrabold uppercase tracking-widest text-slate-400 mb-2 pl-1">Email Address</label>
+                <div className="relative">
+                  <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                  <input 
+                    type="email" 
+                    placeholder="Email Address" 
+                    disabled={(effectiveIsVerified && requireOtp) || readOnlyFields.includes('email')}
+                    value={data.email}
+                    onChange={(e) => onChange({ email: e.target.value })}
+                    className={inputClass}
+                    style={{ ...inputStyle, paddingLeft: '2.5rem' }} 
+                  />
+                </div>
               </div>
             )}
           </div>
         )}
         
         {showPhone && (
-          <div style={{ position: 'relative' }}>
+          <div>
+            <label className="block text-[11px] font-extrabold uppercase tracking-widest text-slate-400 mb-2 pl-1">Phone Number</label>
+            <div style={{ position: 'relative' }}>
+              <Phone className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 z-10" />
             <input 
               type="tel" 
               placeholder="Phone Number (+234...)" 
@@ -165,7 +171,7 @@ export function ResultsProRegistryForm({
               value={data.phone}
               onChange={(e) => onChange({ phone: e.target.value })}
               className={inputClass}
-              style={{ ...inputStyle, paddingRight: requireOtp ? '8.5rem' : '1rem' }} 
+              style={{ ...inputStyle, paddingLeft: '2.5rem', paddingRight: requireOtp ? '8.5rem' : '1rem' }} 
             />
             {requireOtp && !effectiveIsVerified && (
               <button
@@ -183,6 +189,7 @@ export function ResultsProRegistryForm({
                 <Check size={16} strokeWidth={3} /> Verified
               </div>
             )}
+            </div>
           </div>
         )}
 

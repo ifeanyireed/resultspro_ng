@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ResultsProRegistryForm } from '@/components/onboarding/ResultsProRegistryForm';
-import { Camera, Image as ImageIcon, Globe, ArrowRight, ArrowLeft, CheckCircle2, Building2, Palette, BookOpen } from 'lucide-react';
+import { Camera, Image as ImageIcon, Globe, ArrowRight, ArrowLeft, CheckCircle2, Building2, Palette, BookOpen, Quote, Plus } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { ResultsProStepIndicator } from '@/components/onboarding/ResultsProStepIndicator';
 
@@ -25,8 +25,69 @@ export default function SchoolOnboarding() {
     primaryColor: '#146ef5',
     accentColor: '#0f172a',
     country: 'Nigeria',
-    curriculum: 'WASSCE / National'
+    curriculum: 'WASSCE / National',
+    logoUrl: '' as string | null,
+    logoFile: null as File | null,
+    logoZoom: 1,
+    logoRotate: 0,
+    logoCropped: false,
+    coverUrl: '' as string | null,
+    coverFile: null as File | null,
+    coverZoom: 1,
+    coverRotate: 0,
+    coverCropped: false,
   });
+
+  const [notification, setNotification] = useState<string | null>(null);
+
+  const handleLogoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      const url = URL.createObjectURL(file);
+      setFormData(prev => ({
+        ...prev,
+        logoUrl: url,
+        logoFile: file,
+        logoCropped: false
+      }));
+    }
+  };
+
+  const handleCoverChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      const url = URL.createObjectURL(file);
+      setFormData(prev => ({
+        ...prev,
+        coverUrl: url,
+        coverFile: file,
+        coverCropped: false
+      }));
+    }
+  };
+
+  const handleSaveCrop = () => {
+    setFormData(prev => ({
+      ...prev,
+      logoCropped: true
+    }));
+    triggerToast("School logo cropped and saved successfully!");
+  };
+
+  const handleSaveCoverCrop = () => {
+    setFormData(prev => ({
+      ...prev,
+      coverCropped: true
+    }));
+    triggerToast("Cover photo cropped and saved successfully!");
+  };
+
+  const triggerToast = (msg: string) => {
+    setNotification(msg);
+    setTimeout(() => {
+      setNotification(null);
+    }, 4000);
+  };
 
   const nextStep = () => setStep(s => Math.min(s + 1, steps.length));
   const prevStep = () => setStep(s => Math.max(s - 1, 1));
@@ -45,6 +106,20 @@ export default function SchoolOnboarding() {
   return (
     <>
       <main className="onboard-page bg-[#fafbfc] min-h-screen flex flex-col font-sans text-slate-900 selection:bg-blue-100" style={{ paddingBottom: '6rem' }}>
+        <AnimatePresence>
+          {notification && (
+            <motion.div
+              initial={{ opacity: 0, y: -50 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -50 }}
+              className="fixed top-6 left-1/2 -translate-x-1/2 z-50 bg-[#1e293b] text-white px-6 py-3 rounded-full shadow-2xl flex items-center gap-3 font-bold text-sm tracking-wide border border-white/10"
+            >
+              <CheckCircle2 className="w-5 h-5 text-emerald-400" />
+              {notification}
+            </motion.div>
+          )}
+        </AnimatePresence>
+
         <div className="h-2 md:h-4 w-full shrink-0" />
 
         <ResultsProStepIndicator 
@@ -95,26 +170,34 @@ export default function SchoolOnboarding() {
                   requirePassword={false}
                   showName={false}
                   customTopElement={
-                    <div className="space-y-6 mb-6">
-                      <div>
-                        <label className={labelStyle}>Official School Name</label>
-                        <input
-                          type="text"
-                          placeholder="e.g. Royal Academy"
-                          value={formData.schoolName}
-                          onChange={(e) => setFormData({ ...formData, schoolName: e.target.value })}
-                          className={inputStyle}
-                        />
+                    <div style={{ display: 'grid', gap: '1rem' }}>
+                      <div className="relative">
+                        <label className="block text-[11px] font-extrabold uppercase tracking-widest text-slate-400 mb-2 pl-1">Official School Name</label>
+                        <div className="relative">
+                          <Building2 className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                          <input
+                            type="text"
+                            placeholder="e.g. Royal Academy"
+                            value={formData.schoolName}
+                            onChange={(e) => setFormData({ ...formData, schoolName: e.target.value })}
+                            className="focus:border-[#146ef5] focus:ring-1 focus:ring-[#146ef5] transition-all text-slate-800 placeholder:text-slate-400"
+                            style={{ padding: '0.75rem 1rem 0.75rem 2.5rem', border: '1px solid #e2e8f0', borderRadius: '4px', outline: 'none', fontSize: '0.875rem', width: '100%', background: 'white' }}
+                          />
+                        </div>
                       </div>
-                      <div>
-                        <label className={labelStyle}>School Motto</label>
-                        <input
-                          type="text"
-                          placeholder="e.g. Excellence in Service"
-                          value={formData.motto}
-                          onChange={(e) => setFormData({ ...formData, motto: e.target.value })}
-                          className={inputStyle}
-                        />
+                      <div className="relative">
+                        <label className="block text-[11px] font-extrabold uppercase tracking-widest text-slate-400 mb-2 pl-1">School Motto</label>
+                        <div className="relative">
+                          <Quote className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                          <input
+                            type="text"
+                            placeholder="e.g. Excellence in Service"
+                            value={formData.motto}
+                            onChange={(e) => setFormData({ ...formData, motto: e.target.value })}
+                            className="focus:border-[#146ef5] focus:ring-1 focus:ring-[#146ef5] transition-all text-slate-800 placeholder:text-slate-400"
+                            style={{ padding: '0.75rem 1rem 0.75rem 2.5rem', border: '1px solid #e2e8f0', borderRadius: '4px', outline: 'none', fontSize: '0.875rem', width: '100%', background: 'white' }}
+                          />
+                        </div>
                       </div>
                     </div>
                   }
@@ -162,74 +245,270 @@ export default function SchoolOnboarding() {
                 <div className="grid md:grid-cols-3 gap-8 mb-12">
                   {/* Card 1: Assets */}
                   <div className={cardStyle} style={{ boxShadow: '0 30px 60px rgba(0,0,0,0.02)', borderRadius: '4px', padding: '2.5rem', backgroundColor: '#ffffff' }}>
-                    <h3 className="font-bold text-slate-900 uppercase tracking-widest text-[11px] border-b border-slate-100 pb-4 mb-6">Assets</h3>
-                    <div className="flex-grow space-y-6">
-                      <div className="aspect-square rounded-[2rem] border-2 border-dashed border-slate-200 flex flex-col items-center justify-center text-center p-6 bg-slate-50 hover:border-blue-400 hover:bg-blue-50/50 transition-all cursor-pointer group">
-                        <Camera className="w-8 h-8 text-slate-400 mb-3 group-hover:text-blue-500 transition-colors" />
-                        <p className="text-[10px] font-extrabold uppercase tracking-widest text-slate-500 group-hover:text-blue-600">School Logo</p>
+                    <h3 className="font-bold text-slate-900 tracking-wider border-b border-slate-100 pb-4 text-center" style={{ fontSize: '20px', marginBottom: '2rem' }}>Assets</h3>
+                    <div className="flex-grow flex flex-col items-center w-full">
+                      <div className="flex flex-col w-full items-center" style={{ marginBottom: '2.5rem' }}>
+                        <label 
+                          className="relative mx-auto rounded-full flex items-center justify-center cursor-pointer group transition-all"
+                          style={{ aspectRatio: '1/1', width: '75%', boxShadow: '0 15px 35px -5px rgba(0,0,0,0.1), 0 10px 15px -5px rgba(0,0,0,0.04)' }}
+                        >
+                          <input
+                            type="file"
+                            accept="image/*"
+                            onChange={handleLogoChange}
+                            className="hidden"
+                          />
+
+                          {formData.logoUrl ? (
+                            <div className="w-full h-full rounded-full overflow-hidden relative">
+                              <motion.div
+                                className="relative w-full h-full"
+                                animate={{ scale: formData.logoCropped ? 1 : 1.05 }}
+                              >
+                                <img
+                                  src={formData.logoUrl}
+                                  alt="Logo Source"
+                                  className="absolute object-cover transition-transform duration-75"
+                                  style={{
+                                    width: '100%',
+                                    height: '100%',
+                                    transform: `scale(${formData.logoZoom}) rotate(${formData.logoRotate}deg)`,
+                                  }}
+                                />
+                                {!formData.logoCropped && (
+                                  <div className="absolute inset-0 border-2 border-dashed border-blue-500 rounded-full pointer-events-none bg-black/15 shadow-[0_0_0_9999px_rgba(0,0,0,0.4)]" />
+                                )}
+                              </motion.div>
+                            </div>
+                          ) : (
+                            <div 
+                              className="w-full h-full rounded-full flex items-center justify-center overflow-hidden"
+                              style={{
+                                backgroundImage: 'url(/abstract-blue-1.jpg)',
+                                backgroundSize: 'cover',
+                                backgroundPosition: 'center',
+                              }}
+                            >
+                              <div className="absolute inset-0 bg-black/40 rounded-full group-hover:bg-black/50 transition-colors"></div>
+                              <div className="z-10 flex flex-col items-center justify-center gap-1">
+                                <Camera className="w-10 h-10 text-white/90 transition-colors group-hover:text-white drop-shadow-md" strokeWidth={0.5} />
+                                <span className="text-white font-black uppercase tracking-widest text-[10px] drop-shadow-md">Logo</span>
+                              </div>
+                            </div>
+                          )}
+
+                          <div className="absolute bottom-1 right-1 w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white border-2 border-white shadow-sm group-hover:scale-110 transition-transform">
+                            <Plus className="w-5 h-5" strokeWidth={2} />
+                          </div>
+                        </label>
+                        
+                        {formData.logoUrl && !formData.logoCropped && (
+                          <div className="flex flex-col gap-3 mt-4" style={{ width: '75%' }}>
+                            <div className="bg-slate-50 border border-slate-200 p-3 rounded-xl flex flex-col gap-2">
+                              <label className="text-[10px] font-bold uppercase tracking-widest text-slate-500 flex justify-between">
+                                <span>Zoom</span>
+                                <span className="text-blue-600">{Math.round(formData.logoZoom * 100)}%</span>
+                              </label>
+                              <input 
+                                type="range" min="1" max="3" step="0.1"
+                                value={formData.logoZoom}
+                                onChange={(e) => setFormData(prev => ({ ...prev, logoZoom: parseFloat(e.target.value) }))}
+                                className="w-full accent-blue-600 h-1 bg-slate-200 rounded-lg appearance-none cursor-pointer"
+                              />
+                            </div>
+                            
+                            <button
+                              onClick={(e) => { e.preventDefault(); handleSaveCrop(); }}
+                              className="w-full bg-slate-900 hover:bg-black text-white text-[11px] font-black uppercase tracking-widest py-2.5 rounded-xl shadow-md transition-all flex items-center justify-center gap-2"
+                            >
+                              <CheckCircle2 className="w-4 h-4" />
+                              Confirm Crop
+                            </button>
+                          </div>
+                        )}
                       </div>
-                      <div className="aspect-[16/9] rounded-2xl border-2 border-dashed border-slate-200 flex flex-col items-center justify-center text-center p-4 bg-slate-50 hover:border-blue-400 hover:bg-blue-50/50 transition-all cursor-pointer group">
-                        <ImageIcon className="w-6 h-6 text-slate-400 mb-2 group-hover:text-blue-500 transition-colors" />
-                        <p className="text-[10px] font-extrabold uppercase tracking-widest text-slate-500 group-hover:text-blue-600">Cover Photo</p>
+                      <div className="flex flex-col w-full items-center gap-2 mt-4">
+                        <label 
+                          className="relative mx-auto rounded-3xl flex flex-col items-center justify-center cursor-pointer group transition-all"
+                          style={{ aspectRatio: '1/1', width: '90%', boxShadow: '0 15px 35px -5px rgba(0,0,0,0.1), 0 10px 15px -5px rgba(0,0,0,0.04)' }}
+                        >
+                          <input
+                            type="file"
+                            accept="image/*"
+                            onChange={handleCoverChange}
+                            className="hidden"
+                          />
+                          {formData.coverUrl ? (
+                            <div className="w-full h-full rounded-3xl overflow-hidden relative">
+                              <motion.div
+                                className="relative w-full h-full"
+                                animate={{ scale: formData.coverCropped ? 1 : 1.05 }}
+                              >
+                                <img
+                                  src={formData.coverUrl}
+                                  alt="Cover Source"
+                                  className="absolute object-cover transition-transform duration-75"
+                                  style={{
+                                    width: '100%',
+                                    height: '100%',
+                                    transform: `scale(${formData.coverZoom}) rotate(${formData.coverRotate}deg)`,
+                                  }}
+                                />
+                                {!formData.coverCropped && (
+                                  <div className="absolute inset-0 border-2 border-dashed border-blue-500 rounded-3xl pointer-events-none bg-black/15 shadow-[0_0_0_9999px_rgba(0,0,0,0.4)]" />
+                                )}
+                              </motion.div>
+                            </div>
+                          ) : (
+                            <div 
+                              className="w-full h-full rounded-3xl flex items-center justify-center overflow-hidden"
+                              style={{
+                                backgroundImage: 'url(/abstract-blue-5.jpg)',
+                                backgroundSize: 'cover',
+                                backgroundPosition: 'center',
+                              }}
+                            >
+                              <div className="absolute inset-0 bg-black/40 rounded-3xl group-hover:bg-black/50 transition-colors"></div>
+                              <div className="z-10 flex flex-col items-center justify-center mb-6">
+                                <ImageIcon className="w-10 h-10 text-white/90 transition-colors group-hover:text-white drop-shadow-md" strokeWidth={0.5} />
+                              </div>
+                              <div 
+                                className="absolute border whitespace-nowrap text-white transition-all font-black uppercase tracking-widest text-[10px] flex items-center justify-center gap-2 shadow-sm hover:shadow-md hover:-translate-y-0.5"
+                                style={{ width: '85%', bottom: '8px', left: '50%', transform: 'translateX(-50%)', padding: '0.6rem 1.5rem', borderRadius: '9999px', backgroundColor: '#146ef5', borderColor: '#146ef5' }}
+                              >
+                                Upload Cover
+                              </div>
+                            </div>
+                          )}
+                        </label>
+                        
+                        {formData.coverUrl && !formData.coverCropped && (
+                          <div className="flex flex-col gap-3 mt-4" style={{ width: '90%' }}>
+                            <div className="bg-slate-50 border border-slate-200 p-3 rounded-xl flex flex-col gap-2">
+                              <label className="text-[10px] font-bold uppercase tracking-widest text-slate-500 flex justify-between">
+                                <span>Zoom</span>
+                                <span className="text-blue-600">{Math.round(formData.coverZoom * 100)}%</span>
+                              </label>
+                              <input 
+                                type="range" min="1" max="3" step="0.1"
+                                value={formData.coverZoom}
+                                onChange={(e) => setFormData(prev => ({ ...prev, coverZoom: parseFloat(e.target.value) }))}
+                                className="w-full accent-blue-600 h-1 bg-slate-200 rounded-lg appearance-none cursor-pointer"
+                              />
+                            </div>
+                            
+                            <button
+                              onClick={(e) => { e.preventDefault(); handleSaveCoverCrop(); }}
+                              className="w-full bg-slate-900 hover:bg-black text-white text-[11px] font-black uppercase tracking-widest py-2.5 rounded-xl shadow-md transition-all flex items-center justify-center gap-2"
+                            >
+                              <CheckCircle2 className="w-4 h-4" />
+                              Confirm Crop
+                            </button>
+                          </div>
+                        )}
                       </div>
+                      <div style={{ height: '2rem' }}></div>
                     </div>
                   </div>
 
                   {/* Card 2: Preview & Colors */}
                   <div className={`${cardStyle} md:col-span-2`} style={{ boxShadow: '0 30px 60px rgba(0,0,0,0.02)', borderRadius: '4px', padding: '2.5rem', backgroundColor: '#ffffff' }}>
-                    <h3 className="font-bold text-slate-900 uppercase tracking-widest text-[11px] border-b border-slate-100 pb-4 mb-6">
+                    <h3 className="font-bold text-slate-900 tracking-wider border-b border-slate-100 pb-4" style={{ fontSize: '20px', marginBottom: '2rem' }}>
                       Platform Preview
                     </h3>
 
                     <div className="grid grid-cols-2 gap-8 mb-10">
                       <div>
-                        <label className={labelStyle}>Primary Color</label>
-                        <div className="flex gap-4 items-center bg-slate-50 p-2 rounded-2xl border border-slate-200/60">
-                          <input
-                            type="color"
-                            value={formData.primaryColor}
-                            onChange={(e) => setFormData({ ...formData, primaryColor: e.target.value })}
-                            className="w-10 h-10 rounded-xl cursor-pointer border-0 p-0 shadow-sm bg-transparent"
-                          />
-                          <span className="font-bold text-slate-600 text-sm uppercase tracking-wider">{formData.primaryColor}</span>
+                        <div className="flex gap-4 items-center">
+                          <div 
+                            className="relative shadow-sm shrink-0"
+                            style={{ backgroundColor: formData.primaryColor, width: '2.5rem', height: '2.5rem', borderRadius: '50%', overflow: 'hidden', border: '1px solid rgba(0,0,0,0.05)' }}
+                          >
+                            <input
+                              type="color"
+                              value={formData.primaryColor}
+                              onChange={(e) => setFormData({ ...formData, primaryColor: e.target.value })}
+                              className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                            />
+                          </div>
+                          <div className="flex flex-col" style={{ gap: '0.1rem' }}>
+                            <span className="font-bold text-slate-800 uppercase tracking-widest leading-none" style={{ fontSize: '16px' }}>{formData.primaryColor}</span>
+                            <span className="text-[9px] font-extrabold uppercase tracking-widest text-slate-400 leading-none">Primary Color</span>
+                          </div>
                         </div>
                       </div>
                       <div>
-                        <label className={labelStyle}>Accent Color</label>
-                        <div className="flex gap-4 items-center bg-slate-50 p-2 rounded-2xl border border-slate-200/60">
-                          <input
-                            type="color"
-                            value={formData.accentColor}
-                            onChange={(e) => setFormData({ ...formData, accentColor: e.target.value })}
-                            className="w-10 h-10 rounded-xl cursor-pointer border-0 p-0 shadow-sm bg-transparent"
-                          />
-                          <span className="font-bold text-slate-600 text-sm uppercase tracking-wider">{formData.accentColor}</span>
+                        <div className="flex gap-4 items-center">
+                          <div 
+                            className="relative shadow-sm shrink-0"
+                            style={{ backgroundColor: formData.accentColor, width: '2.5rem', height: '2.5rem', borderRadius: '50%', overflow: 'hidden', border: '1px solid rgba(0,0,0,0.05)' }}
+                          >
+                            <input
+                              type="color"
+                              value={formData.accentColor}
+                              onChange={(e) => setFormData({ ...formData, accentColor: e.target.value })}
+                              className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                            />
+                          </div>
+                          <div className="flex flex-col" style={{ gap: '0.1rem' }}>
+                            <span className="font-bold text-slate-800 uppercase tracking-widest leading-none" style={{ fontSize: '16px' }}>{formData.accentColor}</span>
+                            <span className="text-[9px] font-extrabold uppercase tracking-widest text-slate-400 leading-none">Accent Color</span>
+                          </div>
                         </div>
                       </div>
                     </div>
 
-                    <div className="border border-slate-200/80 rounded-[2rem] overflow-hidden shadow-xl shadow-slate-200/40 bg-white mt-auto transition-transform hover:-translate-y-1 duration-500">
-                      <div className="h-28 w-full transition-colors duration-500 relative overflow-hidden" style={{ backgroundColor: formData.primaryColor }}>
-                        {/* Glass overlay on header */}
-                        <div className="absolute inset-0 bg-gradient-to-b from-white/10 to-transparent" />
-                        <div className="p-5 flex items-center gap-4 relative z-10">
-                          <div className="w-14 h-14 rounded-2xl bg-white/20 backdrop-blur-md border border-white/30 shadow-sm" />
+                    <div 
+                      className="border border-slate-200/80 rounded-[2rem] overflow-hidden shadow-xl shadow-slate-200/40 bg-white transition-transform hover:-translate-y-1 duration-500"
+                      style={{ marginTop: '3rem' }}
+                    >
+                      <div 
+                        className="h-28 w-full transition-colors duration-500 relative overflow-hidden" 
+                        style={{ 
+                          backgroundColor: formData.primaryColor,
+                          backgroundImage: formData.coverUrl ? `url(${formData.coverUrl})` : 'url(/abstract-blue-5.jpg)',
+                          backgroundSize: 'cover',
+                          backgroundPosition: 'center',
+                        }}
+                      >
+                        {/* Dark overlay filter on header */}
+                        <div className="absolute inset-0 bg-black/40" />
+                        <div className="p-5 flex items-center justify-end relative z-10 h-full">
                           <div className="space-y-2">
-                            <div className="h-3 w-32 bg-white/40 rounded-full" />
-                            <div className="h-2 w-20 bg-white/20 rounded-full" />
+                            <div className="h-3 w-24 bg-white/40 rounded-full" />
+                            <div className="h-2 w-16 bg-white/20 rounded-full ml-auto" />
                           </div>
                         </div>
                       </div>
-                      <div className="p-6">
-                        <h4 className="text-base font-extrabold mb-2 text-slate-900 tracking-tight">{formData.schoolName || "Your School Name"}</h4>
-                        <p className="text-xs text-slate-500 font-medium leading-relaxed line-clamp-2">
+                      <div style={{ padding: '0 1.5rem 1.5rem 1.5rem' }}>
+                        <div style={{ marginTop: '-1.75rem', marginBottom: '1rem', position: 'relative', zIndex: 20 }}>
+                          <div 
+                            className="w-14 h-14 rounded-full bg-white shadow-md flex items-center justify-center overflow-hidden relative"
+                            style={{ border: '1.5px solid white' }}
+                          >
+                            {formData.logoUrl ? (
+                              <img src={formData.logoUrl} className="w-full h-full object-contain" alt="School Logo" />
+                            ) : (
+                              <div 
+                                className="w-full h-full" 
+                                style={{
+                                  backgroundImage: 'url(/abstract-blue-1.jpg)',
+                                  backgroundSize: 'cover',
+                                  backgroundPosition: 'center',
+                                }}
+                              />
+                            )}
+                          </div>
+                        </div>
+                        <h4 className="font-extrabold text-slate-900 tracking-tight leading-none" style={{ fontSize: '20px', marginBottom: '0.25rem' }}>{formData.schoolName || "Your School Name"}</h4>
+                        <p className="text-slate-400 font-bold uppercase tracking-widest line-clamp-2" style={{ fontSize: '9px', lineHeight: '1.4' }}>
                           {formData.motto || "Your school motto will appear here for students and parents to see."}
                         </p>
-                        <div className="mt-8 flex justify-between items-center pt-6 border-t border-slate-100">
+                        <div className="flex justify-between items-center border-t border-slate-100" style={{ marginTop: '2rem', paddingTop: '2rem' }}>
                           <div className="flex gap-1.5">
-                            {[...Array(5)].map((_, i) => <div key={i} className="w-2.5 h-2.5 rounded-full bg-slate-200" />)}
+                            {[...Array(5)].map((_, i) => <div key={i} className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: '#146ef5', opacity: i === 0 ? 1 : 0.3 }} />)}
                           </div>
-                          <div className="w-16 h-8 rounded-full opacity-10 transition-colors duration-500" style={{ backgroundColor: formData.primaryColor }} />
+                          <div className="w-16 h-8 rounded-full shadow-sm" style={{ backgroundColor: '#146ef5' }} />
                         </div>
                       </div>
                     </div>
