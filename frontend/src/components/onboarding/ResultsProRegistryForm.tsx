@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Check, AlertCircle, Eye, EyeOff, Mail, Phone } from 'lucide-react';
+import { Check, AlertCircle, Eye, EyeOff, Mail, Phone, User, MapPin, Map, Lock } from 'lucide-react';
+import { NIGERIA_STATES_LGAS } from '../../utils/nigeriaStatesLgas';
 
 export interface RegistryFormData {
   name: string;
@@ -7,7 +8,8 @@ export interface RegistryFormData {
   phone: string;
   password?: string;
   address?: string;
-  zone?: string;
+  state?: string;
+  lga?: string;
 }
 
 interface Props {
@@ -20,9 +22,8 @@ interface Props {
   requireOtp?: boolean;
   requirePassword?: boolean;
   showAddress?: boolean;
-  showZone?: boolean;
-  zoneOptions?: string[];
-  readOnlyFields?: ('name'|'email'|'phone'|'address'|'zone')[];
+  showStateLga?: boolean;
+  readOnlyFields?: ('name'|'email'|'phone'|'address'|'state'|'lga')[];
   showName?: boolean;
   showEmail?: boolean;
   showPhone?: boolean;
@@ -39,14 +40,13 @@ export function ResultsProRegistryForm({
   requireOtp = true,
   requirePassword = true,
   showAddress = false,
-  showZone = false,
-  zoneOptions = [],
+  showStateLga = false,
   readOnlyFields = [],
   showName = true,
   showEmail = true,
   showPhone = true,
   namePlaceholder = 'Full Name',
-  nameLabel,
+  nameLabel = 'Full Name',
   customTopElement
 }: Props) {
   // OTP Local State
@@ -126,22 +126,25 @@ export function ResultsProRegistryForm({
         {(showName || showEmail) && (
           <div style={{ display: 'grid', gridTemplateColumns: (showName && showEmail) ? '1fr 1fr' : '1fr', gap: '1rem' }}>
             {showName && (
-              <div>
-                {nameLabel && <label className="block text-[11px] font-extrabold uppercase tracking-widest text-slate-400 mb-2 pl-1">{nameLabel}</label>}
-                <input 
-                  type="text" 
-                  placeholder={namePlaceholder} 
-                disabled={(effectiveIsVerified && requireOtp) || readOnlyFields.includes('name')}
-                value={data.name}
-                onChange={(e) => onChange({ name: e.target.value })}
-                className={inputClass}
-                style={inputStyle} 
-                />
+              <div className="relative">
+                {nameLabel && <label className="block text-[11px] font-extrabold uppercase tracking-widest text-slate-400 mb-2 pl-1" style={{ marginTop: '0.75rem' }}>{nameLabel}</label>}
+                <div className="relative">
+                  <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                  <input 
+                    type="text" 
+                    placeholder={namePlaceholder} 
+                    disabled={(effectiveIsVerified && requireOtp) || readOnlyFields.includes('name')}
+                    value={data.name}
+                    onChange={(e) => onChange({ name: e.target.value })}
+                    className={inputClass}
+                    style={{ ...inputStyle, paddingLeft: '2.5rem' }} 
+                  />
+                </div>
               </div>
             )}
             {showEmail && (
               <div className="relative">
-                <label className="block text-[11px] font-extrabold uppercase tracking-widest text-slate-400 mb-2 pl-1">Email Address</label>
+                <label className="block text-[11px] font-extrabold uppercase tracking-widest text-slate-400 mb-2 pl-1" style={{ marginTop: '0.75rem' }}>Email Address</label>
                 <div className="relative">
                   <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
                   <input 
@@ -161,7 +164,7 @@ export function ResultsProRegistryForm({
         
         {showPhone && (
           <div>
-            <label className="block text-[11px] font-extrabold uppercase tracking-widest text-slate-400 mb-2 pl-1">Phone Number</label>
+            <label className="block text-[11px] font-extrabold uppercase tracking-widest text-slate-400 mb-2 pl-1" style={{ marginTop: '0.75rem' }}>Phone Number</label>
             <div style={{ position: 'relative' }}>
               <Phone className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 z-10" />
             <input 
@@ -194,46 +197,85 @@ export function ResultsProRegistryForm({
         )}
 
         {showAddress && (
-          <input 
-            type="text" 
-            placeholder="Office/Home Address" 
-            disabled={readOnlyFields.includes('address')}
-            value={data.address || ''}
-            onChange={(e) => onChange({ address: e.target.value })}
-            className={inputClass}
-            style={inputStyle} 
-          />
+          <div>
+            <label className="block text-[11px] font-extrabold uppercase tracking-widest text-slate-400 mb-2 pl-1" style={{ marginTop: '0.75rem' }}>Office/Home Address</label>
+            <div className="relative">
+              <MapPin className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+              <input 
+                type="text" 
+                placeholder="Office/Home Address" 
+                disabled={readOnlyFields.includes('address')}
+                value={data.address || ''}
+                onChange={(e) => onChange({ address: e.target.value })}
+                className={inputClass}
+                style={{ ...inputStyle, paddingLeft: '2.5rem' }} 
+              />
+            </div>
+          </div>
         )}
 
-        {showZone && zoneOptions.length > 0 && (
-          <select 
-            value={data.zone || ''}
-            disabled={readOnlyFields.includes('zone')}
-            onChange={(e) => onChange({ zone: e.target.value })}
-            className={inputClass}
-            style={{ ...inputStyle, appearance: 'none' }}
-          >
-            {zoneOptions.map((z) => (
-              <option key={z} value={z}>{z}</option>
-            ))}
-          </select>
+        {showStateLga && (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-[11px] font-extrabold uppercase tracking-widest text-slate-400 mb-2 pl-1" style={{ marginTop: '0.75rem' }}>State</label>
+              <div className="relative">
+                <Map className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                <select 
+                  value={data.state || ''}
+                  disabled={readOnlyFields.includes('state')}
+                  onChange={(e) => {
+                    onChange({ state: e.target.value, lga: '' }); // reset LGA on state change
+                  }}
+                  className={inputClass}
+                  style={{ ...inputStyle, appearance: 'none', paddingLeft: '2.5rem', fontSize: '13px' }}
+                >
+                  <option value="" style={{ fontSize: '13px' }}>Select State</option>
+                  {Object.keys(NIGERIA_STATES_LGAS).sort().map((s) => (
+                    <option key={s} value={s} style={{ fontSize: '13px' }}>{s}</option>
+                  ))}
+                </select>
+              </div>
+            </div>
+            <div>
+              <label className="block text-[11px] font-extrabold uppercase tracking-widest text-slate-400 mb-2 pl-1" style={{ marginTop: '0.75rem' }}>LGA</label>
+              <div className="relative">
+                <MapPin className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                <select 
+                  value={data.lga || ''}
+                  disabled={readOnlyFields.includes('lga') || !data.state}
+                  onChange={(e) => onChange({ lga: e.target.value })}
+                  className={`${inputClass} disabled:opacity-50 disabled:bg-slate-100 disabled:cursor-not-allowed`}
+                  style={{ ...inputStyle, appearance: 'none', paddingLeft: '2.5rem', fontSize: '13px' }}
+                >
+                  <option value="" style={{ fontSize: '13px' }}>Select LGA</option>
+                  {data.state && NIGERIA_STATES_LGAS[data.state]?.sort().map((l) => (
+                    <option key={l} value={l} style={{ fontSize: '13px' }}>{l}</option>
+                  ))}
+                </select>
+              </div>
+            </div>
+          </div>
         )}
 
         {requirePassword && (
-          <>
-            <input 
-              type="password" 
-              placeholder="Password (Min. 6 characters)" 
-              disabled={effectiveIsVerified && requireOtp}
-              value={data.password || ''}
-              onChange={(e) => onChange({ password: e.target.value })}
-              className={inputClass}
-              style={inputStyle} 
-            />
+          <div>
+            <label className="block text-[11px] font-extrabold uppercase tracking-widest text-slate-400 mb-2 pl-1" style={{ marginTop: '0.75rem' }}>Account Password</label>
+            <div className="relative">
+              <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+              <input 
+                type="password" 
+                placeholder="Password (Min. 6 characters)" 
+                disabled={effectiveIsVerified && requireOtp}
+                value={data.password || ''}
+                onChange={(e) => onChange({ password: e.target.value })}
+                className={inputClass}
+                style={{ ...inputStyle, paddingLeft: '2.5rem' }} 
+              />
+            </div>
 
             {/* Password strength meter */}
             {data.password && (
-              <div style={{ marginTop: '-1rem', padding: '0 0.5rem' }}>
+              <div style={{ marginTop: '0.5rem', padding: '0 0.5rem' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', fontWeight: 'bold', color: '#94a3b8', textTransform: 'uppercase', marginBottom: '0.25rem' }}>
                   <span>Strength: {passwordStrength.text}</span>
                 </div>
@@ -244,7 +286,7 @@ export function ResultsProRegistryForm({
                 </div>
               </div>
             )}
-          </>
+          </div>
         )}
 
         {/* OTP Verification Modal Box */}
