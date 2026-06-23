@@ -36,7 +36,7 @@ export default function ContactPage() {
                 <div style={{ marginTop: '3rem' }}>
                   <div style={{ marginBottom: '2.5rem' }}>
                     <h3 style={{ fontSize: '1.25rem', marginBottom: '0.5rem', color: 'var(--color-sky-blue)' }}>General Inquiry</h3>
-                    <p style={{ color: 'var(--color-text-on-white)' }}>info@resultspro.ng</p>
+                    <p style={{ color: 'var(--color-text-on-white)' }}>hello@resultspro.ng</p>
                     <p style={{ color: 'var(--color-text-on-white)' }}>+234 (0) 800 000 0000</p>
                   </div>
                   <div style={{ marginBottom: '2.5rem' }}>

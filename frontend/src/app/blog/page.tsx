@@ -37,7 +37,7 @@ export default function BlogPage() {
   return (
     <>
       <PhotoHero 
-        title="The ResultsPRO Blog" 
+        title="Latest News" 
         subtitle="Exploring the future of education, technology, and academic intelligence in Africa." 
         image="/photo08.jpeg" 
       />

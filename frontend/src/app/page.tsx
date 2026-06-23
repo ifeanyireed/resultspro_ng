@@ -27,7 +27,7 @@ export default function Home() {
       {/* SchoolHub Section */}
       <FeatureSplit 
         title="SchoolHub"
-        description="Power up your school, from Admission, Transformation till Graduation. Access ExamsPRO, ClassroomPRO, ResultsPRO and TutorsPRO all from one Mobile-First Digital Campus experience."
+        description="Power up your school, from Admission, Transformation, through Graduation. Access ExamsPRO, ClassroomPRO, ResultsPRO and TutorsPRO all from one Mobile-First Digital Campus experience."
         imageMain="/photo13.jpeg"
         imageSecondary="/photo11.jpeg"
         linkText="Launch Digital Campus"
@@ -45,22 +45,22 @@ export default function Home() {
 
       <section className="section section-white">
         <div className="container">
-          <div className="grid grid-cols-1 md:grid-cols-2 items-center" style={{ gap: 'var(--space-xl)' }}>
+          <div className="grid grid-cols-1 md:grid-cols-2 items-center mission-grid" style={{ gap: 'var(--space-lg)' }}>
             <div>
               <ScrollReveal animation="fade-up">
                 <span className="caption">Our Mission</span>
               </ScrollReveal>
               <ScrollReveal animation="fade-up" delay={200}>
-                <h2 className="mt-[var(--space-sm)]">Empowering the Next Generation</h2>
+                <h2 className="mt-[var(--space-sm)]">To Prepare Africa for Takeover.</h2>
               </ScrollReveal>
               <ScrollReveal animation="fade-up" delay={400}>
-                <p>We provide the digital foundation for schools to scale excellence, ensuring every student has access to high-quality learning resources.</p>
+                <p>To provoke specific achievable change in how African parents and schools approach K12 education.</p>
               </ScrollReveal>
             </div>
             <ScrollReveal animation="slide-left">
-              <div className="border-l-2 border-sky-blue" style={{ padding: 'var(--space-md)', paddingLeft: 'var(--space-lg)' }}>
-                <p style={{ fontStyle: 'italic', fontSize: '1.25rem', color: 'var(--color-text-on-white)', textShadow: 'none' }}>
-                  &ldquo;Technology is the bridge that connects potential to opportunity. We are building that bridge for African education.&rdquo;
+              <div className="border-l-2 border-sky-blue" style={{ padding: 'var(--space-md)', paddingLeft: 'var(--space-md)' }}>
+                <p style={{ fontStyle: 'italic', fontSize: '1.25rem', color: 'var(--color-text-on-white)', textShadow: 'none', lineHeight: '1.6' }}>
+                  &ldquo;From the parent's seat at the kitchen table, through the teacher's classroom, the exam hall, the report card, the tutor's screen, the principal's office, the household's accountability, the digital future and the continent's urgency, we are building an infrastructure to power the needed culture shift.&rdquo;
                 </p>
               </div>
             </ScrollReveal>
@@ -71,7 +71,7 @@ export default function Home() {
       {/* ClassroomPRO Section */}
       <FeatureSplit 
         title="ClassroomPRO"
-        description="Provide structured resources for classroom and after-school engagement with key insights performance insights for Parents. Keep learning moving with an offline-first digital classroom."
+        description="Provide structured resources for classroom and after-school engagement with key performance insights for parents. Keep learning moving with an offline-first digital classroom."
         imageMain="/photo02.jpeg"
         imageSecondary="/photo04.jpeg"
         linkText="Discover ClassroomPRO"
@@ -91,7 +91,7 @@ export default function Home() {
       {/* TutorsPRO Section */}
       <FeatureSplit 
         title="TutorsPRO"
-        description="Find and provide vetted, top-rated curriculum aligned tution for and to kids abroad. Connect students with academic support through real-time collaboration tools."
+        description="Find and provide vetted, top-rated, curriculum-aligned tuition for kids abroad. Connect students with academic support through real-time collaboration tools."
         imageMain="/photo06.jpeg"
         imageSecondary="/photo07.jpeg"
         reverse
@@ -101,7 +101,7 @@ export default function Home() {
       {/* ResultsPRO Section */}
       <FeatureSplit 
         title="ResultsPRO"
-        description="Reduce processing time to zero, generate AI-Powered performance insights and monetize end-of-term results delivery at scale. Transform examination data into actionable intelligence."
+        description="Reduce processing time to zero, generate AI-powered performance insights and monetize end-of-term results delivery at scale. Transform examination data into actionable intelligence."
         imageMain="/photo08.jpeg"
         imageSecondary="/photo10.jpeg"
         linkText="Explore ResultsPRO"

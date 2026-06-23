@@ -63,7 +63,7 @@ export default function Footer() {
               <h4>Contact</h4>
               <p>Nigeria Office</p>
               <p>+234 (0) 800 000 0000</p>
-              <p>info@resultspro.ng</p>
+              <p>hello@resultspro.ng</p>
               
               <div className={styles.subscription}>
                 <h5>Subscribe to Insights</h5>
